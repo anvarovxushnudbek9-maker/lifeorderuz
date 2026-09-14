@@ -17,9 +17,12 @@ import { Route as AuthenticatedAnalizRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedBilimRouteImport } from './routes/_authenticated/bilim'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedKundalikRouteImport } from './routes/_authenticated/kundalik'
+import { Route as AuthenticatedMaqsadRouteImport } from './routes/_authenticated/maqsad'
 import { Route as AuthenticatedOdatRouteImport } from './routes/_authenticated/odat'
 import { Route as AuthenticatedProfilRouteImport } from './routes/_authenticated/profil'
+import { Route as AuthenticatedRejaRouteImport } from './routes/_authenticated/reja'
 import { Route as AuthenticatedTanaRouteImport } from './routes/_authenticated/tana'
+import { Route as AuthenticatedYutuqlarRouteImport } from './routes/_authenticated/yutuqlar'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AuthenticatedDavraIndexRouteImport } from './routes/_authenticated/davra.index'
 import { Route as AuthenticatedDavraIdRouteImport } from './routes/_authenticated/davra.$id'
@@ -63,6 +66,11 @@ const AuthenticatedKundalikRoute = AuthenticatedKundalikRouteImport.update({
   path: '/kundalik',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedMaqsadRoute = AuthenticatedMaqsadRouteImport.update({
+  id: '/maqsad',
+  path: '/maqsad',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedOdatRoute = AuthenticatedOdatRouteImport.update({
   id: '/odat',
   path: '/odat',
@@ -73,9 +81,19 @@ const AuthenticatedProfilRoute = AuthenticatedProfilRouteImport.update({
   path: '/profil',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedRejaRoute = AuthenticatedRejaRouteImport.update({
+  id: '/reja',
+  path: '/reja',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedTanaRoute = AuthenticatedTanaRouteImport.update({
   id: '/tana',
   path: '/tana',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedYutuqlarRoute = AuthenticatedYutuqlarRouteImport.update({
+  id: '/yutuqlar',
+  path: '/yutuqlar',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const ApiChatRoute = ApiChatRouteImport.update({
@@ -102,9 +120,12 @@ export interface FileRoutesByFullPath {
   '/bilim': typeof AuthenticatedBilimRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/kundalik': typeof AuthenticatedKundalikRoute
+  '/maqsad': typeof AuthenticatedMaqsadRoute
   '/odat': typeof AuthenticatedOdatRoute
   '/profil': typeof AuthenticatedProfilRoute
+  '/reja': typeof AuthenticatedRejaRoute
   '/tana': typeof AuthenticatedTanaRoute
+  '/yutuqlar': typeof AuthenticatedYutuqlarRoute
   '/api/chat': typeof ApiChatRoute
   '/davra/$id': typeof AuthenticatedDavraIdRoute
   '/davra/': typeof AuthenticatedDavraIndexRoute
@@ -117,9 +138,12 @@ export interface FileRoutesByTo {
   '/bilim': typeof AuthenticatedBilimRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/kundalik': typeof AuthenticatedKundalikRoute
+  '/maqsad': typeof AuthenticatedMaqsadRoute
   '/odat': typeof AuthenticatedOdatRoute
   '/profil': typeof AuthenticatedProfilRoute
+  '/reja': typeof AuthenticatedRejaRoute
   '/tana': typeof AuthenticatedTanaRoute
+  '/yutuqlar': typeof AuthenticatedYutuqlarRoute
   '/api/chat': typeof ApiChatRoute
   '/davra/$id': typeof AuthenticatedDavraIdRoute
   '/davra': typeof AuthenticatedDavraIndexRoute
@@ -134,9 +158,12 @@ export interface FileRoutesById {
   '/_authenticated/bilim': typeof AuthenticatedBilimRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/kundalik': typeof AuthenticatedKundalikRoute
+  '/_authenticated/maqsad': typeof AuthenticatedMaqsadRoute
   '/_authenticated/odat': typeof AuthenticatedOdatRoute
   '/_authenticated/profil': typeof AuthenticatedProfilRoute
+  '/_authenticated/reja': typeof AuthenticatedRejaRoute
   '/_authenticated/tana': typeof AuthenticatedTanaRoute
+  '/_authenticated/yutuqlar': typeof AuthenticatedYutuqlarRoute
   '/api/chat': typeof ApiChatRoute
   '/_authenticated/davra/$id': typeof AuthenticatedDavraIdRoute
   '/_authenticated/davra/': typeof AuthenticatedDavraIndexRoute
@@ -151,9 +178,12 @@ export interface FileRouteTypes {
     | '/bilim'
     | '/dashboard'
     | '/kundalik'
+    | '/maqsad'
     | '/odat'
     | '/profil'
+    | '/reja'
     | '/tana'
+    | '/yutuqlar'
     | '/api/chat'
     | '/davra/$id'
     | '/davra/'
@@ -166,9 +196,12 @@ export interface FileRouteTypes {
     | '/bilim'
     | '/dashboard'
     | '/kundalik'
+    | '/maqsad'
     | '/odat'
     | '/profil'
+    | '/reja'
     | '/tana'
+    | '/yutuqlar'
     | '/api/chat'
     | '/davra/$id'
     | '/davra'
@@ -182,9 +215,12 @@ export interface FileRouteTypes {
     | '/_authenticated/bilim'
     | '/_authenticated/dashboard'
     | '/_authenticated/kundalik'
+    | '/_authenticated/maqsad'
     | '/_authenticated/odat'
     | '/_authenticated/profil'
+    | '/_authenticated/reja'
     | '/_authenticated/tana'
+    | '/_authenticated/yutuqlar'
     | '/api/chat'
     | '/_authenticated/davra/$id'
     | '/_authenticated/davra/'
@@ -255,6 +291,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedKundalikRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/maqsad': {
+      id: '/_authenticated/maqsad'
+      path: '/maqsad'
+      fullPath: '/maqsad'
+      preLoaderRoute: typeof AuthenticatedMaqsadRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/odat': {
       id: '/_authenticated/odat'
       path: '/odat'
@@ -269,11 +312,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProfilRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/reja': {
+      id: '/_authenticated/reja'
+      path: '/reja'
+      fullPath: '/reja'
+      preLoaderRoute: typeof AuthenticatedRejaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/tana': {
       id: '/_authenticated/tana'
       path: '/tana'
       fullPath: '/tana'
       preLoaderRoute: typeof AuthenticatedTanaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/yutuqlar': {
+      id: '/_authenticated/yutuqlar'
+      path: '/yutuqlar'
+      fullPath: '/yutuqlar'
+      preLoaderRoute: typeof AuthenticatedYutuqlarRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/api/chat': {
@@ -306,9 +363,12 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedBilimRoute: typeof AuthenticatedBilimRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedKundalikRoute: typeof AuthenticatedKundalikRoute
+  AuthenticatedMaqsadRoute: typeof AuthenticatedMaqsadRoute
   AuthenticatedOdatRoute: typeof AuthenticatedOdatRoute
   AuthenticatedProfilRoute: typeof AuthenticatedProfilRoute
+  AuthenticatedRejaRoute: typeof AuthenticatedRejaRoute
   AuthenticatedTanaRoute: typeof AuthenticatedTanaRoute
+  AuthenticatedYutuqlarRoute: typeof AuthenticatedYutuqlarRoute
   AuthenticatedDavraIdRoute: typeof AuthenticatedDavraIdRoute
   AuthenticatedDavraIndexRoute: typeof AuthenticatedDavraIndexRoute
 }
@@ -319,9 +379,12 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBilimRoute: AuthenticatedBilimRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedKundalikRoute: AuthenticatedKundalikRoute,
+  AuthenticatedMaqsadRoute: AuthenticatedMaqsadRoute,
   AuthenticatedOdatRoute: AuthenticatedOdatRoute,
   AuthenticatedProfilRoute: AuthenticatedProfilRoute,
+  AuthenticatedRejaRoute: AuthenticatedRejaRoute,
   AuthenticatedTanaRoute: AuthenticatedTanaRoute,
+  AuthenticatedYutuqlarRoute: AuthenticatedYutuqlarRoute,
   AuthenticatedDavraIdRoute: AuthenticatedDavraIdRoute,
   AuthenticatedDavraIndexRoute: AuthenticatedDavraIndexRoute,
 }
