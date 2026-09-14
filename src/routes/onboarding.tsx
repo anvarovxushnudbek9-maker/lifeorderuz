@@ -225,7 +225,7 @@ function Onboarding() {
           key={step}
           className="space-y-5"
           style={{
-            animation: `${dir === 1 ? "fade-in" : "fade-in"} 0.35s cubic-bezier(0.22,1,0.36,1)`,
+            animation: `osish-step 0.35s cubic-bezier(0.22,1,0.36,1)`,
           }}
         >
           {step === 0 && (

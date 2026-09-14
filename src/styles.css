@@ -246,3 +246,10 @@
     transition-duration: 0.001ms !important;
   }
 }
+
+@keyframes osish-step {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
