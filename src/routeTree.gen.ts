@@ -10,33 +10,240 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as AuthenticatedAiRouteImport } from './routes/_authenticated/ai'
+import { Route as AuthenticatedAnalizRouteImport } from './routes/_authenticated/analiz'
+import { Route as AuthenticatedBilimRouteImport } from './routes/_authenticated/bilim'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedKundalikRouteImport } from './routes/_authenticated/kundalik'
+import { Route as AuthenticatedMaqsadRouteImport } from './routes/_authenticated/maqsad'
+import { Route as AuthenticatedOdatRouteImport } from './routes/_authenticated/odat'
+import { Route as AuthenticatedProfilRouteImport } from './routes/_authenticated/profil'
+import { Route as AuthenticatedRejaRouteImport } from './routes/_authenticated/reja'
+import { Route as AuthenticatedTanaRouteImport } from './routes/_authenticated/tana'
+import { Route as AuthenticatedYutuqlarRouteImport } from './routes/_authenticated/yutuqlar'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as AuthenticatedDavraIndexRouteImport } from './routes/_authenticated/davra.index'
+import { Route as AuthenticatedDavraIdRouteImport } from './routes/_authenticated/davra.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAiRoute = AuthenticatedAiRouteImport.update({
+  id: '/ai',
+  path: '/ai',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAnalizRoute = AuthenticatedAnalizRouteImport.update({
+  id: '/analiz',
+  path: '/analiz',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedBilimRoute = AuthenticatedBilimRouteImport.update({
+  id: '/bilim',
+  path: '/bilim',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedKundalikRoute = AuthenticatedKundalikRouteImport.update({
+  id: '/kundalik',
+  path: '/kundalik',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedMaqsadRoute = AuthenticatedMaqsadRouteImport.update({
+  id: '/maqsad',
+  path: '/maqsad',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedOdatRoute = AuthenticatedOdatRouteImport.update({
+  id: '/odat',
+  path: '/odat',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProfilRoute = AuthenticatedProfilRouteImport.update({
+  id: '/profil',
+  path: '/profil',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedRejaRoute = AuthenticatedRejaRouteImport.update({
+  id: '/reja',
+  path: '/reja',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedTanaRoute = AuthenticatedTanaRouteImport.update({
+  id: '/tana',
+  path: '/tana',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedYutuqlarRoute = AuthenticatedYutuqlarRouteImport.update({
+  id: '/yutuqlar',
+  path: '/yutuqlar',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedDavraIndexRoute = AuthenticatedDavraIndexRouteImport.update({
+  id: '/davra/',
+  path: '/davra/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDavraIdRoute = AuthenticatedDavraIdRouteImport.update({
+  id: '/davra/$id',
+  path: '/davra/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/onboarding': typeof OnboardingRoute
+  '/ai': typeof AuthenticatedAiRoute
+  '/analiz': typeof AuthenticatedAnalizRoute
+  '/bilim': typeof AuthenticatedBilimRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/kundalik': typeof AuthenticatedKundalikRoute
+  '/maqsad': typeof AuthenticatedMaqsadRoute
+  '/odat': typeof AuthenticatedOdatRoute
+  '/profil': typeof AuthenticatedProfilRoute
+  '/reja': typeof AuthenticatedRejaRoute
+  '/tana': typeof AuthenticatedTanaRoute
+  '/yutuqlar': typeof AuthenticatedYutuqlarRoute
+  '/api/chat': typeof ApiChatRoute
+  '/davra/$id': typeof AuthenticatedDavraIdRoute
+  '/davra/': typeof AuthenticatedDavraIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/onboarding': typeof OnboardingRoute
+  '/ai': typeof AuthenticatedAiRoute
+  '/analiz': typeof AuthenticatedAnalizRoute
+  '/bilim': typeof AuthenticatedBilimRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/kundalik': typeof AuthenticatedKundalikRoute
+  '/maqsad': typeof AuthenticatedMaqsadRoute
+  '/odat': typeof AuthenticatedOdatRoute
+  '/profil': typeof AuthenticatedProfilRoute
+  '/reja': typeof AuthenticatedRejaRoute
+  '/tana': typeof AuthenticatedTanaRoute
+  '/yutuqlar': typeof AuthenticatedYutuqlarRoute
+  '/api/chat': typeof ApiChatRoute
+  '/davra/$id': typeof AuthenticatedDavraIdRoute
+  '/davra': typeof AuthenticatedDavraIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/onboarding': typeof OnboardingRoute
+  '/_authenticated/ai': typeof AuthenticatedAiRoute
+  '/_authenticated/analiz': typeof AuthenticatedAnalizRoute
+  '/_authenticated/bilim': typeof AuthenticatedBilimRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/kundalik': typeof AuthenticatedKundalikRoute
+  '/_authenticated/maqsad': typeof AuthenticatedMaqsadRoute
+  '/_authenticated/odat': typeof AuthenticatedOdatRoute
+  '/_authenticated/profil': typeof AuthenticatedProfilRoute
+  '/_authenticated/reja': typeof AuthenticatedRejaRoute
+  '/_authenticated/tana': typeof AuthenticatedTanaRoute
+  '/_authenticated/yutuqlar': typeof AuthenticatedYutuqlarRoute
+  '/api/chat': typeof ApiChatRoute
+  '/_authenticated/davra/$id': typeof AuthenticatedDavraIdRoute
+  '/_authenticated/davra/': typeof AuthenticatedDavraIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/onboarding'
+    | '/ai'
+    | '/analiz'
+    | '/bilim'
+    | '/dashboard'
+    | '/kundalik'
+    | '/maqsad'
+    | '/odat'
+    | '/profil'
+    | '/reja'
+    | '/tana'
+    | '/yutuqlar'
+    | '/api/chat'
+    | '/davra/$id'
+    | '/davra/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/onboarding'
+    | '/ai'
+    | '/analiz'
+    | '/bilim'
+    | '/dashboard'
+    | '/kundalik'
+    | '/maqsad'
+    | '/odat'
+    | '/profil'
+    | '/reja'
+    | '/tana'
+    | '/yutuqlar'
+    | '/api/chat'
+    | '/davra/$id'
+    | '/davra'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/onboarding'
+    | '/_authenticated/ai'
+    | '/_authenticated/analiz'
+    | '/_authenticated/bilim'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/kundalik'
+    | '/_authenticated/maqsad'
+    | '/_authenticated/odat'
+    | '/_authenticated/profil'
+    | '/_authenticated/reja'
+    | '/_authenticated/tana'
+    | '/_authenticated/yutuqlar'
+    | '/api/chat'
+    | '/_authenticated/davra/$id'
+    | '/_authenticated/davra/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  OnboardingRoute: typeof OnboardingRoute
+  ApiChatRoute: typeof ApiChatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +255,169 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/ai': {
+      id: '/_authenticated/ai'
+      path: '/ai'
+      fullPath: '/ai'
+      preLoaderRoute: typeof AuthenticatedAiRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/analiz': {
+      id: '/_authenticated/analiz'
+      path: '/analiz'
+      fullPath: '/analiz'
+      preLoaderRoute: typeof AuthenticatedAnalizRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/bilim': {
+      id: '/_authenticated/bilim'
+      path: '/bilim'
+      fullPath: '/bilim'
+      preLoaderRoute: typeof AuthenticatedBilimRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/kundalik': {
+      id: '/_authenticated/kundalik'
+      path: '/kundalik'
+      fullPath: '/kundalik'
+      preLoaderRoute: typeof AuthenticatedKundalikRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/maqsad': {
+      id: '/_authenticated/maqsad'
+      path: '/maqsad'
+      fullPath: '/maqsad'
+      preLoaderRoute: typeof AuthenticatedMaqsadRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/odat': {
+      id: '/_authenticated/odat'
+      path: '/odat'
+      fullPath: '/odat'
+      preLoaderRoute: typeof AuthenticatedOdatRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/profil': {
+      id: '/_authenticated/profil'
+      path: '/profil'
+      fullPath: '/profil'
+      preLoaderRoute: typeof AuthenticatedProfilRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/reja': {
+      id: '/_authenticated/reja'
+      path: '/reja'
+      fullPath: '/reja'
+      preLoaderRoute: typeof AuthenticatedRejaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/tana': {
+      id: '/_authenticated/tana'
+      path: '/tana'
+      fullPath: '/tana'
+      preLoaderRoute: typeof AuthenticatedTanaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/yutuqlar': {
+      id: '/_authenticated/yutuqlar'
+      path: '/yutuqlar'
+      fullPath: '/yutuqlar'
+      preLoaderRoute: typeof AuthenticatedYutuqlarRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/davra/': {
+      id: '/_authenticated/davra/'
+      path: '/davra'
+      fullPath: '/davra/'
+      preLoaderRoute: typeof AuthenticatedDavraIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/davra/$id': {
+      id: '/_authenticated/davra/$id'
+      path: '/davra/$id'
+      fullPath: '/davra/$id'
+      preLoaderRoute: typeof AuthenticatedDavraIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAiRoute: typeof AuthenticatedAiRoute
+  AuthenticatedAnalizRoute: typeof AuthenticatedAnalizRoute
+  AuthenticatedBilimRoute: typeof AuthenticatedBilimRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedKundalikRoute: typeof AuthenticatedKundalikRoute
+  AuthenticatedMaqsadRoute: typeof AuthenticatedMaqsadRoute
+  AuthenticatedOdatRoute: typeof AuthenticatedOdatRoute
+  AuthenticatedProfilRoute: typeof AuthenticatedProfilRoute
+  AuthenticatedRejaRoute: typeof AuthenticatedRejaRoute
+  AuthenticatedTanaRoute: typeof AuthenticatedTanaRoute
+  AuthenticatedYutuqlarRoute: typeof AuthenticatedYutuqlarRoute
+  AuthenticatedDavraIdRoute: typeof AuthenticatedDavraIdRoute
+  AuthenticatedDavraIndexRoute: typeof AuthenticatedDavraIndexRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAiRoute: AuthenticatedAiRoute,
+  AuthenticatedAnalizRoute: AuthenticatedAnalizRoute,
+  AuthenticatedBilimRoute: AuthenticatedBilimRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedKundalikRoute: AuthenticatedKundalikRoute,
+  AuthenticatedMaqsadRoute: AuthenticatedMaqsadRoute,
+  AuthenticatedOdatRoute: AuthenticatedOdatRoute,
+  AuthenticatedProfilRoute: AuthenticatedProfilRoute,
+  AuthenticatedRejaRoute: AuthenticatedRejaRoute,
+  AuthenticatedTanaRoute: AuthenticatedTanaRoute,
+  AuthenticatedYutuqlarRoute: AuthenticatedYutuqlarRoute,
+  AuthenticatedDavraIdRoute: AuthenticatedDavraIdRoute,
+  AuthenticatedDavraIndexRoute: AuthenticatedDavraIndexRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  OnboardingRoute: OnboardingRoute,
+  ApiChatRoute: ApiChatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
