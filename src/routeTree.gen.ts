@@ -13,10 +13,12 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedAiRouteImport } from './routes/_authenticated/ai'
+import { Route as AuthenticatedAnalizRouteImport } from './routes/_authenticated/analiz'
 import { Route as AuthenticatedBilimRouteImport } from './routes/_authenticated/bilim'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedKundalikRouteImport } from './routes/_authenticated/kundalik'
 import { Route as AuthenticatedOdatRouteImport } from './routes/_authenticated/odat'
+import { Route as AuthenticatedProfilRouteImport } from './routes/_authenticated/profil'
 import { Route as AuthenticatedTanaRouteImport } from './routes/_authenticated/tana'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AuthenticatedDavraIndexRouteImport } from './routes/_authenticated/davra.index'
@@ -41,6 +43,11 @@ const AuthenticatedAiRoute = AuthenticatedAiRouteImport.update({
   path: '/ai',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAnalizRoute = AuthenticatedAnalizRouteImport.update({
+  id: '/analiz',
+  path: '/analiz',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedBilimRoute = AuthenticatedBilimRouteImport.update({
   id: '/bilim',
   path: '/bilim',
@@ -59,6 +66,11 @@ const AuthenticatedKundalikRoute = AuthenticatedKundalikRouteImport.update({
 const AuthenticatedOdatRoute = AuthenticatedOdatRouteImport.update({
   id: '/odat',
   path: '/odat',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProfilRoute = AuthenticatedProfilRouteImport.update({
+  id: '/profil',
+  path: '/profil',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedTanaRoute = AuthenticatedTanaRouteImport.update({
@@ -86,10 +98,12 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/ai': typeof AuthenticatedAiRoute
+  '/analiz': typeof AuthenticatedAnalizRoute
   '/bilim': typeof AuthenticatedBilimRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/kundalik': typeof AuthenticatedKundalikRoute
   '/odat': typeof AuthenticatedOdatRoute
+  '/profil': typeof AuthenticatedProfilRoute
   '/tana': typeof AuthenticatedTanaRoute
   '/api/chat': typeof ApiChatRoute
   '/davra/$id': typeof AuthenticatedDavraIdRoute
@@ -99,10 +113,12 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/ai': typeof AuthenticatedAiRoute
+  '/analiz': typeof AuthenticatedAnalizRoute
   '/bilim': typeof AuthenticatedBilimRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/kundalik': typeof AuthenticatedKundalikRoute
   '/odat': typeof AuthenticatedOdatRoute
+  '/profil': typeof AuthenticatedProfilRoute
   '/tana': typeof AuthenticatedTanaRoute
   '/api/chat': typeof ApiChatRoute
   '/davra/$id': typeof AuthenticatedDavraIdRoute
@@ -114,10 +130,12 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/_authenticated/ai': typeof AuthenticatedAiRoute
+  '/_authenticated/analiz': typeof AuthenticatedAnalizRoute
   '/_authenticated/bilim': typeof AuthenticatedBilimRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/kundalik': typeof AuthenticatedKundalikRoute
   '/_authenticated/odat': typeof AuthenticatedOdatRoute
+  '/_authenticated/profil': typeof AuthenticatedProfilRoute
   '/_authenticated/tana': typeof AuthenticatedTanaRoute
   '/api/chat': typeof ApiChatRoute
   '/_authenticated/davra/$id': typeof AuthenticatedDavraIdRoute
@@ -129,10 +147,12 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/ai'
+    | '/analiz'
     | '/bilim'
     | '/dashboard'
     | '/kundalik'
     | '/odat'
+    | '/profil'
     | '/tana'
     | '/api/chat'
     | '/davra/$id'
@@ -142,10 +162,12 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/ai'
+    | '/analiz'
     | '/bilim'
     | '/dashboard'
     | '/kundalik'
     | '/odat'
+    | '/profil'
     | '/tana'
     | '/api/chat'
     | '/davra/$id'
@@ -156,10 +178,12 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/_authenticated/ai'
+    | '/_authenticated/analiz'
     | '/_authenticated/bilim'
     | '/_authenticated/dashboard'
     | '/_authenticated/kundalik'
     | '/_authenticated/odat'
+    | '/_authenticated/profil'
     | '/_authenticated/tana'
     | '/api/chat'
     | '/_authenticated/davra/$id'
@@ -203,6 +227,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAiRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/analiz': {
+      id: '/_authenticated/analiz'
+      path: '/analiz'
+      fullPath: '/analiz'
+      preLoaderRoute: typeof AuthenticatedAnalizRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/bilim': {
       id: '/_authenticated/bilim'
       path: '/bilim'
@@ -229,6 +260,13 @@ declare module '@tanstack/react-router' {
       path: '/odat'
       fullPath: '/odat'
       preLoaderRoute: typeof AuthenticatedOdatRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/profil': {
+      id: '/_authenticated/profil'
+      path: '/profil'
+      fullPath: '/profil'
+      preLoaderRoute: typeof AuthenticatedProfilRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/tana': {
@@ -264,10 +302,12 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAiRoute: typeof AuthenticatedAiRoute
+  AuthenticatedAnalizRoute: typeof AuthenticatedAnalizRoute
   AuthenticatedBilimRoute: typeof AuthenticatedBilimRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedKundalikRoute: typeof AuthenticatedKundalikRoute
   AuthenticatedOdatRoute: typeof AuthenticatedOdatRoute
+  AuthenticatedProfilRoute: typeof AuthenticatedProfilRoute
   AuthenticatedTanaRoute: typeof AuthenticatedTanaRoute
   AuthenticatedDavraIdRoute: typeof AuthenticatedDavraIdRoute
   AuthenticatedDavraIndexRoute: typeof AuthenticatedDavraIndexRoute
@@ -275,10 +315,12 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAiRoute: AuthenticatedAiRoute,
+  AuthenticatedAnalizRoute: AuthenticatedAnalizRoute,
   AuthenticatedBilimRoute: AuthenticatedBilimRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedKundalikRoute: AuthenticatedKundalikRoute,
   AuthenticatedOdatRoute: AuthenticatedOdatRoute,
+  AuthenticatedProfilRoute: AuthenticatedProfilRoute,
   AuthenticatedTanaRoute: AuthenticatedTanaRoute,
   AuthenticatedDavraIdRoute: AuthenticatedDavraIdRoute,
   AuthenticatedDavraIndexRoute: AuthenticatedDavraIndexRoute,
