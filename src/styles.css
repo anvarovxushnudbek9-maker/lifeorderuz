@@ -142,3 +142,114 @@
     color: var(--color-foreground);
   }
 }
+
+/* ---- O'SISH brand + motion layer ---- */
+:root {
+  --primary: oklch(0.55 0.2 258);
+  --primary-foreground: oklch(0.985 0.005 250);
+  --primary-glow: oklch(0.72 0.15 250);
+  --ring: oklch(0.55 0.2 258);
+  --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-glow));
+  --shadow-elegant: 0 18px 50px -24px color-mix(in oklab, var(--primary) 55%, transparent);
+}
+
+.dark {
+  --primary: oklch(0.66 0.17 255);
+  --primary-foreground: oklch(0.16 0.03 260);
+  --primary-glow: oklch(0.78 0.13 245);
+  --ring: oklch(0.66 0.17 255);
+}
+
+@theme inline {
+  --color-primary-glow: var(--primary-glow);
+}
+
+@utility gradient-primary {
+  background-image: var(--gradient-primary);
+}
+
+@utility text-gradient {
+  background-image: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility shadow-elegant {
+  box-shadow: var(--shadow-elegant);
+}
+
+@utility reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+
+  &[data-visible="true"] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@utility hover-lift {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-elegant);
+  }
+}
+
+@keyframes osish-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes osish-sheen {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+@keyframes osish-progress {
+  from {
+    width: 0%;
+  }
+}
+
+@utility animate-float {
+  animation: osish-float 6s ease-in-out infinite;
+}
+
+@utility animate-sheen {
+  background-size: 200% 200%;
+  animation: osish-sheen 8s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+@keyframes osish-step {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}

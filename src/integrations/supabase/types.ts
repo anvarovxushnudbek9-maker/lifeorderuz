@@ -373,37 +373,61 @@ export type Database = {
       }
       profiles: {
         Row: {
+          activity_level: string | null
+          age: number | null
           avatar_url: string | null
+          biggest_obstacle: string | null
           bio: string | null
           created_at: string
+          digital_habits: Json
           focus_areas: string[]
           full_name: string | null
+          gender: string | null
+          height_cm: number | null
           id: string
           main_goal: string | null
           onboarding_completed: boolean
           updated_at: string
+          weight_kg: number | null
+          why_now: string | null
         }
         Insert: {
+          activity_level?: string | null
+          age?: number | null
           avatar_url?: string | null
+          biggest_obstacle?: string | null
           bio?: string | null
           created_at?: string
+          digital_habits?: Json
           focus_areas?: string[]
           full_name?: string | null
+          gender?: string | null
+          height_cm?: number | null
           id: string
           main_goal?: string | null
           onboarding_completed?: boolean
           updated_at?: string
+          weight_kg?: number | null
+          why_now?: string | null
         }
         Update: {
+          activity_level?: string | null
+          age?: number | null
           avatar_url?: string | null
+          biggest_obstacle?: string | null
           bio?: string | null
           created_at?: string
+          digital_habits?: Json
           focus_areas?: string[]
           full_name?: string | null
+          gender?: string | null
+          height_cm?: number | null
           id?: string
           main_goal?: string | null
           onboarding_completed?: boolean
           updated_at?: string
+          weight_kg?: number | null
+          why_now?: string | null
         }
         Relationships: []
       }
