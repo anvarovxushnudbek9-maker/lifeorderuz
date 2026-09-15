@@ -40,14 +40,9 @@ import { useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { QuickAddDialog, type QuickAddKind } from "@/components/QuickAddDialog";
+import { HUBS } from "@/lib/hubs";
 
-const NAV = [
-  { to: "/tana", label: "Tana", icon: Dumbbell },
-  { to: "/bilim", label: "Bilim", icon: BookOpen },
-  { to: "/dashboard", label: "Asosiy", icon: LayoutGrid },
-  { to: "/odat", label: "Odat", icon: CheckCircle2 },
-  { to: "/davra", label: "Davra", icon: Users },
-] as const;
+const NAV = HUBS.map((h) => ({ slug: h.slug, label: h.label, icon: h.icon }));
 
 const MENU_GROUPS = [
   {
