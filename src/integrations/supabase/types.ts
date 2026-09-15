@@ -383,10 +383,12 @@ export type Database = {
           focus_areas: string[]
           full_name: string | null
           gender: string | null
+          goal_type: string | null
           height_cm: number | null
           id: string
           main_goal: string | null
           onboarding_completed: boolean
+          sport_preference: string | null
           updated_at: string
           weight_kg: number | null
           why_now: string | null
@@ -402,10 +404,12 @@ export type Database = {
           focus_areas?: string[]
           full_name?: string | null
           gender?: string | null
+          goal_type?: string | null
           height_cm?: number | null
           id: string
           main_goal?: string | null
           onboarding_completed?: boolean
+          sport_preference?: string | null
           updated_at?: string
           weight_kg?: number | null
           why_now?: string | null
@@ -421,10 +425,12 @@ export type Database = {
           focus_areas?: string[]
           full_name?: string | null
           gender?: string | null
+          goal_type?: string | null
           height_cm?: number | null
           id?: string
           main_goal?: string | null
           onboarding_completed?: boolean
+          sport_preference?: string | null
           updated_at?: string
           weight_kg?: number | null
           why_now?: string | null

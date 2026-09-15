@@ -40,16 +40,19 @@ import { useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { QuickAddDialog, type QuickAddKind } from "@/components/QuickAddDialog";
+import { HUBS } from "@/lib/hubs";
 
-const NAV = [
-  { to: "/tana", label: "Tana", icon: Dumbbell },
-  { to: "/bilim", label: "Bilim", icon: BookOpen },
-  { to: "/dashboard", label: "Asosiy", icon: LayoutGrid },
-  { to: "/odat", label: "Odat", icon: CheckCircle2 },
-  { to: "/davra", label: "Davra", icon: Users },
-] as const;
+const NAV = HUBS.map((h) => ({ slug: h.slug, label: h.label, icon: h.icon }));
 
 const MENU_GROUPS = [
+  {
+    title: "Asosiy",
+    items: [
+      { to: "/dashboard", label: "Asosiy panel", icon: LayoutGrid },
+      { to: "/shaxsiy-reja", label: "Shaxsiy reja (kkal/mashq)", icon: Heart },
+      { to: "/ai", label: "AI murabbiy", icon: Sparkles },
+    ],
+  },
   {
     title: "Tahlil",
     items: [
@@ -66,11 +69,13 @@ const MENU_GROUPS = [
     ],
   },
   {
-    title: "Resurslar",
+    title: "Bo'limlar",
     items: [
       { to: "/bilim", label: "Kutubxona", icon: Library },
-      { to: "/tana", label: "Salomatlik", icon: Heart },
-      { to: "/ai", label: "AI murabbiy", icon: Sparkles },
+      { to: "/tana", label: "Tana", icon: Dumbbell },
+      { to: "/odat", label: "Odatlar", icon: CheckCircle2 },
+      { to: "/davra", label: "Davra", icon: Users },
+      { to: "/bilim", label: "Kurslar", icon: BookOpen },
     ],
   },
 ] as const;
@@ -230,11 +235,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-background/95 backdrop-blur-md">
         <div className="mx-auto flex max-w-5xl items-stretch justify-between px-2 pb-[env(safe-area-inset-bottom)]">
           {NAV.map((item) => {
-            const active = pathname === item.to || pathname.startsWith(item.to + "/");
+            const active = pathname === `/hub/${item.slug}`;
             return (
               <Link
-                key={item.to}
-                to={item.to}
+                key={item.slug}
+                to="/hub/$hub"
+                params={{ hub: item.slug }}
                 className={cn(
                   "flex flex-1 flex-col items-center gap-1 py-2.5 text-[11px] font-medium transition-colors",
                   active ? "text-primary" : "text-muted-foreground hover:text-foreground",

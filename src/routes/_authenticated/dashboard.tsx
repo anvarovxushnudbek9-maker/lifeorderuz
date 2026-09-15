@@ -17,6 +17,9 @@ import { useAuth } from "@/hooks/useAuth";
 import { PageHeader } from "@/components/PageHeader";
 import { Progress } from "@/components/ui/progress";
 import { todayISO, lastNDays } from "@/lib/date";
+import { HUBS } from "@/lib/hubs";
+import { AiInsight } from "@/components/AiInsight";
+import { buildNutrition } from "@/lib/plan";
 
 const TITLE = "Asosiy panel — Life Order";
 const DESC = "Bugungi odatlar, mashqlar, o'qish va davra faoliyatingiz bitta ekranda.";
@@ -52,7 +55,7 @@ function Dashboard() {
         supabase.from("books").select("id,title,current_page,total_pages").eq("user_id", uid).eq("status", "oqilmoqda"),
         supabase.from("body_metrics").select("*").eq("user_id", uid).eq("metric_date", today).maybeSingle(),
         supabase.from("circle_members").select("circle_id").eq("user_id", uid),
-        supabase.from("profiles").select("height_cm,weight_kg").eq("id", uid).maybeSingle(),
+        supabase.from("profiles").select("*").eq("id", uid).maybeSingle(),
         supabase.from("meals").select("kcal,protein_g").eq("user_id", uid).eq("eaten_on", today),
       ]);
       return {
@@ -91,6 +94,21 @@ function Dashboard() {
             : "Semizlik";
   const kcalToday = (data?.meals ?? []).reduce((s, m) => s + (m.kcal ?? 0), 0);
   const proteinToday = (data?.meals ?? []).reduce((s, m) => s + (m.protein_g ?? 0), 0);
+  const nutrition = data?.profile ? buildNutrition(data.profile) : null;
+
+  const aiContext = [
+    `Maqsad: ${data?.profile?.main_goal ?? "belgilanmagan"}`,
+    `Maqsad turi: ${data?.profile?.goal_type ?? "belgilanmagan"}`,
+    `BMI: ${bmi ? bmi.toFixed(1) : "—"} (${bmiLabel})`,
+    `Bugungi kaloriya: ${kcalToday} kcal${nutrition ? ` / norma ${nutrition.kcal} kcal` : ""}`,
+    `Bugungi oqsil: ${proteinToday} g${nutrition ? ` / norma ${nutrition.protein} g` : ""}`,
+    `Bugungi odatlar: ${doneToday.size}/${habits.length} (${habitPct}%)`,
+    `Haftalik mashq: ${weekMinutes} daqiqa`,
+    `Suv: ${data?.metrics?.water_ml ?? 0} ml, uyqu: ${data?.metrics?.sleep_hours ?? 0} soat, qadam: ${data?.metrics?.steps ?? 0}`,
+    `O'qilayotgan kitoblar: ${data?.books.length ?? 0}`,
+    `Davralar: ${data?.circleCount ?? 0}`,
+  ].join("\n");
+
 
   return (
     <div>
@@ -172,6 +190,25 @@ function Dashboard() {
           label="Qadam"
           value={String(data?.metrics?.steps ?? 0)}
         />
+      </div>
+
+      <h2 className="mt-8 text-base font-semibold">5 Hub</h2>
+      <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-5">
+        {HUBS.map((h) => (
+          <Link
+            key={h.slug}
+            to="/hub/$hub"
+            params={{ hub: h.slug }}
+            className="flex flex-col items-center gap-2 rounded-xl border border-border bg-card p-4 text-center transition-all hover:-translate-y-0.5 hover:bg-accent"
+          >
+            <h.icon className="size-5 text-primary" />
+            <span className="text-xs font-semibold">{h.label}</span>
+          </Link>
+        ))}
+      </div>
+
+      <div className="mt-8">
+        <AiInsight context={aiContext} />
       </div>
 
       <h2 className="mt-8 text-base font-semibold">Odatlar</h2>

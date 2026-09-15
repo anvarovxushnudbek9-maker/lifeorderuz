@@ -23,11 +23,13 @@ import { Route as AuthenticatedMaqsadRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedOdatRouteImport } from './routes/_authenticated/odat'
 import { Route as AuthenticatedProfilRouteImport } from './routes/_authenticated/profil'
 import { Route as AuthenticatedRejaRouteImport } from './routes/_authenticated/reja'
+import { Route as AuthenticatedShaxsiyRejaRouteImport } from './routes/_authenticated/shaxsiy-reja'
 import { Route as AuthenticatedTanaRouteImport } from './routes/_authenticated/tana'
 import { Route as AuthenticatedYutuqlarRouteImport } from './routes/_authenticated/yutuqlar'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AuthenticatedDavraIndexRouteImport } from './routes/_authenticated/davra.index'
 import { Route as AuthenticatedDavraIdRouteImport } from './routes/_authenticated/davra.$id'
+import { Route as AuthenticatedHubHubRouteImport } from './routes/_authenticated/hub.$hub'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -98,6 +100,12 @@ const AuthenticatedRejaRoute = AuthenticatedRejaRouteImport.update({
   path: '/reja',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedShaxsiyRejaRoute =
+  AuthenticatedShaxsiyRejaRouteImport.update({
+    id: '/shaxsiy-reja',
+    path: '/shaxsiy-reja',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedTanaRoute = AuthenticatedTanaRouteImport.update({
   id: '/tana',
   path: '/tana',
@@ -123,6 +131,11 @@ const AuthenticatedDavraIdRoute = AuthenticatedDavraIdRouteImport.update({
   path: '/davra/$id',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedHubHubRoute = AuthenticatedHubHubRouteImport.update({
+  id: '/hub/$hub',
+  path: '/hub/$hub',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -138,10 +151,12 @@ export interface FileRoutesByFullPath {
   '/odat': typeof AuthenticatedOdatRoute
   '/profil': typeof AuthenticatedProfilRoute
   '/reja': typeof AuthenticatedRejaRoute
+  '/shaxsiy-reja': typeof AuthenticatedShaxsiyRejaRoute
   '/tana': typeof AuthenticatedTanaRoute
   '/yutuqlar': typeof AuthenticatedYutuqlarRoute
   '/api/chat': typeof ApiChatRoute
   '/davra/$id': typeof AuthenticatedDavraIdRoute
+  '/hub/$hub': typeof AuthenticatedHubHubRoute
   '/davra/': typeof AuthenticatedDavraIndexRoute
 }
 export interface FileRoutesByTo {
@@ -158,10 +173,12 @@ export interface FileRoutesByTo {
   '/odat': typeof AuthenticatedOdatRoute
   '/profil': typeof AuthenticatedProfilRoute
   '/reja': typeof AuthenticatedRejaRoute
+  '/shaxsiy-reja': typeof AuthenticatedShaxsiyRejaRoute
   '/tana': typeof AuthenticatedTanaRoute
   '/yutuqlar': typeof AuthenticatedYutuqlarRoute
   '/api/chat': typeof ApiChatRoute
   '/davra/$id': typeof AuthenticatedDavraIdRoute
+  '/hub/$hub': typeof AuthenticatedHubHubRoute
   '/davra': typeof AuthenticatedDavraIndexRoute
 }
 export interface FileRoutesById {
@@ -180,10 +197,12 @@ export interface FileRoutesById {
   '/_authenticated/odat': typeof AuthenticatedOdatRoute
   '/_authenticated/profil': typeof AuthenticatedProfilRoute
   '/_authenticated/reja': typeof AuthenticatedRejaRoute
+  '/_authenticated/shaxsiy-reja': typeof AuthenticatedShaxsiyRejaRoute
   '/_authenticated/tana': typeof AuthenticatedTanaRoute
   '/_authenticated/yutuqlar': typeof AuthenticatedYutuqlarRoute
   '/api/chat': typeof ApiChatRoute
   '/_authenticated/davra/$id': typeof AuthenticatedDavraIdRoute
+  '/_authenticated/hub/$hub': typeof AuthenticatedHubHubRoute
   '/_authenticated/davra/': typeof AuthenticatedDavraIndexRoute
 }
 export interface FileRouteTypes {
@@ -202,10 +221,12 @@ export interface FileRouteTypes {
     | '/odat'
     | '/profil'
     | '/reja'
+    | '/shaxsiy-reja'
     | '/tana'
     | '/yutuqlar'
     | '/api/chat'
     | '/davra/$id'
+    | '/hub/$hub'
     | '/davra/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -222,10 +243,12 @@ export interface FileRouteTypes {
     | '/odat'
     | '/profil'
     | '/reja'
+    | '/shaxsiy-reja'
     | '/tana'
     | '/yutuqlar'
     | '/api/chat'
     | '/davra/$id'
+    | '/hub/$hub'
     | '/davra'
   id:
     | '__root__'
@@ -243,10 +266,12 @@ export interface FileRouteTypes {
     | '/_authenticated/odat'
     | '/_authenticated/profil'
     | '/_authenticated/reja'
+    | '/_authenticated/shaxsiy-reja'
     | '/_authenticated/tana'
     | '/_authenticated/yutuqlar'
     | '/api/chat'
     | '/_authenticated/davra/$id'
+    | '/_authenticated/hub/$hub'
     | '/_authenticated/davra/'
   fileRoutesById: FileRoutesById
 }
@@ -359,6 +384,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRejaRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/shaxsiy-reja': {
+      id: '/_authenticated/shaxsiy-reja'
+      path: '/shaxsiy-reja'
+      fullPath: '/shaxsiy-reja'
+      preLoaderRoute: typeof AuthenticatedShaxsiyRejaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/tana': {
       id: '/_authenticated/tana'
       path: '/tana'
@@ -394,6 +426,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDavraIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/hub/$hub': {
+      id: '/_authenticated/hub/$hub'
+      path: '/hub/$hub'
+      fullPath: '/hub/$hub'
+      preLoaderRoute: typeof AuthenticatedHubHubRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -407,9 +446,11 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedOdatRoute: typeof AuthenticatedOdatRoute
   AuthenticatedProfilRoute: typeof AuthenticatedProfilRoute
   AuthenticatedRejaRoute: typeof AuthenticatedRejaRoute
+  AuthenticatedShaxsiyRejaRoute: typeof AuthenticatedShaxsiyRejaRoute
   AuthenticatedTanaRoute: typeof AuthenticatedTanaRoute
   AuthenticatedYutuqlarRoute: typeof AuthenticatedYutuqlarRoute
   AuthenticatedDavraIdRoute: typeof AuthenticatedDavraIdRoute
+  AuthenticatedHubHubRoute: typeof AuthenticatedHubHubRoute
   AuthenticatedDavraIndexRoute: typeof AuthenticatedDavraIndexRoute
 }
 
@@ -423,9 +464,11 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedOdatRoute: AuthenticatedOdatRoute,
   AuthenticatedProfilRoute: AuthenticatedProfilRoute,
   AuthenticatedRejaRoute: AuthenticatedRejaRoute,
+  AuthenticatedShaxsiyRejaRoute: AuthenticatedShaxsiyRejaRoute,
   AuthenticatedTanaRoute: AuthenticatedTanaRoute,
   AuthenticatedYutuqlarRoute: AuthenticatedYutuqlarRoute,
   AuthenticatedDavraIdRoute: AuthenticatedDavraIdRoute,
+  AuthenticatedHubHubRoute: AuthenticatedHubHubRoute,
   AuthenticatedDavraIndexRoute: AuthenticatedDavraIndexRoute,
 }
 

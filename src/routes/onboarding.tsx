@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { GOALS, SPORTS } from "@/lib/plan";
 
 const TITLE = "Boshlash — Life Order";
 const DESC = "Besh qadamda profilingizni sozlang va shaxsiy rivojlanish tizimingizni yarating.";
@@ -153,6 +154,8 @@ function Onboarding() {
   const [height, setHeight] = React.useState("");
   const [weight, setWeight] = React.useState("");
   const [activity, setActivity] = React.useState("");
+  const [goalType, setGoalType] = React.useState("");
+  const [sport, setSport] = React.useState("");
 
   React.useEffect(() => {
     if (!loading && !session) navigate({ to: "/auth", replace: true });
@@ -163,7 +166,13 @@ function Onboarding() {
     whyNow.length > 0 && areas.length > 0,
     obstacle.length > 0,
     PHONE_QUESTIONS.every((q) => phone[q.key]),
-    age !== "" && gender !== "" && height !== "" && weight !== "" && activity !== "",
+    age !== "" &&
+      gender !== "" &&
+      height !== "" &&
+      weight !== "" &&
+      activity !== "" &&
+      goalType !== "" &&
+      sport !== "",
   ][step];
 
   function go(next: number) {
@@ -189,6 +198,8 @@ function Onboarding() {
         height_cm: height ? Number(height) : null,
         weight_kg: weight ? Number(weight) : null,
         activity_level: activity || null,
+        goal_type: goalType || null,
+        sport_preference: sport || null,
         onboarding_completed: true,
       });
       if (error) throw error;
@@ -416,6 +427,25 @@ function Onboarding() {
                     <span className="block text-xs text-muted-foreground">{a.d}</span>
                   </OptionRow>
                 ))}
+              </div>
+              <div className="space-y-2">
+                <Label>Jismoniy maqsad</Label>
+                {GOALS.map((g) => (
+                  <OptionRow key={g.v} on={goalType === g.v} onClick={() => setGoalType(g.v)}>
+                    <span className="font-medium">{g.t}</span>
+                    <span className="block text-xs text-muted-foreground">{g.d}</span>
+                  </OptionRow>
+                ))}
+              </div>
+              <div className="space-y-2">
+                <Label>Sport turi</Label>
+                <div className="flex flex-wrap gap-2">
+                  {SPORTS.map((s) => (
+                    <Chip key={s} on={sport === s} onClick={() => setSport(s)}>
+                      {s}
+                    </Chip>
+                  ))}
+                </div>
               </div>
             </>
           )}
