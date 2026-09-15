@@ -113,7 +113,14 @@ function AuthPage() {
     e.preventDefault();
     setBusy(true);
     try {
-      if (mode === "signup") {
+      if (mode === "reset") {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/parol-tiklash`,
+        });
+        if (error) throw error;
+        toast.success("Tiklash havolasi pochtangizga yuborildi.");
+        setMode("signin");
+      } else if (mode === "signup") {
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
