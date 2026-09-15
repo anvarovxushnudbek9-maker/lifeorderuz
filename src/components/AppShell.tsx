@@ -46,6 +46,14 @@ const NAV = HUBS.map((h) => ({ slug: h.slug, label: h.label, icon: h.icon }));
 
 const MENU_GROUPS = [
   {
+    title: "Asosiy",
+    items: [
+      { to: "/dashboard", label: "Asosiy panel", icon: LayoutGrid },
+      { to: "/shaxsiy-reja", label: "Shaxsiy reja (kkal/mashq)", icon: Heart },
+      { to: "/ai", label: "AI murabbiy", icon: Sparkles },
+    ],
+  },
+  {
     title: "Tahlil",
     items: [
       { to: "/analiz", label: "Analiz va statistika", icon: BarChart3 },
@@ -61,11 +69,13 @@ const MENU_GROUPS = [
     ],
   },
   {
-    title: "Resurslar",
+    title: "Bo'limlar",
     items: [
       { to: "/bilim", label: "Kutubxona", icon: Library },
-      { to: "/tana", label: "Salomatlik", icon: Heart },
-      { to: "/ai", label: "AI murabbiy", icon: Sparkles },
+      { to: "/tana", label: "Tana", icon: Dumbbell },
+      { to: "/odat", label: "Odatlar", icon: CheckCircle2 },
+      { to: "/davra", label: "Davra", icon: Users },
+      { to: "/bilim", label: "Kurslar", icon: BookOpen },
     ],
   },
 ] as const;
