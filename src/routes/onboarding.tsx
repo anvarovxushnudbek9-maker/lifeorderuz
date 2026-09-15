@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { GOALS, SPORTS } from "@/lib/plan";
 
 const TITLE = "Boshlash — Life Order";
 const DESC = "Besh qadamda profilingizni sozlang va shaxsiy rivojlanish tizimingizni yarating.";
@@ -153,6 +154,8 @@ function Onboarding() {
   const [height, setHeight] = React.useState("");
   const [weight, setWeight] = React.useState("");
   const [activity, setActivity] = React.useState("");
+  const [goalType, setGoalType] = React.useState("");
+  const [sport, setSport] = React.useState("");
 
   React.useEffect(() => {
     if (!loading && !session) navigate({ to: "/auth", replace: true });
