@@ -52,6 +52,8 @@ function Dashboard() {
         books: books.data ?? [],
         metrics: metrics.data,
         circleCount: circles.data?.length ?? 0,
+        profile: profile.data,
+        meals: meals.data ?? [],
       };
     },
   });
