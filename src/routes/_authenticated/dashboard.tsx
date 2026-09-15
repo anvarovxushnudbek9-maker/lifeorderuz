@@ -42,6 +42,8 @@ function Dashboard() {
         supabase.from("books").select("id,title,current_page,total_pages").eq("user_id", uid).eq("status", "oqilmoqda"),
         supabase.from("body_metrics").select("*").eq("user_id", uid).eq("metric_date", today).maybeSingle(),
         supabase.from("circle_members").select("circle_id").eq("user_id", uid),
+        supabase.from("profiles").select("height_cm,weight_kg").eq("id", uid).maybeSingle(),
+        supabase.from("meals").select("kcal,protein_g").eq("user_id", uid).eq("eaten_on", today),
       ]);
       return {
         habits: habits.data ?? [],
