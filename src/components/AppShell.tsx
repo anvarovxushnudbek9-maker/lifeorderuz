@@ -225,11 +225,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-background/95 backdrop-blur-md">
         <div className="mx-auto flex max-w-5xl items-stretch justify-between px-2 pb-[env(safe-area-inset-bottom)]">
           {NAV.map((item) => {
-            const active = pathname === item.to || pathname.startsWith(item.to + "/");
+            const active = pathname === `/hub/${item.slug}`;
             return (
               <Link
-                key={item.to}
-                to={item.to}
+                key={item.slug}
+                to="/hub/$hub"
+                params={{ hub: item.slug }}
                 className={cn(
                   "flex flex-1 flex-col items-center gap-1 py-2.5 text-[11px] font-medium transition-colors",
                   active ? "text-primary" : "text-muted-foreground hover:text-foreground",
