@@ -66,6 +66,22 @@ function Dashboard() {
   const weekMinutes = (data?.workouts ?? []).reduce((s, w) => s + (w.duration_min ?? 0), 0);
   const name = (user?.user_metadata?.["full_name"] as string | undefined)?.split(" ")[0];
 
+  const h = Number(data?.profile?.height_cm ?? 0);
+  const w = Number(data?.profile?.weight_kg ?? 0);
+  const bmi = h > 0 && w > 0 ? w / (h / 100) ** 2 : null;
+  const bmiLabel =
+    bmi === null
+      ? "—"
+      : bmi < 18.5
+        ? "Kam vazn"
+        : bmi < 25
+          ? "Normal"
+          : bmi < 30
+            ? "Ortiqcha"
+            : "Semizlik";
+  const kcalToday = (data?.meals ?? []).reduce((s, m) => s + (m.kcal ?? 0), 0);
+  const proteinToday = (data?.meals ?? []).reduce((s, m) => s + (m.protein_g ?? 0), 0);
+
   return (
     <div>
       <PageHeader
