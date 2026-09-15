@@ -166,7 +166,13 @@ function Onboarding() {
     whyNow.length > 0 && areas.length > 0,
     obstacle.length > 0,
     PHONE_QUESTIONS.every((q) => phone[q.key]),
-    age !== "" && gender !== "" && height !== "" && weight !== "" && activity !== "",
+    age !== "" &&
+      gender !== "" &&
+      height !== "" &&
+      weight !== "" &&
+      activity !== "" &&
+      goalType !== "" &&
+      sport !== "",
   ][step];
 
   function go(next: number) {
