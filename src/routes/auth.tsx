@@ -232,12 +232,18 @@ function AuthPage() {
             </div>
 
             <h1 className="text-xl font-bold text-card-foreground">
-              {mode === "signin" ? "Xush kelibsiz" : "Hisob yaratish"}
+              {mode === "signin"
+                ? "Xush kelibsiz"
+                : mode === "signup"
+                  ? "Hisob yaratish"
+                  : "Parolni tiklash"}
             </h1>
             <p className="mt-1 text-sm text-muted-foreground">
               {mode === "signin"
                 ? "Tizimingizni davom ettiring."
-                : "Bir daqiqada boshlang — bepul."}
+                : mode === "signup"
+                  ? "Bir daqiqada boshlang — bepul."
+                  : "Pochtangizni kiriting, tiklash havolasini yuboramiz."}
             </p>
 
             <Button
