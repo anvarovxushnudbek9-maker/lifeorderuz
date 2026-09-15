@@ -94,6 +94,21 @@ function Dashboard() {
             : "Semizlik";
   const kcalToday = (data?.meals ?? []).reduce((s, m) => s + (m.kcal ?? 0), 0);
   const proteinToday = (data?.meals ?? []).reduce((s, m) => s + (m.protein_g ?? 0), 0);
+  const nutrition = data?.profile ? buildNutrition(data.profile) : null;
+
+  const aiContext = [
+    `Maqsad: ${data?.profile?.main_goal ?? "belgilanmagan"}`,
+    `Maqsad turi: ${data?.profile?.goal_type ?? "belgilanmagan"}`,
+    `BMI: ${bmi ? bmi.toFixed(1) : "—"} (${bmiLabel})`,
+    `Bugungi kaloriya: ${kcalToday} kcal${nutrition ? ` / norma ${nutrition.kcal} kcal` : ""}`,
+    `Bugungi oqsil: ${proteinToday} g${nutrition ? ` / norma ${nutrition.protein} g` : ""}`,
+    `Bugungi odatlar: ${doneToday.size}/${habits.length} (${habitPct}%)`,
+    `Haftalik mashq: ${weekMinutes} daqiqa`,
+    `Suv: ${data?.metrics?.water_ml ?? 0} ml, uyqu: ${data?.metrics?.sleep_hours ?? 0} soat, qadam: ${data?.metrics?.steps ?? 0}`,
+    `O'qilayotgan kitoblar: ${data?.books.length ?? 0}`,
+    `Davralar: ${data?.circleCount ?? 0}`,
+  ].join("\n");
+
 
   return (
     <div>
