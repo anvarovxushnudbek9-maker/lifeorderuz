@@ -1,6 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Dumbbell, BookOpen, CheckCircle2, Users, Flame, Droplets, Moon } from "lucide-react";
+import {
+  Dumbbell,
+  BookOpen,
+  CheckCircle2,
+  Users,
+  Flame,
+  Droplets,
+  Moon,
+  Scale,
+  Beef,
+} from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
