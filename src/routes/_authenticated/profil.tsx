@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 
-const TITLE = "Profil va sozlamalar — O'SISH";
+const TITLE = "Profil va sozlamalar — Life Order";
 const DESC = "Ismingiz, maqsadingiz va ilova sozlamalarini boshqaring.";
 
 export const Route = createFileRoute("/_authenticated/profil")({

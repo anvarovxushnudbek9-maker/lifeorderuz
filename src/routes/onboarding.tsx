@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
-const TITLE = "Boshlash — O'SISH";
+const TITLE = "Boshlash — Life Order";
 const DESC = "Besh qadamda profilingizni sozlang va shaxsiy rivojlanish tizimingizni yarating.";
 
 const AREAS = ["Tana", "Bilim", "Odatlar", "Davra", "Ruhiyat", "Moliya", "Karyera"];

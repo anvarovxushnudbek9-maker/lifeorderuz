@@ -152,7 +152,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </Sheet>
 
           <Link to="/dashboard" className="text-sm font-bold tracking-tight">
-            O&apos;SISH
+            Life Order
           </Link>
 
           <div className="flex items-center gap-1">

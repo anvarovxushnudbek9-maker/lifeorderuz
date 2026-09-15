@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-const TITLE = "Bilim — kitoblar va kurslar | O'SISH";
+const TITLE = "Bilim — kitoblar va kurslar | Life Order";
 const DESC = "Shaxsiy kutubxonangiz: o'qilayotgan kitoblar, kurslar va o'qish progressi.";
 
 export const Route = createFileRoute("/_authenticated/bilim")({

@@ -17,7 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/hooks/useReveal";
 
-const TITLE = "O'SISH — motivatsiya tugaydi, tizim qoladi";
+const TITLE = "Life Order — motivatsiya tugaydi, tizim qoladi";
 const DESC =
   "Tana, bilim, odatlar va davra — shaxsiy rivojlanishning barcha modullari bitta tizimda. AI murabbiy bilan har kuni bir qadam oldinga.";
 
@@ -143,7 +143,7 @@ function Landing() {
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-5">
-          <span className="text-sm font-bold tracking-[0.2em]">O&apos;SISH</span>
+          <span className="text-sm font-bold tracking-[0.2em]">Life Order</span>
           <nav className="hidden items-center gap-6 text-sm text-muted-foreground sm:flex">
             <a href="#modullar" className="transition-colors hover:text-foreground">
               Modullar
@@ -372,7 +372,7 @@ function Landing() {
       </section>
 
       <footer className="border-t border-border py-8 text-center text-xs text-muted-foreground">
-        O&apos;SISH — motivatsiya tugaydi, tizim qoladi
+        Life Order — motivatsiya tugaydi, tizim qoladi
       </footer>
     </div>
   );

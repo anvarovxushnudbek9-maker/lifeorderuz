@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { lastNDays, todayISO, shortDate } from "@/lib/date";
 
-const TITLE = "Odatlar — O'SISH";
+const TITLE = "Odatlar — Life Order";
 const DESC = "Kunlik odatlaringizni belgilang, ketma-ketlikni saqlang va haftalik natijani ko'ring.";
 
 export const Route = createFileRoute("/_authenticated/odat")({

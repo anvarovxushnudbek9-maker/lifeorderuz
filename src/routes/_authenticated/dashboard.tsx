@@ -1,6 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Dumbbell, BookOpen, CheckCircle2, Users, Flame, Droplets, Moon } from "lucide-react";
+import {
+  Dumbbell,
+  BookOpen,
+  CheckCircle2,
+  Users,
+  Flame,
+  Droplets,
+  Moon,
+  Scale,
+  Beef,
+} from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -8,7 +18,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { Progress } from "@/components/ui/progress";
 import { todayISO, lastNDays } from "@/lib/date";
 
-const TITLE = "Asosiy panel — O'SISH";
+const TITLE = "Asosiy panel — Life Order";
 const DESC = "Bugungi odatlar, mashqlar, o'qish va davra faoliyatingiz bitta ekranda.";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
@@ -35,13 +45,15 @@ function Dashboard() {
     queryKey: ["dashboard", uid, today],
     enabled: !!uid,
     queryFn: async () => {
-      const [habits, logs, workouts, books, metrics, circles] = await Promise.all([
+      const [habits, logs, workouts, books, metrics, circles, profile, meals] = await Promise.all([
         supabase.from("habits").select("id,title,emoji").eq("user_id", uid).eq("archived", false),
         supabase.from("habit_logs").select("habit_id,log_date").eq("user_id", uid).gte("log_date", week[0]!),
         supabase.from("workouts").select("id,duration_min").eq("user_id", uid).gte("performed_on", week[0]!),
         supabase.from("books").select("id,title,current_page,total_pages").eq("user_id", uid).eq("status", "oqilmoqda"),
         supabase.from("body_metrics").select("*").eq("user_id", uid).eq("metric_date", today).maybeSingle(),
         supabase.from("circle_members").select("circle_id").eq("user_id", uid),
+        supabase.from("profiles").select("height_cm,weight_kg").eq("id", uid).maybeSingle(),
+        supabase.from("meals").select("kcal,protein_g").eq("user_id", uid).eq("eaten_on", today),
       ]);
       return {
         habits: habits.data ?? [],
@@ -50,6 +62,8 @@ function Dashboard() {
         books: books.data ?? [],
         metrics: metrics.data,
         circleCount: circles.data?.length ?? 0,
+        profile: profile.data,
+        meals: meals.data ?? [],
       };
     },
   });
@@ -61,6 +75,22 @@ function Dashboard() {
   const habitPct = habits.length ? Math.round((doneToday.size / habits.length) * 100) : 0;
   const weekMinutes = (data?.workouts ?? []).reduce((s, w) => s + (w.duration_min ?? 0), 0);
   const name = (user?.user_metadata?.["full_name"] as string | undefined)?.split(" ")[0];
+
+  const h = Number(data?.profile?.height_cm ?? 0);
+  const w = Number(data?.profile?.weight_kg ?? 0);
+  const bmi = h > 0 && w > 0 ? w / (h / 100) ** 2 : null;
+  const bmiLabel =
+    bmi === null
+      ? "—"
+      : bmi < 18.5
+        ? "Kam vazn"
+        : bmi < 25
+          ? "Normal"
+          : bmi < 30
+            ? "Ortiqcha"
+            : "Semizlik";
+  const kcalToday = (data?.meals ?? []).reduce((s, m) => s + (m.kcal ?? 0), 0);
+  const proteinToday = (data?.meals ?? []).reduce((s, m) => s + (m.protein_g ?? 0), 0);
 
   return (
     <div>
@@ -112,6 +142,21 @@ function Dashboard() {
 
       <h2 className="mt-8 text-base font-semibold">Bugungi tana ko&apos;rsatkichlari</h2>
       <div className="mt-3 grid grid-cols-3 gap-3">
+        <MiniStat
+          icon={<Scale className="size-4 text-primary" />}
+          label={`BMI — ${bmiLabel}`}
+          value={bmi ? bmi.toFixed(1) : "—"}
+        />
+        <MiniStat
+          icon={<Flame className="size-4 text-primary" />}
+          label="Kaloriya"
+          value={`${kcalToday} kcal`}
+        />
+        <MiniStat
+          icon={<Beef className="size-4 text-primary" />}
+          label="Oqsil"
+          value={`${proteinToday} g`}
+        />
         <MiniStat
           icon={<Droplets className="size-4 text-primary" />}
           label="Suv"

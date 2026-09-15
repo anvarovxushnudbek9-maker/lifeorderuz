@@ -17,7 +17,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { PageHeader } from "@/components/PageHeader";
 import { lastNDays, shortDate } from "@/lib/date";
 
-const TITLE = "Analiz va statistika — O'SISH";
+const TITLE = "Analiz va statistika — Life Order";
 const DESC = "Odatlar, mashqlar va tana ko'rsatkichlaringiz bo'yicha 14 kunlik grafik tahlil.";
 
 export const Route = createFileRoute("/_authenticated/analiz")({

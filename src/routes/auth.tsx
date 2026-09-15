@@ -12,8 +12,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { Reveal } from "@/hooks/useReveal";
 import { cn } from "@/lib/utils";
 
-const TITLE = "Kirish — O'SISH";
-const DESC = "O'SISH hisobingizga kiring yoki bir daqiqada ro'yxatdan o'ting.";
+const TITLE = "Kirish — Life Order";
+const DESC = "Life Order hisobingizga kiring yoki bir daqiqada ro'yxatdan o'ting.";
 
 export const Route = createFileRoute("/auth")({
   ssr: false,
@@ -53,10 +53,51 @@ function GoogleIcon() {
   );
 }
 
+function scorePassword(p: string) {
+  let s = 0;
+  if (p.length >= 6) s++;
+  if (p.length >= 10) s++;
+  if (/[A-Z]/.test(p) && /[a-z]/.test(p)) s++;
+  if (/\d/.test(p)) s++;
+  if (/[^A-Za-z0-9]/.test(p)) s++;
+  return Math.min(s, 4);
+}
+
+const STRENGTH = [
+  { label: "Juda zaif", color: "bg-destructive" },
+  { label: "Zaif", color: "bg-destructive" },
+  { label: "O'rtacha", color: "bg-amber-500" },
+  { label: "Yaxshi", color: "bg-emerald-500" },
+  { label: "Kuchli", color: "bg-emerald-600" },
+] as const;
+
+function PasswordStrength({ value }: { value: string }) {
+  const score = scorePassword(value);
+  const info = STRENGTH[score]!;
+  return (
+    <div className="space-y-1.5 pt-1">
+      <div className="flex gap-1">
+        {[0, 1, 2, 3].map((i) => (
+          <span
+            key={i}
+            className={cn(
+              "h-1.5 flex-1 rounded-full transition-all duration-500",
+              i < score ? info.color : "bg-muted",
+            )}
+          />
+        ))}
+      </div>
+      <p className="text-xs text-muted-foreground">
+        Parol kuchi: <span className="font-medium text-foreground">{info.label}</span>
+      </p>
+    </div>
+  );
+}
+
 function AuthPage() {
   const navigate = useNavigate();
   const { session } = useAuth();
-  const [mode, setMode] = React.useState<"signin" | "signup">("signin");
+  const [mode, setMode] = React.useState<"signin" | "signup" | "reset">("signin");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [showPass, setShowPass] = React.useState(false);
@@ -72,7 +113,14 @@ function AuthPage() {
     e.preventDefault();
     setBusy(true);
     try {
-      if (mode === "signup") {
+      if (mode === "reset") {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/parol-tiklash`,
+        });
+        if (error) throw error;
+        toast.success("Tiklash havolasi pochtangizga yuborildi.");
+        setMode("signin");
+      } else if (mode === "signup") {
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
@@ -128,7 +176,7 @@ function AuthPage() {
       {/* Brand side */}
       <aside className="relative hidden w-1/2 flex-col justify-between border-r border-border bg-secondary/40 p-10 lg:flex">
         <Link to="/" className="text-sm font-bold tracking-[0.2em]">
-          O&apos;SISH
+          Life Order
         </Link>
         <Reveal>
           <h2 className="max-w-sm text-4xl font-bold leading-tight tracking-tight">
@@ -184,12 +232,18 @@ function AuthPage() {
             </div>
 
             <h1 className="text-xl font-bold text-card-foreground">
-              {mode === "signin" ? "Xush kelibsiz" : "Hisob yaratish"}
+              {mode === "signin"
+                ? "Xush kelibsiz"
+                : mode === "signup"
+                  ? "Hisob yaratish"
+                  : "Parolni tiklash"}
             </h1>
             <p className="mt-1 text-sm text-muted-foreground">
               {mode === "signin"
                 ? "Tizimingizni davom ettiring."
-                : "Bir daqiqada boshlang — bepul."}
+                : mode === "signup"
+                  ? "Bir daqiqada boshlang — bepul."
+                  : "Pochtangizni kiriting, tiklash havolasini yuboramiz."}
             </p>
 
             <Button
@@ -238,42 +292,70 @@ function AuthPage() {
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <Label htmlFor="password">Parol</Label>
-                <div className="relative">
-                  <Input
-                    id="password"
-                    type={showPass ? "text" : "password"}
-                    minLength={6}
-                    autoComplete={mode === "signin" ? "current-password" : "new-password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="pr-10"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPass((s) => !s)}
-                    aria-label="Parolni ko'rsatish"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    {showPass ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
-                  </button>
+              {mode !== "reset" && (
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="password">Parol</Label>
+                    {mode === "signin" && (
+                      <button
+                        type="button"
+                        onClick={() => setMode("reset")}
+                        className="text-xs font-medium text-primary hover:underline"
+                      >
+                        Parolni unutdingizmi?
+                      </button>
+                    )}
+                  </div>
+                  <div className="relative">
+                    <Input
+                      id="password"
+                      type={showPass ? "text" : "password"}
+                      minLength={6}
+                      autoComplete={mode === "signin" ? "current-password" : "new-password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      className="pr-10"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPass((s) => !s)}
+                      aria-label="Parolni ko'rsatish"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      {showPass ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                    </button>
+                  </div>
+                  {mode === "signup" && password.length > 0 && (
+                    <PasswordStrength value={password} />
+                  )}
+                  {mode === "signup" && password.length === 0 && (
+                    <p className="text-xs text-muted-foreground">Kamida 6 ta belgi.</p>
+                  )}
                 </div>
-                {mode === "signup" && (
-                  <p className="text-xs text-muted-foreground">Kamida 6 ta belgi.</p>
-                )}
-              </div>
+              )}
 
               <Button type="submit" className="w-full" disabled={busy}>
                 {busy ? (
                   <Loader2 className="size-4 animate-spin" />
                 ) : mode === "signin" ? (
                   "Kirish"
-                ) : (
+                ) : mode === "signup" ? (
                   "Ro'yxatdan o'tish"
+                ) : (
+                  "Tiklash havolasini yuborish"
                 )}
               </Button>
+
+              {mode === "reset" && (
+                <button
+                  type="button"
+                  onClick={() => setMode("signin")}
+                  className="w-full text-center text-xs text-muted-foreground hover:text-foreground"
+                >
+                  Kirishga qaytish
+                </button>
+              )}
             </form>
           </div>
         </Reveal>

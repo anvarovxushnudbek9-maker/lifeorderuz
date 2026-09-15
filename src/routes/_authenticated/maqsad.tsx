@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
-const TITLE = "Maqsadlar — O'SISH";
+const TITLE = "Maqsadlar — Life Order";
 const DESC = "Asosiy maqsadingizni belgilang va e'tibor qaratadigan yo'nalishlarni tanlang.";
 
 const AREAS = ["Tana", "Bilim", "Odatlar", "Davra", "Ruhiyat", "Moliya", "Karyera"];

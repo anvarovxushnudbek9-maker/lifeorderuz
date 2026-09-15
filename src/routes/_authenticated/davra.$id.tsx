@@ -13,9 +13,9 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_authenticated/davra/$id")({
   head: () => ({
     meta: [
-      { title: "Davra suhbati — O'SISH" },
+      { title: "Davra suhbati — Life Order" },
       { name: "description", content: "Davra a'zolari bilan jonli suhbat va qo'llab-quvvatlash." },
-      { property: "og:title", content: "Davra suhbati — O'SISH" },
+      { property: "og:title", content: "Davra suhbati — Life Order" },
       {
         property: "og:description",
         content: "Davra a'zolari bilan jonli suhbat va qo'llab-quvvatlash.",
