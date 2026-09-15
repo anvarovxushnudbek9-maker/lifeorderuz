@@ -292,42 +292,70 @@ function AuthPage() {
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <Label htmlFor="password">Parol</Label>
-                <div className="relative">
-                  <Input
-                    id="password"
-                    type={showPass ? "text" : "password"}
-                    minLength={6}
-                    autoComplete={mode === "signin" ? "current-password" : "new-password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="pr-10"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPass((s) => !s)}
-                    aria-label="Parolni ko'rsatish"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    {showPass ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
-                  </button>
+              {mode !== "reset" && (
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="password">Parol</Label>
+                    {mode === "signin" && (
+                      <button
+                        type="button"
+                        onClick={() => setMode("reset")}
+                        className="text-xs font-medium text-primary hover:underline"
+                      >
+                        Parolni unutdingizmi?
+                      </button>
+                    )}
+                  </div>
+                  <div className="relative">
+                    <Input
+                      id="password"
+                      type={showPass ? "text" : "password"}
+                      minLength={6}
+                      autoComplete={mode === "signin" ? "current-password" : "new-password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      className="pr-10"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPass((s) => !s)}
+                      aria-label="Parolni ko'rsatish"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      {showPass ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                    </button>
+                  </div>
+                  {mode === "signup" && password.length > 0 && (
+                    <PasswordStrength value={password} />
+                  )}
+                  {mode === "signup" && password.length === 0 && (
+                    <p className="text-xs text-muted-foreground">Kamida 6 ta belgi.</p>
+                  )}
                 </div>
-                {mode === "signup" && (
-                  <p className="text-xs text-muted-foreground">Kamida 6 ta belgi.</p>
-                )}
-              </div>
+              )}
 
               <Button type="submit" className="w-full" disabled={busy}>
                 {busy ? (
                   <Loader2 className="size-4 animate-spin" />
                 ) : mode === "signin" ? (
                   "Kirish"
-                ) : (
+                ) : mode === "signup" ? (
                   "Ro'yxatdan o'tish"
+                ) : (
+                  "Tiklash havolasini yuborish"
                 )}
               </Button>
+
+              {mode === "reset" && (
+                <button
+                  type="button"
+                  onClick={() => setMode("signin")}
+                  className="w-full text-center text-xs text-muted-foreground hover:text-foreground"
+                >
+                  Kirishga qaytish
+                </button>
+              )}
             </form>
           </div>
         </Reveal>
