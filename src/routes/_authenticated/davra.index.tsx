@@ -9,7 +9,7 @@ import { PageHeader, EmptyState } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-const TITLE = "Davra — hamfikrlar jamoasi | O'SISH";
+const TITLE = "Davra — hamfikrlar jamoasi | Life Order";
 const DESC = "Maqsadi bir xil odamlar bilan guruhlarda suhbatlashing va bir-biringizni qo'llab-quvvatlang.";
 
 export const Route = createFileRoute("/_authenticated/davra/")({

@@ -12,8 +12,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { Reveal } from "@/hooks/useReveal";
 import { cn } from "@/lib/utils";
 
-const TITLE = "Kirish — O'SISH";
-const DESC = "O'SISH hisobingizga kiring yoki bir daqiqada ro'yxatdan o'ting.";
+const TITLE = "Kirish — Life Order";
+const DESC = "Life Order hisobingizga kiring yoki bir daqiqada ro'yxatdan o'ting.";
 
 export const Route = createFileRoute("/auth")({
   ssr: false,
@@ -128,7 +128,7 @@ function AuthPage() {
       {/* Brand side */}
       <aside className="relative hidden w-1/2 flex-col justify-between border-r border-border bg-secondary/40 p-10 lg:flex">
         <Link to="/" className="text-sm font-bold tracking-[0.2em]">
-          O&apos;SISH
+          Life Order
         </Link>
         <Reveal>
           <h2 className="max-w-sm text-4xl font-bold leading-tight tracking-tight">

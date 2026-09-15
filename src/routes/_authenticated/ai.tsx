@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { todayISO, lastNDays } from "@/lib/date";
 
-const TITLE = "AI murabbiy — O'SISH";
+const TITLE = "AI murabbiy — Life Order";
 const DESC = "Ko'rsatkichlaringizni tahlil qilib, kunlik tavsiya va reja beradigan AI murabbiy.";
 
 export const Route = createFileRoute("/_authenticated/ai")({

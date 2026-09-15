@@ -8,7 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { lastNDays, shortDate } from "@/lib/date";
 import { cn } from "@/lib/utils";
 
-const TITLE = "Haftalik reja — O'SISH";
+const TITLE = "Haftalik reja — Life Order";
 const DESC = "Haftalik odatlar jadvali: qaysi kun nima bajarildi va nima qoldi.";
 
 export const Route = createFileRoute("/_authenticated/reja")({

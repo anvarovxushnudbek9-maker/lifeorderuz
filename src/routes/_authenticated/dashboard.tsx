@@ -8,7 +8,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { Progress } from "@/components/ui/progress";
 import { todayISO, lastNDays } from "@/lib/date";
 
-const TITLE = "Asosiy panel — O'SISH";
+const TITLE = "Asosiy panel — Life Order";
 const DESC = "Bugungi odatlar, mashqlar, o'qish va davra faoliyatingiz bitta ekranda.";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({

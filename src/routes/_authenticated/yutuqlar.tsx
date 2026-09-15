@@ -7,7 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { PageHeader } from "@/components/PageHeader";
 import { cn } from "@/lib/utils";
 
-const TITLE = "Yutuqlar — O'SISH";
+const TITLE = "Yutuqlar — Life Order";
 const DESC = "Faolligingiz asosida ochiladigan nishonlar va bosqichlar.";
 
 export const Route = createFileRoute("/_authenticated/yutuqlar")({

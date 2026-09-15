@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-const TITLE = "Kundalik — O'SISH";
+const TITLE = "Kundalik — Life Order";
 const DESC = "Kunlik fikrlaringizni yozing, kayfiyatni kuzating va o'z o'sishingizni ko'ring.";
 
 export const Route = createFileRoute("/_authenticated/kundalik")({

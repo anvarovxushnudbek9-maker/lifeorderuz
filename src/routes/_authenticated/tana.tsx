@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { todayISO, lastNDays } from "@/lib/date";
 
-const TITLE = "Tana — mashq, ovqat va tiklanish | O'SISH";
+const TITLE = "Tana — mashq, ovqat va tiklanish | Life Order";
 const DESC =
   "Mashqlaringiz, ovqatlanishingiz, uyqu, suv va vazningizni kuzating hamda progressni ko'ring.";
 

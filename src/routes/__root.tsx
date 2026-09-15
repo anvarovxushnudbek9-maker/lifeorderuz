@@ -80,13 +80,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "O'SISH — shaxsiy rivojlanish ekotizimi" },
+      { title: "Life Order — shaxsiy rivojlanish ekotizimi" },
       {
         name: "description",
         content:
           "Tana, bilim, odatlar va davra — shaxsiy rivojlanishning barcha modullari bitta ilovada.",
       },
-      { property: "og:title", content: "O'SISH — shaxsiy rivojlanish ekotizimi" },
+      { property: "og:title", content: "Life Order — shaxsiy rivojlanish ekotizimi" },
       {
         property: "og:description",
         content: "Tana, bilim, odatlar, davra va AI murabbiy bitta ekotizimda.",
