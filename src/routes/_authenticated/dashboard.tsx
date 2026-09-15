@@ -133,6 +133,21 @@ function Dashboard() {
       <h2 className="mt-8 text-base font-semibold">Bugungi tana ko&apos;rsatkichlari</h2>
       <div className="mt-3 grid grid-cols-3 gap-3">
         <MiniStat
+          icon={<Scale className="size-4 text-primary" />}
+          label={`BMI — ${bmiLabel}`}
+          value={bmi ? bmi.toFixed(1) : "—"}
+        />
+        <MiniStat
+          icon={<Flame className="size-4 text-primary" />}
+          label="Kaloriya"
+          value={`${kcalToday} kcal`}
+        />
+        <MiniStat
+          icon={<Beef className="size-4 text-primary" />}
+          label="Oqsil"
+          value={`${proteinToday} g`}
+        />
+        <MiniStat
           icon={<Droplets className="size-4 text-primary" />}
           label="Suv"
           value={`${data?.metrics?.water_ml ?? 0} ml`}
