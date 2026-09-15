@@ -35,7 +35,7 @@ function Dashboard() {
     queryKey: ["dashboard", uid, today],
     enabled: !!uid,
     queryFn: async () => {
-      const [habits, logs, workouts, books, metrics, circles] = await Promise.all([
+      const [habits, logs, workouts, books, metrics, circles, profile, meals] = await Promise.all([
         supabase.from("habits").select("id,title,emoji").eq("user_id", uid).eq("archived", false),
         supabase.from("habit_logs").select("habit_id,log_date").eq("user_id", uid).gte("log_date", week[0]!),
         supabase.from("workouts").select("id,duration_min").eq("user_id", uid).gte("performed_on", week[0]!),
