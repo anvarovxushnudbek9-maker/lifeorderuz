@@ -55,12 +55,15 @@ function PersonalPlan() {
   const kcalToday = (data?.meals ?? []).reduce((s, m) => s + (m.kcal ?? 0), 0);
   const proteinToday = (data?.meals ?? []).reduce((s, m) => s + (m.protein_g ?? 0), 0);
 
-  async function update(patch: Record<string, string>) {
+  async function update(patch: { goal_type?: string; sport_preference?: string }) {
     if (!uid) return;
     setSaving(true);
     const { error } = await supabase.from("profiles").update(patch).eq("id", uid);
     setSaving(false);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     toast.success("Reja yangilandi");
     qc.invalidateQueries({ queryKey: ["personal-plan"] });
     qc.invalidateQueries({ queryKey: ["dashboard"] });
