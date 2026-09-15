@@ -53,10 +53,51 @@ function GoogleIcon() {
   );
 }
 
+function scorePassword(p: string) {
+  let s = 0;
+  if (p.length >= 6) s++;
+  if (p.length >= 10) s++;
+  if (/[A-Z]/.test(p) && /[a-z]/.test(p)) s++;
+  if (/\d/.test(p)) s++;
+  if (/[^A-Za-z0-9]/.test(p)) s++;
+  return Math.min(s, 4);
+}
+
+const STRENGTH = [
+  { label: "Juda zaif", color: "bg-destructive" },
+  { label: "Zaif", color: "bg-destructive" },
+  { label: "O'rtacha", color: "bg-amber-500" },
+  { label: "Yaxshi", color: "bg-emerald-500" },
+  { label: "Kuchli", color: "bg-emerald-600" },
+] as const;
+
+function PasswordStrength({ value }: { value: string }) {
+  const score = scorePassword(value);
+  const info = STRENGTH[score]!;
+  return (
+    <div className="space-y-1.5 pt-1">
+      <div className="flex gap-1">
+        {[0, 1, 2, 3].map((i) => (
+          <span
+            key={i}
+            className={cn(
+              "h-1.5 flex-1 rounded-full transition-all duration-500",
+              i < score ? info.color : "bg-muted",
+            )}
+          />
+        ))}
+      </div>
+      <p className="text-xs text-muted-foreground">
+        Parol kuchi: <span className="font-medium text-foreground">{info.label}</span>
+      </p>
+    </div>
+  );
+}
+
 function AuthPage() {
   const navigate = useNavigate();
   const { session } = useAuth();
-  const [mode, setMode] = React.useState<"signin" | "signup">("signin");
+  const [mode, setMode] = React.useState<"signin" | "signup" | "reset">("signin");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [showPass, setShowPass] = React.useState(false);
