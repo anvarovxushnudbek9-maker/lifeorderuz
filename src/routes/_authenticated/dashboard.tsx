@@ -174,6 +174,25 @@ function Dashboard() {
         />
       </div>
 
+      <h2 className="mt-8 text-base font-semibold">5 Hub</h2>
+      <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-5">
+        {HUBS.map((h) => (
+          <Link
+            key={h.slug}
+            to="/hub/$hub"
+            params={{ hub: h.slug }}
+            className="flex flex-col items-center gap-2 rounded-xl border border-border bg-card p-4 text-center transition-all hover:-translate-y-0.5 hover:bg-accent"
+          >
+            <h.icon className="size-5 text-primary" />
+            <span className="text-xs font-semibold">{h.label}</span>
+          </Link>
+        ))}
+      </div>
+
+      <div className="mt-8">
+        <AiInsight context={aiContext} />
+      </div>
+
       <h2 className="mt-8 text-base font-semibold">Odatlar</h2>
       <div className="mt-3 space-y-2">
         {habits.length === 0 ? (
