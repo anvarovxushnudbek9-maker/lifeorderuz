@@ -12,6 +12,9 @@ import {
   Moon,
   Target,
   Quote,
+  ShieldCheck,
+  Globe,
+  Palette,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -86,6 +89,24 @@ const STEPS = [
   },
 ];
 
+const FEATURES = [
+  {
+    icon: Globe,
+    title: "O'zbek tilida",
+    text: "Barcha interfeys va AI murabbiy o'zbek tilida muloqot qiladi.",
+  },
+  {
+    icon: Palette,
+    title: "Zamonaviy dizayn",
+    text: "Qorong'u va yorug' mavzular, chiroyli grafiklar va qulay boshqaruv.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Premium imkoniyatlar",
+    text: "AI tahlil, cheksiz odatlar va guruhlarda ishtirok etish uchun maxsus reja.",
+  },
+];
+
 const STATS = [
   { label: "Modul", value: 6, suffix: "" },
   { label: "Kunlik vaqt", value: 30, suffix: " son." },
@@ -142,14 +163,14 @@ function Landing() {
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-5">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5">
           <span className="text-sm font-bold tracking-[0.2em]">Life Order</span>
           <nav className="hidden items-center gap-6 text-sm text-muted-foreground sm:flex">
             <a href="#modullar" className="transition-colors hover:text-foreground">
               Modullar
             </a>
-            <a href="#qanday" className="transition-colors hover:text-foreground">
-              Qanday ishlaydi
+            <a href="#premium" className="transition-colors hover:text-foreground">
+              Premium
             </a>
             <a href="#ai" className="transition-colors hover:text-foreground">
               AI murabbiy
@@ -167,7 +188,7 @@ function Landing() {
           aria-hidden
           className="pointer-events-none absolute -top-40 left-1/2 size-[38rem] -translate-x-1/2 rounded-full bg-primary/15 blur-3xl"
         />
-        <div className="relative mx-auto max-w-3xl px-5 pb-20 pt-16 text-center sm:pt-24">
+        <div className="relative mx-auto max-w-4xl px-5 pb-20 pt-16 text-center sm:pt-24">
           <Reveal className="inline-flex">
             <p className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-3 py-1 text-xs font-medium text-muted-foreground">
               <Flame className="size-3.5 text-primary" />
@@ -176,7 +197,7 @@ function Landing() {
           </Reveal>
 
           <Reveal delay={90}>
-            <h1 className="mt-6 text-4xl font-bold leading-[1.1] tracking-tight text-foreground sm:text-6xl">
+            <h1 className="mt-6 text-4xl font-bold leading-[1.1] tracking-tight text-foreground sm:text-7xl">
               Motivatsiya tugaydi.
               <br />
               <span className="text-gradient animate-sheen">Tizim qoladi.</span>
@@ -184,9 +205,9 @@ function Landing() {
           </Reveal>
 
           <Reveal delay={180}>
-            <p className="mx-auto mt-6 max-w-xl text-base text-muted-foreground sm:text-lg">
-              Tana, bilim, odatlar va davra — rivojlanishning barcha modullari birlashgan joy. Kayfiyatga
-              emas, tizimga tayaning.
+            <p className="mx-auto mt-6 max-w-2xl text-base text-muted-foreground sm:text-xl">
+              Tana, bilim, odatlar va davra — rivojlanishning barcha modullari birlashgan joy. 
+              To'liq o'zbek tilida, AI murabbiy bilan tizimli o'sish.
             </p>
           </Reveal>
 
@@ -219,7 +240,7 @@ function Landing() {
                   { icon: Dumbbell, label: "Ertalabki mashq", pct: 100 },
                   { icon: BookOpen, label: "30 daqiqa kitob", pct: 70 },
                   { icon: Moon, label: "Erta uyqu", pct: 45 },
-                ].map((row) => (
+                ].map((row) => (row &&
                   <div key={row.label}>
                     <div className="mb-1.5 flex items-center gap-2 text-sm text-muted-foreground">
                       <row.icon className="size-4 text-primary" />
@@ -240,7 +261,7 @@ function Landing() {
       </section>
 
       {/* Stats */}
-      <section className="mx-auto max-w-3xl px-5 pb-20">
+      <section className="mx-auto max-w-4xl px-5 pb-20">
         <div className="grid gap-4 sm:grid-cols-3">
           {STATS.map((s, i) => (
             <Reveal key={s.label} delay={i * 80}>
@@ -251,23 +272,40 @@ function Landing() {
       </section>
 
       {/* Modules */}
-      <section id="modullar" className="mx-auto max-w-5xl scroll-mt-20 px-5 pb-24">
+      <section id="modullar" className="mx-auto max-w-7xl scroll-mt-20 px-5 pb-24">
         <Reveal>
-          <h2 className="text-center text-3xl font-bold tracking-tight">Bitta ilova, olti modul</h2>
-          <p className="mx-auto mt-3 max-w-lg text-center text-sm text-muted-foreground">
+          <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">Bitta ilova, olti modul</h2>
+          <p className="mx-auto mt-3 max-w-2xl text-center text-base text-muted-foreground">
             Har bir soha alohida ilova emas — bitta tizimning bo&apos;laklari. Shuning uchun ular
             bir-birini kuchaytiradi.
           </p>
         </Reveal>
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {MODULES.map((m, i) => (
             <Reveal key={m.title} delay={i * 70}>
-              <div className="h-full rounded-2xl border border-border bg-card p-5 hover-lift">
-                <div className="mb-3 flex size-10 items-center justify-center rounded-xl bg-primary/10">
-                  <m.icon className="size-5 text-primary" />
+              <div className="h-full rounded-2xl border border-border bg-card p-6 hover-lift">
+                <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-primary/10">
+                  <m.icon className="size-6 text-primary" />
                 </div>
-                <h3 className="text-base font-semibold text-card-foreground">{m.title}</h3>
-                <p className="mt-1.5 text-sm text-muted-foreground">{m.text}</p>
+                <h3 className="text-lg font-semibold text-card-foreground">{m.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{m.text}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* Features/Premium Info */}
+      <section id="premium" className="mx-auto max-w-7xl scroll-mt-20 px-5 pb-24">
+        <div className="grid gap-12 sm:grid-cols-3">
+          {FEATURES.map((f, i) => (
+            <Reveal key={f.title} delay={i * 100}>
+              <div className="text-center">
+                <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-primary/5">
+                  <f.icon className="size-6 text-primary" />
+                </div>
+                <h3 className="text-lg font-semibold">{f.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{f.text}</p>
               </div>
             </Reveal>
           ))}
@@ -276,17 +314,17 @@ function Landing() {
 
       {/* How it works */}
       <section id="qanday" className="scroll-mt-20 border-y border-border bg-secondary/40 py-24">
-        <div className="mx-auto max-w-4xl px-5">
+        <div className="mx-auto max-w-5xl px-5">
           <Reveal>
             <h2 className="text-center text-3xl font-bold tracking-tight">Uch qadamda tizim</h2>
           </Reveal>
-          <div className="mt-10 grid gap-6 sm:grid-cols-3">
+          <div className="mt-12 grid gap-8 sm:grid-cols-3">
             {STEPS.map((s, i) => (
               <Reveal key={s.n} delay={i * 100}>
-                <div className="relative rounded-2xl border border-border bg-card p-6">
+                <div className="relative rounded-2xl border border-border bg-card p-8">
                   <span className="text-xs font-bold tracking-widest text-primary">{s.n}</span>
-                  <h3 className="mt-2 text-lg font-semibold">{s.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">{s.text}</p>
+                  <h3 className="mt-3 text-xl font-semibold">{s.title}</h3>
+                  <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{s.text}</p>
                 </div>
               </Reveal>
             ))}
@@ -295,27 +333,27 @@ function Landing() {
       </section>
 
       {/* AI */}
-      <section id="ai" className="mx-auto max-w-4xl scroll-mt-20 px-5 py-24">
-        <div className="grid items-center gap-10 sm:grid-cols-2">
+      <section id="ai" className="mx-auto max-w-5xl scroll-mt-20 px-5 py-24">
+        <div className="grid items-center gap-16 sm:grid-cols-2">
           <Reveal>
             <div>
-              <div className="mb-4 inline-flex size-11 items-center justify-center rounded-2xl gradient-primary">
-                <Sparkles className="size-5 text-primary-foreground" />
+              <div className="mb-6 inline-flex size-14 items-center justify-center rounded-2xl gradient-primary">
+                <Sparkles className="size-7 text-primary-foreground" />
               </div>
-              <h2 className="text-3xl font-bold tracking-tight">Sizni biladigan murabbiy</h2>
-              <p className="mt-3 text-sm text-muted-foreground">
+              <h2 className="text-4xl font-bold tracking-tight">Sizni biladigan murabbiy</h2>
+              <p className="mt-4 text-base text-muted-foreground leading-relaxed">
                 AI murabbiy sizning mashqlaringiz, uyqungiz, o&apos;qigan kitoblaringiz va odatlaringizni
                 ko&apos;radi. U umumiy maslahat bermaydi — aynan sizning raqamlaringizga qarab keyingi
                 qadamni aytadi.
               </p>
-              <ul className="mt-5 space-y-2 text-sm">
+              <ul className="mt-6 space-y-3 text-sm sm:text-base">
                 {[
                   "Haftalik tahlil va zaif nuqtalar",
                   "Reja va maqsadlarni bo'laklarga bo'lish",
                   "O'zbek tilida, qisqa va amaliy",
                 ].map((t) => (
-                  <li key={t} className="flex items-center gap-2">
-                    <CheckCircle2 className="size-4 text-primary" />
+                  <li key={t} className="flex items-center gap-3">
+                    <CheckCircle2 className="size-5 text-primary" />
                     <span className="text-muted-foreground">{t}</span>
                   </li>
                 ))}
@@ -323,15 +361,15 @@ function Landing() {
             </div>
           </Reveal>
           <Reveal delay={120}>
-            <div className="space-y-3 rounded-3xl border border-border bg-card p-5 shadow-elegant">
-              <div className="ml-auto w-fit max-w-[85%] rounded-2xl rounded-br-sm bg-primary px-4 py-2 text-sm text-primary-foreground">
+            <div className="space-y-4 rounded-3xl border border-border bg-card p-6 shadow-elegant">
+              <div className="ml-auto w-fit max-w-[85%] rounded-2xl rounded-br-sm bg-primary px-4 py-2.5 text-sm text-primary-foreground">
                 Shu hafta nima yaxshi ketmadi?
               </div>
-              <div className="w-fit max-w-[90%] rounded-2xl rounded-bl-sm bg-muted px-4 py-2 text-sm">
+              <div className="w-fit max-w-[90%] rounded-2xl rounded-bl-sm bg-muted px-4 py-2.5 text-sm">
                 Uyqu: 5 kun 6 soatdan kam. Mashq esa 4/4 bajarilgan. Ertaga 23:00 da chiroqni
                 o&apos;chirishni odatlarga qo&apos;shaylikmi?
               </div>
-              <div className="w-fit rounded-2xl rounded-bl-sm bg-muted px-4 py-2 text-sm text-muted-foreground">
+              <div className="w-fit rounded-2xl rounded-bl-sm bg-muted px-4 py-2.5 text-sm text-muted-foreground">
                 <span className="inline-flex gap-1">
                   <span className="size-1.5 animate-bounce rounded-full bg-foreground/50 [animation-delay:0ms]" />
                   <span className="size-1.5 animate-bounce rounded-full bg-foreground/50 [animation-delay:150ms]" />
@@ -344,10 +382,10 @@ function Landing() {
       </section>
 
       {/* Quote */}
-      <section className="border-y border-border bg-secondary/40 py-20">
-        <Reveal className="mx-auto max-w-2xl px-5 text-center">
-          <Quote className="mx-auto size-6 text-primary" />
-          <p className="mt-4 text-xl font-medium leading-relaxed sm:text-2xl">
+      <section className="border-y border-border bg-secondary/40 py-24">
+        <Reveal className="mx-auto max-w-3xl px-5 text-center">
+          <Quote className="mx-auto size-8 text-primary" />
+          <p className="mt-6 text-2xl font-medium leading-relaxed sm:text-3xl">
             &ldquo;Siz maqsadlaringiz darajasiga ko&apos;tarilmaysiz — tizimingiz darajasiga
             tushasiz.&rdquo;
           </p>
@@ -355,23 +393,23 @@ function Landing() {
       </section>
 
       {/* CTA */}
-      <section className="mx-auto max-w-2xl px-5 py-24 text-center">
+      <section className="mx-auto max-w-3xl px-5 py-24 text-center">
         <Reveal>
-          <Target className="mx-auto size-8 text-primary" />
-          <h2 className="mt-4 text-3xl font-bold tracking-tight">Bugundan boshlang</h2>
-          <p className="mt-3 text-sm text-muted-foreground">
-            Bir necha savol — va tizimingiz tayyor. Bepul.
+          <Target className="mx-auto size-10 text-primary" />
+          <h2 className="mt-6 text-4xl font-bold tracking-tight">Bugundan boshlang</h2>
+          <p className="mt-4 text-base text-muted-foreground">
+            Bir necha savol — va tizimingiz tayyor. Bepul sinab ko'ring yoki Premium imkoniyatlarni o'rganing.
           </p>
-          <Link to="/auth" className="mt-8 inline-block">
-            <Button size="lg" className="group">
+          <Link to="/auth" className="mt-10 inline-block w-full sm:w-auto">
+            <Button size="lg" className="group w-full sm:w-auto">
               Hisob yaratish
-              <ArrowRight className="ml-2 size-4 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="ml-2 size-5 transition-transform group-hover:translate-x-1" />
             </Button>
           </Link>
         </Reveal>
       </section>
 
-      <footer className="border-t border-border py-8 text-center text-xs text-muted-foreground">
+      <footer className="border-t border-border py-12 text-center text-sm text-muted-foreground">
         Life Order — motivatsiya tugaydi, tizim qoladi
       </footer>
     </div>
