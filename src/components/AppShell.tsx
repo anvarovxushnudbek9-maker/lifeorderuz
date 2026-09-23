@@ -40,9 +40,14 @@ import { useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { QuickAddDialog, type QuickAddKind } from "@/components/QuickAddDialog";
-import { HUBS } from "@/lib/hubs";
 
-const NAV = HUBS.map((h) => ({ slug: h.slug, label: h.label, icon: h.icon }));
+const NAV = [
+  { to: "/tana", label: "Tana", icon: Dumbbell },
+  { to: "/bilim", label: "Bilim", icon: BookOpen },
+  { to: "/dashboard", label: "Dashboard", icon: LayoutGrid },
+  { to: "/odat", label: "Odat", icon: CheckCircle2 },
+  { to: "/davra", label: "Davra", icon: Users },
+] as const;
 
 const MENU_GROUPS = [
   {
@@ -110,7 +115,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-background pb-24">
       {/* Top bar */}
       <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-md">
-        <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4">
+        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
           <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" aria-label="Menyu">
@@ -195,7 +200,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      <main className="mx-auto max-w-5xl px-4 py-5">{children}</main>
+      <main className="mx-auto max-w-7xl px-4 py-5">{children}</main>
 
       {/* FABs */}
       <div className="pointer-events-none fixed bottom-24 right-4 z-40 flex flex-col items-end gap-3">
@@ -233,14 +238,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       {/* Bottom nav */}
       <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-background/95 backdrop-blur-md">
-        <div className="mx-auto flex max-w-5xl items-stretch justify-between px-2 pb-[env(safe-area-inset-bottom)]">
+        <div className="mx-auto flex max-w-7xl items-stretch justify-between px-2 pb-[env(safe-area-inset-bottom)]">
           {NAV.map((item) => {
-            const active = pathname === `/hub/${item.slug}`;
+            const active = pathname === item.to;
             return (
               <Link
-                key={item.slug}
-                to="/hub/$hub"
-                params={{ hub: item.slug }}
+                key={item.to}
+                to={item.to}
                 className={cn(
                   "flex flex-1 flex-col items-center gap-1 py-2.5 text-[11px] font-medium transition-colors",
                   active ? "text-primary" : "text-muted-foreground hover:text-foreground",
