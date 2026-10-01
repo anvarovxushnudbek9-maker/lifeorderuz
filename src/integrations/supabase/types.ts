@@ -437,6 +437,45 @@ export type Database = {
         }
         Relationships: []
       }
+      reminders: {
+        Row: {
+          created_at: string
+          done_on: string[]
+          end_time: string | null
+          id: string
+          note: string | null
+          remind_date: string
+          repeat: string
+          start_time: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          done_on?: string[]
+          end_time?: string | null
+          id?: string
+          note?: string | null
+          remind_date?: string
+          repeat?: string
+          start_time: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          done_on?: string[]
+          end_time?: string | null
+          id?: string
+          note?: string | null
+          remind_date?: string
+          repeat?: string
+          start_time?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       workouts: {
         Row: {
           calories: number | null

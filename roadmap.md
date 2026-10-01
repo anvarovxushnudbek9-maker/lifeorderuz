@@ -8,6 +8,8 @@
 - [x] Landingga Bepul / Premium (49 000 so'm) narxlar bo'limi
 - [ ] Landingda 4 til: o'zbek lotin, o'zbek kirill, rus, ingliz
 - [ ] Onboarding javoblaridan AI shaxsiy kun tartibi va odatlar
-- [ ] Eslatmalar: sayt ichida, keyin Telegram bot (ulanish kerak), keyin email (domen kerak)
+- [x] Sayt ichidagi vaqtli eslatmalar + dashboardda bajarilish
+- [ ] Eslatmalar: Telegram bot (ulanish kerak), keyin email (domen kerak)
 - [ ] Premium to'lov tizimi
 - [ ] Mobil va desktop oqimlarni brauzerda tekshirish
+- [x] Profil ma'lumotlari faqat egasiga ko'rinadi (xavfsizlik)
