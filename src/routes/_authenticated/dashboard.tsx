@@ -109,7 +109,6 @@ function Dashboard() {
     `Davralar: ${data?.circleCount ?? 0}`,
   ].join("\n");
 
-
   return (
     <div>
       <PageHeader
@@ -191,7 +190,6 @@ function Dashboard() {
           value={String(data?.metrics?.steps ?? 0)}
         />
       </div>
-
 
       <div className="mt-8">
         <AiInsight context={aiContext} />
