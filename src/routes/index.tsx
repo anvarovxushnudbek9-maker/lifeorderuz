@@ -15,6 +15,7 @@ import {
   ShieldCheck,
   Globe,
   Palette,
+  Check,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
