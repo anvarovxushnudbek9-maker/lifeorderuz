@@ -129,6 +129,41 @@ function useCountUp(target: number, run: boolean) {
   return value;
 }
 
+const PLANS = [
+  {
+    name: "Bepul",
+    price: "0",
+    period: "so'm",
+    note: "Tizimni boshlash uchun hamma asosiy narsa.",
+    highlight: false,
+    cta: "Bepul boshlash",
+    items: [
+      "5 ta modul: Tana, Bilim, Odat, Davra, Kundalik",
+      "3 tagacha faol odat",
+      "Kaloriya va makro hisob-kitobi",
+      "Kuniga 5 ta AI savol",
+      "Sayt ichidagi eslatmalar",
+    ],
+  },
+  {
+    name: "Premium",
+    price: "49 000",
+    period: "so'm / oy",
+    note: "Hayotingizni to'liq boshqarish uchun shaxsiy tizim.",
+    highlight: true,
+    cta: "7 kun bepul sinash",
+    items: [
+      "Cheksiz odatlar va maqsadlar",
+      "Cheksiz AI murabbiy + haftalik shaxsiy tahlil",
+      "AI tuzgan kun tartibi, ovqat va mashq rejasi",
+      "Telegram va email eslatmalar",
+      "Chuqur analitika: trendlar, seriyalar, hisobotlar",
+      "Cheksiz davralar va jamoaviy challenge'lar",
+      "Ma'lumotlarni eksport qilish",
+    ],
+  },
+] as const;
+
 function StatCard({ label, value, suffix }: { label: string; value: number; suffix: string }) {
   const [run, setRun] = React.useState(false);
   const ref = React.useRef<HTMLDivElement>(null);
@@ -310,6 +345,61 @@ function Landing() {
             </Reveal>
           ))}
         </div>
+
+        <Reveal>
+          <h2 className="mt-24 text-center text-3xl font-bold tracking-tight sm:text-4xl">
+            Oddiy va ochiq narxlar
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-center text-muted-foreground">
+            Bepul boshlang. Tizim ishlayotganini his qilganingizda Premiumga o'ting.
+          </p>
+        </Reveal>
+        <div className="mx-auto mt-10 grid max-w-4xl gap-6 md:grid-cols-2">
+          {PLANS.map((p, i) => (
+            <Reveal key={p.name} delay={i * 120}>
+              <div
+                className={
+                  p.highlight
+                    ? "relative h-full rounded-2xl border-2 border-primary bg-card p-7 shadow-lg"
+                    : "h-full rounded-2xl border border-border bg-card p-7"
+                }
+              >
+                {p.highlight && (
+                  <span className="absolute -top-3 left-7 rounded-full bg-primary px-3 py-0.5 text-xs font-semibold text-primary-foreground">
+                    Eng foydali
+                  </span>
+                )}
+                <h3 className="text-lg font-semibold">{p.name}</h3>
+                <p className="mt-3">
+                  <span className="text-4xl font-bold">{p.price}</span>
+                  <span className="text-sm text-muted-foreground"> {p.period}</span>
+                </p>
+                <p className="mt-2 text-sm text-muted-foreground">{p.note}</p>
+                <ul className="mt-6 space-y-2.5 text-sm">
+                  {p.items.map((it) => (
+                    <li key={it} className="flex gap-2">
+                      <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+                      <span>{it}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  to="/auth"
+                  className={
+                    p.highlight
+                      ? "mt-7 block rounded-xl bg-primary py-3 text-center text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+                      : "mt-7 block rounded-xl border border-border py-3 text-center text-sm font-semibold transition-colors hover:bg-accent"
+                  }
+                >
+                  {p.cta}
+                </Link>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+        <p className="mt-6 text-center text-xs text-muted-foreground">
+          7 kunlik bepul sinov · Istalgan vaqtda bekor qilish · Ma'lumotlaringiz faqat sizniki
+        </p>
       </section>
 
       {/* How it works */}
