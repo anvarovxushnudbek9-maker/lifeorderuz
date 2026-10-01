@@ -40,6 +40,7 @@ import { useTheme } from "@/hooks/useTheme";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { QuickAddDialog, type QuickAddKind } from "@/components/QuickAddDialog";
+import { ReminderWatcher } from "@/components/Reminders";
 
 const NAV = [
   { to: "/tana", label: "Tana", icon: Dumbbell },
@@ -259,6 +260,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </nav>
 
       <QuickAddDialog kind={quick} onClose={() => setQuick(null)} />
+      <ReminderWatcher />
     </div>
   );
 }

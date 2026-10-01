@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { PageHeader, EmptyState } from "@/components/PageHeader";
+import { RemindersManager } from "@/components/Reminders";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -73,7 +74,8 @@ function Journal() {
 
   return (
     <div>
-      <PageHeader title="Kundalik" subtitle="Fikrlaringizni yozib boring." />
+      <PageHeader title="Kundalik" subtitle="Kun rejasi, vaqtli eslatmalar va fikrlaringiz." />
+      <div className="mb-6"><RemindersManager /></div>
 
       <form
         className="mb-6 space-y-3 rounded-xl border border-border bg-card p-4"
