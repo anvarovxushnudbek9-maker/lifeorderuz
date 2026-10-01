@@ -1,5 +1,6 @@
 import * as React from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { ArrowRight, ArrowLeft, Check, Loader2, Smartphone } from "lucide-react";
 
@@ -136,6 +137,7 @@ function OptionRow({
 function Onboarding() {
   const { session, user, loading } = useAuth();
   const navigate = useNavigate();
+  const qc = useQueryClient();
   const [step, setStep] = React.useState(0);
   const [dir, setDir] = React.useState<1 | -1>(1);
   const [saving, setSaving] = React.useState(false);
@@ -203,6 +205,12 @@ function Onboarding() {
         onboarding_completed: true,
       });
       if (error) throw error;
+      // Refresh cached profile so the app gate doesn't send the user back here.
+      qc.setQueryData(["profile", user.id], (old: Record<string, unknown> | null | undefined) => ({
+        ...(old ?? {}),
+        onboarding_completed: true,
+      }));
+      await qc.invalidateQueries({ queryKey: ["profile", user.id] });
       toast.success("Tizimingiz tayyor!");
       navigate({ to: "/dashboard", replace: true });
     } catch (e) {

@@ -203,7 +203,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <main className="mx-auto max-w-7xl px-4 py-5">{children}</main>
 
       {/* FABs */}
-      <div className="pointer-events-none fixed bottom-24 right-4 z-40 flex flex-col items-end gap-3">
+      <div className={cn("pointer-events-none fixed bottom-24 right-4 z-40 flex flex-col items-end gap-3", pathname === "/ai" && "hidden")}>
         {fabOpen &&
           miniFabs.map((f) => (
             <button
