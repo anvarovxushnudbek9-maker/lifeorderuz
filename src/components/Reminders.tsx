@@ -144,7 +144,10 @@ export function RemindersManager() {
   });
 
   async function askPermission() {
-    if (typeof Notification === "undefined") return toast.error("Brauzeringiz bildirishnomani qo'llamaydi");
+    if (typeof Notification === "undefined") {
+      toast.error("Brauzeringiz bildirishnomani qo'llamaydi");
+      return;
+    }
     const p = await Notification.requestPermission();
     setPerm(p);
     if (p === "granted") toast.success("Bildirishnomalar yoqildi");
