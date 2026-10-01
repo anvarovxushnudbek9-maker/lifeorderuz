@@ -105,9 +105,12 @@ function AuthPage() {
   const [busy, setBusy] = React.useState(false);
   const [googleBusy, setGoogleBusy] = React.useState(false);
 
+  // Only redirect users who arrive already signed in; sign-up/sign-in handlers navigate themselves.
+  const initialSession = React.useRef(session);
   React.useEffect(() => {
-    if (session) navigate({ to: "/dashboard", replace: true });
-  }, [session, navigate]);
+    if (initialSession.current) navigate({ to: "/dashboard", replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
