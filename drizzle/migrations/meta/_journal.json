@@ -8,6 +8,13 @@
       "when": 1790857501802,
       "tag": "0000_reminders_and_profile_privacy",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791000164804,
+      "tag": "0001_backend_hardening",
+      "breakpoints": true
     }
   ]
 }
