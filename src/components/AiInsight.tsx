@@ -2,6 +2,7 @@ import * as React from "react";
 import { Sparkles, Loader2, RefreshCw } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { aiFetch } from "@/lib/ai-fetch";
 
 export function AiInsight({ context }: { context: string }) {
   const [text, setText] = React.useState("");
@@ -13,19 +14,15 @@ export function AiInsight({ context }: { context: string }) {
     setError(null);
     setText("");
     try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          context,
-          messages: [
-            {
-              role: "user",
-              content:
-                "Quyidagi ko'rsatkichlarim asosida qisqa tahlil qil. 3 ta kuchli tomon, 2 ta zaif nuqta va bugun bajarish uchun 3 ta aniq qadam ber. Umumiy gaplar emas, raqamlarga tayan.",
-            },
-          ],
-        }),
+      const res = await aiFetch({
+        context,
+        messages: [
+          {
+            role: "user",
+            content:
+              "Quyidagi ko'rsatkichlarim asosida qisqa tahlil qil. 3 ta kuchli tomon, 2 ta zaif nuqta va bugun bajarish uchun 3 ta aniq qadam ber. Umumiy gaplar emas, raqamlarga tayan.",
+          },
+        ],
       });
       if (!res.ok || !res.body) {
         setError(await res.text().catch(() => "AI xatosi"));

@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { todayISO, lastNDays } from "@/lib/date";
+import { aiFetch } from "@/lib/ai-fetch";
 
 const TITLE = "AI murabbiy — Life Order";
 const DESC = "Ko'rsatkichlaringizni tahlil qilib, kunlik tavsiya va reja beradigan AI murabbiy.";
@@ -81,11 +82,7 @@ function AiCoach() {
     setMessages([...next, { role: "assistant", content: "" }]);
 
     try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: next, context }),
-      });
+      const res = await aiFetch({ messages: next, context });
       if (!res.ok || !res.body) {
         throw new Error(await res.text());
       }
