@@ -150,11 +150,7 @@ function Onboarding() {
   const [obstacle, setObstacle] = React.useState("");
   // step 4
   const [phone, setPhone] = React.useState<Record<string, string>>({});
-  // step 5
-  const [age, setAge] = React.useState("");
-  const [gender, setGender] = React.useState("");
-  const [height, setHeight] = React.useState("");
-  const [weight, setWeight] = React.useState("");
+  // step 5 (body numbers are collected later in the Tana hub)
   const [activity, setActivity] = React.useState("");
   const [goalType, setGoalType] = React.useState("");
   const [sport, setSport] = React.useState("");
@@ -168,13 +164,7 @@ function Onboarding() {
     whyNow.length > 0 && areas.length > 0,
     obstacle.length > 0,
     PHONE_QUESTIONS.every((q) => phone[q.key]),
-    age !== "" &&
-      gender !== "" &&
-      height !== "" &&
-      weight !== "" &&
-      activity !== "" &&
-      goalType !== "" &&
-      sport !== "",
+    activity !== "" && goalType !== "" && sport !== "",
   ][step];
 
   function go(next: number) {
@@ -195,10 +185,6 @@ function Onboarding() {
         why_now: whyNow || null,
         biggest_obstacle: obstacle || null,
         digital_habits: phone,
-        age: age ? Number(age) : null,
-        gender: gender || null,
-        height_cm: height ? Number(height) : null,
-        weight_kg: weight ? Number(weight) : null,
         activity_level: activity || null,
         goal_type: goalType || null,
         sport_preference: sport || null,
@@ -371,61 +357,11 @@ function Onboarding() {
           {step === 4 && (
             <>
               <div>
-                <h1 className="text-2xl font-bold tracking-tight">Tana ko&apos;rsatkichlari</h1>
+                <h1 className="text-2xl font-bold tracking-tight">Maqsad va harakat</h1>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Mashq va ovqat tavsiyalari aynan shu raqamlarga tayanadi.
+                  Oxirgi qadam. Bo&apos;y, vazn kabi aniq raqamlarni Tana bo&apos;limiga birinchi
+                  kirganingizda so&apos;raymiz — hozir faqat yo&apos;nalish.
                 </p>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1.5">
-                  <Label htmlFor="age">Yosh</Label>
-                  <Input
-                    id="age"
-                    type="number"
-                    min={10}
-                    max={100}
-                    value={age}
-                    onChange={(e) => setAge(e.target.value)}
-                    placeholder="24"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label>Jins</Label>
-                  <div className="flex gap-2">
-                    {[
-                      { v: "male", t: "Erkak" },
-                      { v: "female", t: "Ayol" },
-                    ].map((g) => (
-                      <Chip key={g.v} on={gender === g.v} onClick={() => setGender(g.v)}>
-                        {g.t}
-                      </Chip>
-                    ))}
-                  </div>
-                </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="height">Bo&apos;y (sm)</Label>
-                  <Input
-                    id="height"
-                    type="number"
-                    min={100}
-                    max={250}
-                    value={height}
-                    onChange={(e) => setHeight(e.target.value)}
-                    placeholder="175"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="weight">Vazn (kg)</Label>
-                  <Input
-                    id="weight"
-                    type="number"
-                    min={30}
-                    max={300}
-                    value={weight}
-                    onChange={(e) => setWeight(e.target.value)}
-                    placeholder="70"
-                  />
-                </div>
               </div>
               <div className="space-y-2">
                 <Label>Harakat darajasi</Label>
