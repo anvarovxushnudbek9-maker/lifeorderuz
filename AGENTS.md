@@ -8,3 +8,7 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+## Architecture rules
+- `/api/chat` requires a Supabase bearer token and enforces per-user hourly/daily limits via `public.ai_requests`; call it only through `src/lib/ai-fetch.ts`. Why: an open AI endpoint lets anyone burn the project's AI credits.
+- RLS helper functions live in the `private` schema (not exposed by the Data API). Why: keeps SECURITY DEFINER helpers off the public API.
