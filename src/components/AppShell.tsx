@@ -162,8 +162,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </SheetContent>
           </Sheet>
 
-          <Link to="/dashboard" className="text-sm font-bold tracking-tight">
-            Life Order
+          <Link to="/dashboard" aria-label="Life Order">
+            <Logo />
           </Link>
 
           <div className="flex items-center gap-1">
