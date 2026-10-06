@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
+import type { Database } from "@/integrations/supabase/types";
 
 const SYSTEM = `Sen "Life Order" nomli shaxsiy rivojlanish ilovasining AI murabbiysisan.
 Har doim o'zbek tilida (lotin yozuvida) javob ber.
@@ -35,10 +37,66 @@ function textResponse(text: string) {
   });
 }
 
+const HOURLY_LIMIT = 30;
+const DAILY_LIMIT = 120;
+
+function plain(text: string, status: number) {
+  return new Response(text, {
+    status,
+    headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store" },
+  });
+}
+
+async function authorize(request: Request): Promise<Response | null> {
+  const auth = request.headers.get("authorization") ?? "";
+  const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
+  if (!token || token.split(".").length !== 3) {
+    return plain("Iltimos, avval tizimga kiring.", 401);
+  }
+  const url = process.env["SUPABASE_URL"];
+  const key = process.env["SUPABASE_PUBLISHABLE_KEY"];
+  if (!url || !key) return plain("Server sozlanmagan.", 500);
+
+  const sb = createClient<Database>(url, key, {
+    global: {
+      fetch: (input, init) => {
+        const headers = new Headers(init?.headers);
+        headers.set("apikey", key);
+        headers.set("Authorization", `Bearer ${token}`);
+        return fetch(input, { ...init, headers });
+      },
+    },
+    auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
+  });
+
+  const { data, error } = await sb.auth.getClaims(token);
+  const userId = data?.claims?.sub;
+  if (error || !userId) return plain("Sessiya tugagan. Qaytadan kiring.", 401);
+
+  const hourAgo = new Date(Date.now() - 3600_000).toISOString();
+  const dayAgo = new Date(Date.now() - 86_400_000).toISOString();
+  const [hour, day] = await Promise.all([
+    sb.from("ai_requests").select("id", { count: "exact", head: true }).eq("user_id", userId).gte("created_at", hourAgo),
+    sb.from("ai_requests").select("id", { count: "exact", head: true }).eq("user_id", userId).gte("created_at", dayAgo),
+  ]);
+  if ((hour.count ?? 0) >= HOURLY_LIMIT || (day.count ?? 0) >= DAILY_LIMIT) {
+    return plain("Bugungi AI so'rovlar soni tugadi. Birozdan so'ng qayta urinib ko'ring.", 429);
+  }
+  const ins = await sb.from("ai_requests").insert({ user_id: userId });
+  if (ins.error) return plain("So'rovni qayd etib bo'lmadi.", 500);
+  return null;
+}
+
 export const Route = createFileRoute("/api/chat")({
   server: {
     handlers: {
       POST: async ({ request }) => {
+        const len = Number(request.headers.get("content-length") ?? "0");
+        if (len > 200_000) return plain("So'rov juda katta.", 413);
+
+        const denied = await authorize(request);
+        if (denied) return denied;
+
         const parsed = Body.safeParse(await request.json().catch(() => null));
         if (!parsed.success) return new Response("Noto'g'ri so'rov", { status: 400 });
 
