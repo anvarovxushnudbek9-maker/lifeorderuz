@@ -153,11 +153,48 @@
   --shadow-elegant: 0 18px 50px -24px color-mix(in oklab, var(--primary) 55%, transparent);
 }
 
+/* Premium dark: near-black surfaces with a warm gold accent */
 .dark {
-  --primary: oklch(0.66 0.17 255);
-  --primary-foreground: oklch(0.16 0.03 260);
-  --primary-glow: oklch(0.78 0.13 245);
-  --ring: oklch(0.66 0.17 255);
+  --background: oklch(0.14 0.006 260);
+  --foreground: oklch(0.96 0.006 85);
+  --card: oklch(0.185 0.007 260);
+  --card-foreground: oklch(0.96 0.006 85);
+  --popover: oklch(0.185 0.007 260);
+  --popover-foreground: oklch(0.96 0.006 85);
+  --secondary: oklch(0.23 0.008 260);
+  --secondary-foreground: oklch(0.96 0.006 85);
+  --muted: oklch(0.23 0.008 260);
+  --muted-foreground: oklch(0.7 0.012 80);
+  --accent: oklch(0.25 0.012 80);
+  --accent-foreground: oklch(0.96 0.006 85);
+  --border: oklch(1 0 0 / 9%);
+  --input: oklch(1 0 0 / 13%);
+  --primary: oklch(0.8 0.13 82);
+  --primary-foreground: oklch(0.17 0.02 70);
+  --primary-glow: oklch(0.88 0.1 92);
+  --ring: oklch(0.8 0.13 82);
+  --sidebar: oklch(0.17 0.006 260);
+  --sidebar-primary: oklch(0.8 0.13 82);
+  --sidebar-accent: oklch(0.23 0.008 260);
+  --shadow-elegant: 0 18px 50px -24px color-mix(in oklab, var(--primary) 40%, transparent);
+}
+
+@keyframes lo-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility animate-marquee {
+  animation: lo-marquee 40s linear infinite;
+}
+
+@utility bg-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--foreground) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--foreground) 6%, transparent) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse at top, black 30%, transparent 75%);
 }
 
 @theme inline {
