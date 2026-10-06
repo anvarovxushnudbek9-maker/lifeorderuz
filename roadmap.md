@@ -6,7 +6,11 @@
 - [x] AI kredit xabarini zaxira tavsiya bilan almashtirish + chat xavfsizligi
 - [x] AI tugmasi chat yuborish tugmasini to'smasin
 - [x] Landingga Bepul / Premium (49 000 so'm) narxlar bo'limi
-- [ ] Landingda 4 til: o'zbek lotin, o'zbek kirill, rus, ingliz
+- [x] Landingda 4 til: o'zbek lotin, o'zbek kirill, rus, ingliz
+- [x] Landing: logotip, savol-javob, fikrlar, premium qorong'i rejim
+- [x] Onboarding qisqartirildi, tana raqamlari Tana bo'limida so'raladi
+- [ ] Telefon (SMS) orqali kirish — SMS xizmati kerak
+- [ ] Bilim/Odat/Davra bo'limlarida ham bosqichma-bosqich savollar
 - [ ] Onboarding javoblaridan AI shaxsiy kun tartibi va odatlar
 - [x] Sayt ichidagi vaqtli eslatmalar + dashboardda bajarilish
 - [ ] Eslatmalar: Telegram bot (ulanish kerak), keyin email (domen kerak)
