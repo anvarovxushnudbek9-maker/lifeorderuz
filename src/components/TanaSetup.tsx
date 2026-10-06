@@ -48,7 +48,10 @@ export function TanaSetup() {
       .update({ age: a, gender, height_cm: h, weight_kg: w })
       .eq("id", uid);
     setSaving(false);
-    if (error) return toast.error("Saqlab bo'lmadi. Qayta urinib ko'ring.");
+    if (error) {
+      toast.error("Saqlab bo'lmadi. Qayta urinib ko'ring.");
+      return;
+    }
     toast.success("Rejangiz raqamlaringizga moslashtirildi");
     await Promise.all([
       qc.invalidateQueries({ queryKey: ["profile-body", uid] }),
