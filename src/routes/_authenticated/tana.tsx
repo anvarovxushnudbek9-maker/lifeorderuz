@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { todayISO, lastNDays } from "@/lib/date";
+import { TanaSetup } from "@/components/TanaSetup";
 
 const TITLE = "Tana — mashq, ovqat va tiklanish | Life Order";
 const DESC =
@@ -35,6 +36,7 @@ function Body() {
   return (
     <div>
       <PageHeader title="Tana" subtitle="Mashq, ovqatlanish va tiklanish." />
+      <TanaSetup />
       <Tabs defaultValue="mashq">
         <TabsList className="mb-4 w-full">
           <TabsTrigger className="flex-1" value="mashq">
