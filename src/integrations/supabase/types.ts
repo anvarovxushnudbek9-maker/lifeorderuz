@@ -38,6 +38,24 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_requests: {
+        Row: {
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       body_metrics: {
         Row: {
           created_at: string
