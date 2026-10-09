@@ -119,13 +119,12 @@ export const Route = createFileRoute("/api/chat")({
                 },
               ]
             : []),
+          // Client-supplied messages are never trusted as assistant turns:
+          // forwarding them as output_text would let callers spoof coach
+          // replies and steer the model. Treat every client message as user input.
           ...messages.slice(-20).map((m) => ({
-            role: m.role,
-            content: [
-              m.role === "assistant"
-                ? { type: "output_text", text: m.content }
-                : { type: "input_text", text: m.content },
-            ],
+            role: "user" as const,
+            content: [{ type: "input_text", text: m.content }],
           })),
         ];
 
