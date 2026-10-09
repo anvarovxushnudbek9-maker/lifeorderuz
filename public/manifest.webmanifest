@@ -1,0 +1,28 @@
+{
+  "id": "/",
+  "name": "Life Order — shaxsiy rivojlanish tizimi",
+  "short_name": "Life Order",
+  "description": "Tana, bilim, odatlar va davra — bitta tizimda, AI murabbiy bilan. Motivatsiya tugaydi. Tizim qoladi.",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#1D57E5",
+  "lang": "uz",
+  "dir": "ltr",
+  "categories": ["health", "lifestyle", "productivity", "education"],
+  "prefer_related_applications": false,
+  "launch_handler": { "client_mode": "navigate-existing" },
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Asosiy", "url": "/dashboard", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Kundalik", "url": "/kundalik", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Odatlar", "url": "/odat", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] }
+  ]
+}
