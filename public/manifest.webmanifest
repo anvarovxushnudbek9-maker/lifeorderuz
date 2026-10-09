@@ -23,6 +23,6 @@
   "shortcuts": [
     { "name": "Asosiy", "url": "/dashboard", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
     { "name": "Kundalik", "url": "/kundalik", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] },
-    { "name": "Odatlar", "url": "/odatlar", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] }
+    { "name": "Odatlar", "url": "/odat", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] }
   ]
 }
