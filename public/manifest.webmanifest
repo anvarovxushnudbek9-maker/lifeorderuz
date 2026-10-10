@@ -6,7 +6,7 @@
   "start_url": "/dashboard",
   "scope": "/",
   "display": "standalone",
-  "display_override": ["standalone", "minimal-ui"],
+  "display_override": ["window-controls-overlay", "tabbed", "standalone", "minimal-ui"],
   "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#1D57E5",
@@ -33,6 +33,7 @@
   ],
   "note_taking": { "new_note_url": "/kundalik" },
   "edge_side_panel": { "preferred_width": 420 },
+  "tab_strip": { "new_tab_button": { "url": "/dashboard" } },
   "scope_extensions": [],
   "widgets": [],
   "icons": [

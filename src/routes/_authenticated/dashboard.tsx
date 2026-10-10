@@ -1,4 +1,5 @@
 import { TodayReminders } from "@/components/Reminders";
+import { CommandCenter } from "@/components/CommandCenter";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -116,6 +117,10 @@ function Dashboard() {
         title={name ? `Salom, ${name}` : "Salom"}
         subtitle="Bugun kichik bir qadam — ertaga katta farq."
       />
+
+      <div className="mb-4">
+        <CommandCenter />
+      </div>
 
       <div className="rounded-2xl border border-border bg-card p-5">
         <div className="flex items-end justify-between">

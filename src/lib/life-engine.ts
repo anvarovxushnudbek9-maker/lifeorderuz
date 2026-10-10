@@ -51,7 +51,7 @@ export type EngineInput = {
 };
 
 function completionRate(history: PastItem[]) {
-  const closed = history.filter((h) => h.status !== "todo" || h.plan_date);
+  const closed = history;
   if (!closed.length) return null;
   return closed.filter((h) => h.status === "done").length / closed.length;
 }
@@ -69,13 +69,13 @@ export function diagnose(input: EngineInput): Diagnosis {
   const d = input.profile.digital_habits ?? {};
   const reason = topReason(input.history);
   const rate = completionRate(input.history);
-  if (reason === "Telefon chalg'itdi" || d["screen_time"] === "6 soatdan ko'p" || d["screen_time"] === "4–6 soat")
+  if (reason === "Telefon chalg'itdi" || input.profile.biggest_obstacle === "Telefon chalg'itadi" || d["screen_time"] === "6 soatdan ko'p" || d["screen_time"] === "4–6 soat")
     return { key: "phone", label: "Telefon diqqatni o'g'irlayapti", explain: reason ? "Oxirgi kunlarda vazifalar ko'pincha telefon sabab qoldi." : "Kuniga 4+ soat ekran vaqti — reja uchun eng katta to'siq." };
   if (reason === "Juda katta tuyuldi" || d["start_style"] === "Mukammal bo'lishini kutaman")
     return { key: "perfectionism", label: "Mukammallikni kutish", explain: "Vazifalar katta tuyulgani uchun boshlanmayapti — ularni kichraytiramiz." };
   if (reason === "Vaqt yetmadi" || input.profile.biggest_obstacle === "Vaqt topa olmayman")
     return { key: "time", label: "Vaqt yetishmovchiligi", explain: "Rejani mavjud bo'sh vaqtingizga sig'diramiz." };
-  if (reason === "Charchadim" || (input.sleepHours !== null && input.sleepHours > 0 && input.sleepHours < 6))
+  if (reason === "Charchadim" || input.profile.biggest_obstacle === "Charchoq va energiya" || (input.sleepHours !== null && input.sleepHours > 0 && input.sleepHours < 6))
     return { key: "energy", label: "Energiya past", explain: "Uyqu va charchoq bajarilishni pasaytiryapti." };
   if (input.profile.biggest_obstacle === "Nimadan boshlashni bilmayman")
     return { key: "clarity", label: "Aniqlik yetishmaydi", explain: "Bitta aniq birinchi qadam belgilaymiz." };

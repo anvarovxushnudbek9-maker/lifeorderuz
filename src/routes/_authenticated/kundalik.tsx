@@ -36,6 +36,24 @@ function Journal() {
   const [title, setTitle] = React.useState("");
   const [content, setContent] = React.useState("");
 
+  // Prefill from the install "share" sheet / protocol handler / opened files.
+  React.useEffect(() => {
+    const sp = new URLSearchParams(window.location.search);
+    const t = sp.get("title") ?? "";
+    const body = [sp.get("text"), sp.get("url"), sp.get("q")?.replace(/^web\+lifeorder:\/*/, "")].filter(Boolean).join("\n");
+    if (t) setTitle(t.slice(0, 200));
+    if (body) setContent(body.slice(0, 5000));
+    const lq = (window as unknown as { launchQueue?: { setConsumer: (cb: (p: { files: { getFile: () => Promise<File> }[] }) => void) => void } }).launchQueue;
+    lq?.setConsumer(async (params) => {
+      const h = params.files[0];
+      if (!h) return;
+      const file = await h.getFile();
+      if (file.size > 200_000) return;
+      setTitle(file.name.replace(/\.(txt|md)$/i, "").slice(0, 200));
+      setContent((await file.text()).slice(0, 5000));
+    });
+  }, []);
+
   const { data } = useQuery({
     queryKey: ["journal", uid],
     enabled: !!uid,
