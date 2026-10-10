@@ -258,6 +258,54 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_plan_items: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          domain: string
+          id: string
+          minutes: number
+          plan_date: string
+          position: number
+          skip_reason: string | null
+          source: string
+          status: string
+          title: string
+          user_id: string
+          why: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          domain?: string
+          id?: string
+          minutes?: number
+          plan_date?: string
+          position?: number
+          skip_reason?: string | null
+          source?: string
+          status?: string
+          title: string
+          user_id: string
+          why?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          domain?: string
+          id?: string
+          minutes?: number
+          plan_date?: string
+          position?: number
+          skip_reason?: string | null
+          source?: string
+          status?: string
+          title?: string
+          user_id?: string
+          why?: string | null
+        }
+        Relationships: []
+      }
       habit_logs: {
         Row: {
           created_at: string
