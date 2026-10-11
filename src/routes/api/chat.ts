@@ -47,7 +47,8 @@ function plain(text: string, status: number) {
   });
 }
 
-async function authorize(request: Request): Promise<Response | null> {
+type Authed = { sb: ReturnType<typeof createClient<Database>>; userId: string };
+async function authorize(request: Request): Promise<Response | Authed> {
   const auth = request.headers.get("authorization") ?? "";
   const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
   if (!token || token.split(".").length !== 3) {
@@ -84,7 +85,34 @@ async function authorize(request: Request): Promise<Response | null> {
   }
   const ins = await sb.from("ai_requests").insert({ user_id: userId });
   if (ins.error) return plain("So'rovni qayd etib bo'lmadi.", 500);
-  return null;
+  return { sb, userId };
+}
+
+async function buildLifeModel({ sb, userId }: Authed) {
+  const today = new Date().toISOString().slice(0, 10);
+  const from = new Date(Date.now() - 14 * 86_400_000).toISOString().slice(0, 10);
+  const [p, plan, habits, logs, workouts, metrics] = await Promise.all([
+    sb.from("profiles").select("main_goal,goal_type,biggest_obstacle,why_now,activity_level,digital_habits,age").eq("id", userId).maybeSingle(),
+    sb.from("daily_plan_items").select("plan_date,title,status,skip_reason").eq("user_id", userId).gte("plan_date", from),
+    sb.from("habits").select("title").eq("user_id", userId).eq("archived", false),
+    sb.from("habit_logs").select("log_date").eq("user_id", userId).gte("log_date", from),
+    sb.from("workouts").select("duration_min").eq("user_id", userId).gte("performed_on", from),
+    sb.from("body_metrics").select("sleep_hours,water_ml,steps").eq("user_id", userId).eq("metric_date", today).maybeSingle(),
+  ]);
+  const items = plan.data ?? [];
+  const done = items.filter((i) => i.status === "done").length;
+  const reasons = items.map((i) => i.skip_reason).filter(Boolean);
+  const dh = (p.data?.digital_habits ?? {}) as Record<string, string>;
+  const minor = dh["age_range"] === "18 dan kichik";
+  return [
+    `Maqsad: ${p.data?.main_goal ?? "-"}; tana maqsadi: ${p.data?.goal_type ?? "-"}; to'siq: ${p.data?.biggest_obstacle ?? "-"}`,
+    `Yosh: ${dh["age_range"] ?? "-"}; bandlik: ${dh["life_stage"] ?? "-"}; ekran vaqti: ${dh["screen_time"] ?? "-"}; bo'sh vaqt: ${dh["free_time"] ?? "-"}; samarali vaqt: ${dh["peak_time"] ?? "-"}; ish uslubi: ${dh["start_style"] ?? "-"}`,
+    minor ? "MUHIM: foydalanuvchi voyaga yetmagan — vazn tashlash, kaloriya cheklash yoki og'ir mashq tavsiya qilma." : "",
+    `14 kunlik reja: ${done}/${items.length} bajarilgan. Qoldirish sabablari: ${reasons.slice(-8).join(", ") || "yo'q"}`,
+    `Bugungi reja: ${items.filter((i) => i.plan_date === today).map((i) => `${i.title} [${i.status}]`).join("; ") || "yo'q"}`,
+    `Odatlar: ${(habits.data ?? []).map((h) => h.title).join(", ") || "yo'q"}; 14 kunda belgilar: ${logs.data?.length ?? 0}`,
+    `14 kunlik mashq: ${(workouts.data ?? []).reduce((s, w) => s + (w.duration_min ?? 0), 0)} daq; bugun uyqu ${metrics.data?.sleep_hours ?? "-"} s, suv ${metrics.data?.water_ml ?? 0} ml`,
+  ].filter(Boolean).join("\n").slice(0, 3000);
 }
 
 export const Route = createFileRoute("/api/chat")({
@@ -94,8 +122,9 @@ export const Route = createFileRoute("/api/chat")({
         const len = Number(request.headers.get("content-length") ?? "0");
         if (len > 200_000) return plain("So'rov juda katta.", 413);
 
-        const denied = await authorize(request);
-        if (denied) return denied;
+        const auth = await authorize(request);
+        if (auth instanceof Response) return auth;
+        const serverContext = await buildLifeModel(auth).catch(() => "");
 
         const parsed = Body.safeParse(await request.json().catch(() => null));
         if (!parsed.success) return new Response("Noto'g'ri so'rov", { status: 400 });
@@ -103,7 +132,9 @@ export const Route = createFileRoute("/api/chat")({
         const apiKey = process.env["LOVABLE_API_KEY"];
         if (!apiKey) return textResponse(FALLBACK);
 
-        const { messages, context } = parsed.data;
+        const { messages } = parsed.data;
+        // Context is built on the server from verified data; client context is ignored.
+        const context = serverContext;
         const input = [
           { role: "system", content: [{ type: "input_text", text: SYSTEM }] },
           ...(context

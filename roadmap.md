@@ -11,7 +11,9 @@
 - [x] Onboarding qisqartirildi, tana raqamlari Tana bo'limida so'raladi
 - [ ] Telefon (SMS) orqali kirish — SMS xizmati kerak
 - [ ] Bilim/Odat/Davra bo'limlarida ham bosqichma-bosqich savollar
-- [ ] Onboarding javoblaridan AI shaxsiy kun tartibi va odatlar
+- [x] Onboarding test javoblaridan kunlik 1–3 qadam (Life Engine)
+- [ ] Kechki review, fokus taymeri, haftalik AI tahlil
+- [ ] Landing matnlarini qayta yozish va animatsiyalar
 - [x] Sayt ichidagi vaqtli eslatmalar + dashboardda bajarilish
 - [ ] Eslatmalar: Telegram bot (ulanish kerak), keyin email (domen kerak)
 - [ ] Premium to'lov tizimi
