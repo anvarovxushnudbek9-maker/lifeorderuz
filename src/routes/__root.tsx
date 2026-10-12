@@ -15,6 +15,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { ThemeProvider } from "@/hooks/useTheme";
 import { AuthProvider } from "@/hooks/useAuth";
 import { Toaster } from "@/components/ui/sonner";
+import { registerOfflineShell } from "@/lib/pwa";
 
 function NotFoundComponent() {
   return (
@@ -133,6 +134,7 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  useEffect(() => { void registerOfflineShell().catch(() => {}); }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
