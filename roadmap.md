@@ -1,5 +1,10 @@
 # Roadmap
 
+- [ ] Uploaded master prompts: verify and strengthen daily loop, privacy, honest claims and installation
+- [ ] Offline public shell; private data never cached
+- [ ] Journal share/file draft survives sign-in
+- [ ] Live policy and browser checks; accurate completion report
+
 - [x] Auth va onboarding yo'naltirishini tuzatish
 - [x] Pastki navigatsiya: Tana/Bilim/Dashboard/Odat/Davra
 - [x] Dashboarddagi takroriy hublarni olib tashlash
