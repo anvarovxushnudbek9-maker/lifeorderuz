@@ -1,5 +1,6 @@
 import { TodayReminders } from "@/components/Reminders";
 import { CommandCenter } from "@/components/CommandCenter";
+import { EveningReview } from "@/components/EveningReview";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -84,7 +85,8 @@ function Dashboard() {
   const h = Number(data?.profile?.height_cm ?? 0);
   const w = Number(data?.profile?.weight_kg ?? 0);
   const bmi = h > 0 && w > 0 ? w / (h / 100) ** 2 : null;
-  const bmiLabel =
+  const adult = Number(data?.profile?.age ?? 0) >= 18;
+  const bmiLabel = !adult ? "Kattalar mezoni qo‘llanmaydi" :
     bmi === null
       ? "—"
       : bmi < 18.5
@@ -203,6 +205,7 @@ function Dashboard() {
       <div className="mt-6">
         <TodayReminders />
       </div>
+      <EveningReview />
 
       <h2 className="mt-8 text-base font-semibold">Odatlar</h2>
       <div className="mt-3 space-y-2">

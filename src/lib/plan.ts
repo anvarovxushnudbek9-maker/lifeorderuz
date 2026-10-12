@@ -72,7 +72,8 @@ export function buildNutrition(p: ProfileInput): NutritionPlan | null {
   const age = Number(p.age ?? 0);
   const h = Number(p.height_cm ?? 0);
   const w = Number(p.weight_kg ?? 0);
-  if (!age || !h || !w) return null;
+  // Adult energy formulas are not validated for children and adolescents.
+  if (age < 18 || !h || !w) return null;
 
   const s = p.gender === "female" ? -161 : 5;
   const bmr = Math.round(10 * w + 6.25 * h - 5 * age + s);

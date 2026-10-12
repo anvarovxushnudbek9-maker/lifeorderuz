@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Check, Clock, SkipForward, Target, Undo2, Zap } from "lucide-react";
+import { Check, Clock, SkipForward, Target, Undo2, Zap, Play } from "lucide-react";
+import { FocusTimer } from "@/components/FocusTimer";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -28,13 +29,14 @@ export function CommandCenter() {
   const today = todayISO();
   const qc = useQueryClient();
   const [skipFor, setSkipFor] = React.useState<string | null>(null);
+  const [focus, setFocus] = React.useState<Item | null>(null);
   const key = ["life-engine", uid, today];
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: key,
     enabled: !!uid,
     queryFn: async () => {
-      const from = lastNDays(14)[0]!;
+      const from = lastNDays(14)[0] ?? today;
       const [profile, history, habits, logs, metrics] = await Promise.all([
         supabase.from("profiles").select("main_goal,goal_type,biggest_obstacle,focus_areas,activity_level,digital_habits").eq("id", uid).maybeSingle(),
         supabase.from("daily_plan_items").select("*").eq("user_id", uid).gte("plan_date", from).order("position"),
@@ -42,6 +44,7 @@ export function CommandCenter() {
         supabase.from("habit_logs").select("habit_id").eq("user_id", uid).eq("log_date", today),
         supabase.from("body_metrics").select("sleep_hours").eq("user_id", uid).eq("metric_date", today).maybeSingle(),
       ]);
+      for (const response of [profile, history, habits, logs, metrics]) if (response.error) throw response.error;
       const all = history.data ?? [];
       const past = all.filter((i) => i.plan_date < today);
       let todays = all.filter((i) => i.plan_date === today);
@@ -62,7 +65,9 @@ export function CommandCenter() {
           )
           .select("*");
         if (error) throw error;
-        todays = inserted ?? [];
+        const current = await supabase.from("daily_plan_items").select("*").eq("user_id", uid).eq("plan_date", today).order("position");
+        if (current.error) throw current.error;
+        todays = current.data ?? inserted ?? [];
       }
       const pastDone = past.filter((p) => p.status === "done").length;
       return {
@@ -97,9 +102,10 @@ export function CommandCenter() {
   const items = data?.items ?? [];
   const done = items.filter((i) => i.status === "done").length;
   const pct = items.length ? Math.round((done / items.length) * 100) : 0;
+  const next = items.find((item) => item.status === "todo");
 
   return (
-    <section className="rounded-2xl border border-border bg-card p-5 shadow-sm" aria-label="Bugungi asosiy qadamlar">
+    <section className="border-b border-border py-5" aria-label="Bugungi asosiy qadamlar">
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-primary">
@@ -112,6 +118,9 @@ export function CommandCenter() {
         <span className="text-2xl font-bold text-primary">{pct}%</span>
       </div>
       <Progress value={pct} className="mt-3" />
+      {error && <div role="alert" className="mt-3 text-sm text-destructive">Rejangizni yuklab bo‘lmadi. <Button variant="outline" size="sm" onClick={() => void refetch()}>Qayta urinish</Button></div>}
+      {next && <Button className="mt-4 max-w-full whitespace-normal text-left" onClick={() => setFocus(next)}><Play className="size-4 shrink-0" />Hozir boshlash · {next.minutes} daq</Button>}
+      {focus && <FocusTimer key={focus.id} title={focus.title} minutes={focus.minutes} onClose={() => setFocus(null)} onComplete={() => { update.mutate({ id: focus.id, status: "done" }); setFocus(null); }} />}
 
       {data?.diagnosis && (
         <div className="mt-4 flex gap-2 rounded-xl bg-primary/5 p-3 text-sm">
@@ -131,14 +140,15 @@ export function CommandCenter() {
           return (
             <li key={it.id} className={cn("rounded-xl border border-border p-3 transition-all", it.status === "done" && "border-primary/30 bg-primary/5", (it.status === "skipped" || it.status === "postponed") && "opacity-60")}>
               <div className="flex items-start gap-3">
-                <button
+                <Button
+                  variant="outline" size="icon" disabled={update.isPending}
                   type="button"
                   aria-label={it.status === "done" ? "Bajarilmagan deb belgilash" : "Bajarildi"}
                   onClick={() => update.mutate({ id: it.id, status: it.status === "done" ? "todo" : "done" })}
                   className={cn("mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full border-2 transition-all active:scale-90", it.status === "done" ? "border-primary bg-primary text-primary-foreground" : "border-muted-foreground/40 hover:border-primary")}
                 >
                   {it.status === "done" && <Check className="size-3.5" />}
-                </button>
+                </Button>
                 <div className="min-w-0 flex-1">
                   <p className={cn("text-sm font-medium", it.status === "done" && "line-through decoration-primary/50")}>{it.title}</p>
                   {it.why && <p className="mt-0.5 text-xs text-muted-foreground">{it.why}</p>}
@@ -162,9 +172,9 @@ export function CommandCenter() {
                   <p className="mb-2 text-xs text-muted-foreground">Nima xalaqit berdi? Ertangi reja shunga moslashadi.</p>
                   <div className="flex flex-wrap gap-1.5">
                     {SKIP_REASONS.map((r) => (
-                      <button key={r} type="button" onClick={() => { update.mutate({ id: it.id, status: "postponed", skip_reason: r }); setSkipFor(null); }} className="rounded-full border border-border px-3 py-1 text-xs hover:bg-accent">
+                      <Button variant="outline" size="sm" disabled={update.isPending} key={r} type="button" onClick={() => { update.mutate({ id: it.id, status: "postponed", skip_reason: r }); setSkipFor(null); }}>
                         {r}
-                      </button>
+                      </Button>
                     ))}
                   </div>
                 </div>
