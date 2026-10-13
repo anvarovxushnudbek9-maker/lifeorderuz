@@ -11,6 +11,7 @@ import { RemindersManager } from "@/components/Reminders";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { readSharedDraft, SHARED_DRAFT_KEY } from "@/lib/shared-draft";
 
 const TITLE = "Kundalik — Life Order";
 const DESC = "Kunlik fikrlaringizni yozing, kayfiyatni kuzating va o'z o'sishingizni ko'ring.";
@@ -38,6 +39,8 @@ function Journal() {
 
   // Prefill from the install "share" sheet / protocol handler / opened files.
   React.useEffect(() => {
+    const draft = readSharedDraft();
+    if (draft) { setTitle(draft.title); setContent(draft.content); }
     const sp = new URLSearchParams(window.location.search);
     const t = sp.get("title") ?? "";
     const body = [sp.get("text"), sp.get("url"), sp.get("q")?.replace(/^web\+lifeorder:\/*/, "")].filter(Boolean).join("\n");
@@ -58,12 +61,13 @@ function Journal() {
     queryKey: ["journal", uid],
     enabled: !!uid,
     queryFn: async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("journal_entries")
         .select("*")
         .eq("user_id", uid)
         .order("created_at", { ascending: false })
         .limit(50);
+      if (error) throw error;
       return data ?? [];
     },
   });
@@ -78,6 +82,7 @@ function Journal() {
     onSuccess: () => {
       setTitle("");
       setContent("");
+      sessionStorage.removeItem(SHARED_DRAFT_KEY);
       qc.invalidateQueries({ queryKey: ["journal"] });
     },
     onError: (e: Error) => toast.error(e.message),
@@ -85,9 +90,11 @@ function Journal() {
 
   const remove = useMutation({
     mutationFn: async (id: string) => {
-      await supabase.from("journal_entries").delete().eq("id", id);
+      const { error } = await supabase.from("journal_entries").delete().eq("id", id).eq("user_id", uid);
+      if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["journal"] }),
+    onError: (e: Error) => toast.error(e.message),
   });
 
   return (
@@ -102,9 +109,10 @@ function Journal() {
           if (content.trim()) add.mutate();
         }}
       >
-        <Input placeholder="Sarlavha" value={title} onChange={(e) => setTitle(e.target.value)} />
+        <Input aria-label="Sarlavha" maxLength={200} placeholder="Sarlavha" value={title} onChange={(e) => setTitle(e.target.value)} />
         <Textarea
           rows={4}
+          aria-label="Kundalik matni" maxLength={5000}
           placeholder="Bugun nima bo'ldi, nimani o'rgandingiz?"
           value={content}
           onChange={(e) => setContent(e.target.value)}

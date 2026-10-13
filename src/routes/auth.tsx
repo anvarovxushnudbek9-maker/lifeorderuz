@@ -106,12 +106,13 @@ function AuthPage() {
   const [busy, setBusy] = React.useState(false);
   const [googleBusy, setGoogleBusy] = React.useState(false);
 
-  // Only redirect users who arrive already signed in; sign-up/sign-in handlers navigate themselves.
-  const initialSession = React.useRef(session);
+  // Hydrated sessions include returning users and completed Google sign-in.
   React.useEffect(() => {
-    if (initialSession.current) navigate({ to: "/dashboard", replace: true });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (!session || busy) return;
+    const destination = sessionStorage.getItem("life-order-after-auth") === "/kundalik" ? "/kundalik" : "/dashboard";
+    sessionStorage.removeItem("life-order-after-auth");
+    void navigate({ to: destination, replace: true });
+  }, [session, busy, navigate]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -142,7 +143,9 @@ function AuthPage() {
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        navigate({ to: "/dashboard", replace: true });
+        const destination = sessionStorage.getItem("life-order-after-auth") === "/kundalik" ? "/kundalik" : "/dashboard";
+        sessionStorage.removeItem("life-order-after-auth");
+        navigate({ to: destination, replace: true });
       }
     } catch (err) {
       toast.error((err as Error).message);
@@ -155,14 +158,15 @@ function AuthPage() {
     setGoogleBusy(true);
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin,
+        redirect_uri: `${window.location.origin}/auth`,
       });
       if (result.error) {
         toast.error("Google orqali kirishda xatolik");
         return;
       }
       if (result.redirected) return;
-      navigate({ to: "/dashboard", replace: true });
+      const { data, error } = await supabase.auth.getSession();
+      if (error || !data.session) throw new Error("Google sessiyasi tasdiqlanmadi. Qayta urinib ko‘ring.");
     } catch {
       toast.error("Google orqali kirishda xatolik");
     } finally {
