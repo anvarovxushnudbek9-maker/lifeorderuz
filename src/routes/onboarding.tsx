@@ -78,6 +78,9 @@ function Onboarding() {
   const [step, setStep] = React.useState(0);
   const [answers, setAnswers] = React.useState<Record<string, string>>({});
   const [saving, setSaving] = React.useState(false);
+  const [advancing, setAdvancing] = React.useState(false);
+  const advanceTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  React.useEffect(() => () => { if (advanceTimer.current) clearTimeout(advanceTimer.current); }, []);
   const total = QUESTIONS.length;
 
   React.useEffect(() => {
@@ -114,16 +117,21 @@ function Onboarding() {
   }
 
   function pick(v: string) {
-    const q = QUESTIONS[step]!;
+    if (advancing || saving) return;
+    const q = QUESTIONS[step];
+    if (!q) return;
+    setAdvancing(true);
     const next = { ...answers, [q.key]: v };
     setAnswers(next);
-    window.setTimeout(() => {
+    advanceTimer.current = window.setTimeout(() => {
+      setAdvancing(false);
       if (step + 1 < total) setStep(step + 1);
       else void finish(next);
     }, 220);
   }
 
-  const q = QUESTIONS[step]!;
+  const q = QUESTIONS[step];
+  if (!q) return null;
   const pct = Math.round((step / total) * 100);
   const remainingSec = Math.max(5, (total - step) * 5);
 
@@ -132,7 +140,7 @@ function Onboarding() {
       <div aria-hidden className="pointer-events-none absolute -top-40 left-1/2 size-[30rem] -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
       <div className="relative mx-auto w-full max-w-md">
         <div className="mb-2 flex items-center justify-between text-xs text-muted-foreground">
-          <button type="button" onClick={() => step > 0 && setStep(step - 1)} disabled={step === 0 || saving} className="flex items-center gap-1 disabled:opacity-0" aria-label="Orqaga">
+          <button type="button" onClick={() => step > 0 && setStep(step - 1)} disabled={step === 0 || saving || advancing} className="flex items-center gap-1 disabled:opacity-0" aria-label="Orqaga">
             <ArrowLeft className="size-3.5" /> Orqaga
           </button>
           <span>{step + 1} / {total} · ~{remainingSec} soniya qoldi</span>
@@ -161,6 +169,7 @@ function Onboarding() {
                   <button
                     key={opt.v}
                     type="button"
+                    disabled={advancing}
                     onClick={() => pick(opt.v)}
                     style={{ animation: `osish-step 0.4s ${i * 40}ms both cubic-bezier(0.22,1,0.36,1)` }}
                     className={cn(
