@@ -17,7 +17,6 @@ import {
   CalendarX,
   Layers,
   Smartphone,
-  Quote,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -276,35 +275,6 @@ function Landing() {
         </div>
       </section>
 
-      {/* Voices */}
-      <section className="border-y border-border bg-secondary/40 py-24">
-        <div className="mx-auto max-w-6xl px-5">
-          <Reveal>
-            <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl">{t.voicesTitle}</h2>
-            <p className="mt-2 text-center text-xs text-muted-foreground">{t.voicesNote}</p>
-          </Reveal>
-          <div className="mt-10 grid gap-5 md:grid-cols-3">
-            {t.voices.map((v, i) => (
-              <Reveal key={v.name} delay={i * 90}>
-                <figure className="flex h-full flex-col rounded-2xl border border-border bg-card p-6">
-                  <Quote className="size-5 text-primary" />
-                  <blockquote className="mt-3 flex-1 text-sm leading-relaxed">{v.text}</blockquote>
-                  <figcaption className="mt-5 flex items-center gap-3">
-                    <span className="flex size-9 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
-                      {v.name[0]}
-                    </span>
-                    <span>
-                      <span className="block text-sm font-semibold">{v.name}</span>
-                      <span className="block text-xs text-muted-foreground">{v.role}</span>
-                    </span>
-                  </figcaption>
-                </figure>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Pricing */}
       <section id="narxlar" className="mx-auto max-w-5xl scroll-mt-20 px-5 py-24">
         <Reveal>
@@ -359,9 +329,7 @@ function Landing() {
                   </li>
                 ))}
               </ul>
-              <Link to="/auth" className="mt-7 block">
-                <Button className="w-full">{t.premium.cta}</Button>
-              </Link>
+              <Button disabled className="mt-7 w-full">{t.premium.cta}</Button>
             </div>
           </Reveal>
         </div>

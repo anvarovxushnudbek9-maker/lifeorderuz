@@ -13,7 +13,7 @@ export function useLang() {
   const [lang, setLangState] = React.useState<Lang>("uz");
   React.useEffect(() => {
     const s = window.localStorage.getItem("lang") as Lang | null;
-    if (s && LANGS.some((l) => l.v === s)) setLangState(s);
+    if (s && LANGS.some((l) => l.v === s)) { setLangState(s); document.documentElement.lang = s === "uzc" ? "uz-Cyrl" : s; }
   }, []);
   const setLang = React.useCallback((l: Lang) => {
     setLangState(l);
@@ -97,11 +97,7 @@ const uz: LandingDict = {
   ],
   voicesTitle: "Tizim bilan yashayotganlar",
   voicesNote: "Namuna fikrlar",
-  voices: [
-    { name: "Diyor, 24", role: "Dasturchi", text: "Birinchi marta 30 kundan oshiq mashqni tashlamadim. Sababi — har kuni nima qilishni o'ylab o'tirmayman." },
-    { name: "Madina, 29", role: "O'qituvchi", text: "Telefonda kuniga 6 soat edi, hozir 3 soat. O'sha vaqtga 4 ta kitob o'qidim." },
-    { name: "Sardor, 33", role: "Tadbirkor", text: "Davradagi do'stlarim bilan har kuni belgilaymiz. Uyalib ham tashlab bo'lmaydi." },
-  ],
+  voices: [],
   pricingTitle: "Oddiy va ochiq narxlar",
   pricingSub: "Bepul boshlang. Tizim ishlayotganini his qilganingizda Premiumga o'ting.",
   free: {
@@ -170,11 +166,7 @@ const uzc: LandingDict = {
   ],
   voicesTitle: "Тизим билан яшаётганлар",
   voicesNote: "Намуна фикрлар",
-  voices: [
-    { name: "Диёр, 24", role: "Дастурчи", text: "Биринчи марта 30 кундан ошиқ машқни ташламадим. Ҳар куни нима қилишни ўйлаб ўтирмайман." },
-    { name: "Мадина, 29", role: "Ўқитувчи", text: "Телефонда кунига 6 соат эди, ҳозир 3 соат. Ўша вақтга 4 та китоб ўқидим." },
-    { name: "Сардор, 33", role: "Тадбиркор", text: "Даврадаги дўстларим билан ҳар куни белгилаймиз. Уялиб ҳам ташлаб бўлмайди." },
-  ],
+  voices: [],
   pricingTitle: "Оддий ва очиқ нархлар",
   pricingSub: "Бепул бошланг. Тизим ишлаётганини ҳис қилганингизда Премиумга ўтинг.",
   free: {
@@ -243,11 +235,7 @@ const ru: LandingDict = {
   ],
   voicesTitle: "Те, кто живёт по системе",
   voicesNote: "Примеры отзывов",
-  voices: [
-    { name: "Диёр, 24", role: "Программист", text: "Впервые не бросил тренировки больше 30 дней. Не нужно думать, что делать каждый день." },
-    { name: "Мадина, 29", role: "Учитель", text: "Было 6 часов в телефоне, сейчас 3. За это время прочитала 4 книги." },
-    { name: "Сардор, 33", role: "Предприниматель", text: "Отмечаемся каждый день с друзьями в круге. Бросить уже стыдно." },
-  ],
+  voices: [],
   pricingTitle: "Простые и честные цены",
   pricingSub: "Начните бесплатно. Перейдите на Premium, когда почувствуете, что система работает.",
   free: {
@@ -316,11 +304,7 @@ const en: LandingDict = {
   ],
   voicesTitle: "People living by the system",
   voicesNote: "Sample reviews",
-  voices: [
-    { name: "Diyor, 24", role: "Developer", text: "For the first time I didn't quit training after 30 days. I don't have to decide what to do each day." },
-    { name: "Madina, 29", role: "Teacher", text: "I used to spend 6 hours a day on my phone, now 3. I read 4 books with that time." },
-    { name: "Sardor, 33", role: "Founder", text: "We check in daily with friends in our circle. Quitting would be embarrassing." },
-  ],
+  voices: [],
   pricingTitle: "Simple, honest pricing",
   pricingSub: "Start free. Move to Premium once you feel the system working.",
   free: {
@@ -352,4 +336,18 @@ const en: LandingDict = {
   footer: "Motivation fades. Systems stay.",
 };
 
-export const LANDING: Record<Lang, LandingDict> = { uz, uzc, ru, en };
+// Marketing reflects the shipped Free beta, not proposed paid entitlements.
+const honest = {
+  uz: { demo: "Namuna reja", sub: "Maqsadingiz, bo‘sh vaqtingiz va oldingi bajarilishlarga qarab 1–3 kunlik qadam. Boshlang, belgilang, keyingi kun rejasini moslashtiring.", pricing: "Asosiy imkoniyatlar hozir bepul. Premium hali sotuvga ochilmagan.", note: "Rejalashtirilgan tarif. To‘lov va pullik imkoniyatlar hali yoqilmagan.", items: ["Kunlik 1–3 qadam va fokus taymeri", "Odat, kitob, mashq va kundalik", "Kattalar uchun taxminiy oziqlanish hisobi", "AI: 30 so‘rov/soat, 120/24 soat; xizmat kreditlariga bog‘liq", "Sayt ochiq paytda eslatmalar"], future: ["Kengaytirilgan tahlil — rejalashtirilgan", "Telegram va email eslatmalar — tayyorlanmoqda"], privacy: "Shaxsiy yozuvlar hisobingizga cheklangan. Davrada yozganlaringiz a’zolarga ko‘rinadi; AI tahliliga so‘rov yuborganda tegishli ma’lumotlar AI xizmatiga uzatiladi." },
+  uzc: { demo: "Намуна режа", sub: "Мақсадингиз, бўш вақтингиз ва олдинги бажарилишларга қараб 1–3 кунлик қадам. Бошланг, белгиланг, кейинги кун режасини мослаштиринг.", pricing: "Асосий имкониятлар ҳозир бепул. Premium ҳали сотувга очилмаган.", note: "Режалаштирилган тариф. Тўлов ва пуллик имкониятлар ҳали ёқилмаган.", items: ["Кунлик 1–3 қадам ва фокус таймери", "Одат, китоб, машқ ва кундалик", "Катталар учун тахминий озиқланиш ҳисоби", "AI: 30 сўров/соат, 120/24 соат; хизмат кредитларига боғлиқ", "Сайт очиқ пайтда эслатмалар"], future: ["Кенгайтирилган таҳлил — режалаштирилган", "Telegram ва email эслатмалар — тайёрланмоқда"], privacy: "Шахсий ёзувлар ҳисобингизга чекланган. Даврада ёзганларингиз аъзоларга кўринади; AI таҳлилига сўров юборганда тегишли маълумотлар AI хизматига узатилади." },
+  ru: { demo: "Пример плана", sub: "1–3 шага на день на основе целей, свободного времени и прошлых отметок. Начните, отметьте результат, адаптируйте следующий день.", pricing: "Основные функции сейчас бесплатны. Premium ещё не продаётся.", note: "Планируемый тариф. Платежи и платные функции пока не включены.", items: ["1–3 шага на день и таймер фокуса", "Привычки, книги, тренировки и дневник", "Ориентировочные расчёты питания для взрослых", "AI: 30 запросов/час, 120/24 часа; зависит от кредитов сервиса", "Напоминания, пока сайт открыт"], future: ["Расширенная аналитика — запланирована", "Напоминания Telegram и email — в разработке"], privacy: "Личные записи доступны вашему аккаунту. Сообщения в круге видят участники; при запросе AI соответствующие данные передаются AI-сервису." },
+  en: { demo: "Example plan", sub: "1–3 daily steps based on your goals, available time and past check-ins. Start, record the result and adapt the next day.", pricing: "Core features are currently free. Premium is not yet for sale.", note: "Planned price. Payments and paid features are not enabled yet.", items: ["1–3 daily steps and a focus timer", "Habits, books, workouts and journal", "Estimated nutrition targets for adults", "AI: 30 requests/hour, 120/24 hours; depends on service credits", "Reminders while the site is open"], future: ["Extended analytics — planned", "Telegram and email reminders — in development"], privacy: "Personal records are limited to your account. Circle members see shared messages; relevant data is sent to the AI service when you request an analysis." },
+};
+export const LANDING: Record<Lang, LandingDict> = Object.fromEntries(Object.entries({ uz, uzc, ru, en }).map(([key, dictionary]) => {
+  const copy = honest[key as Lang];
+  return [key, { ...dictionary, sub: copy.sub, streak: copy.demo, pricingSub: copy.pricing, guarantee: copy.pricing,
+    free: { ...dictionary.free, items: copy.items },
+    premium: { ...dictionary.premium, note: copy.note, items: copy.future, cta: dictionary.premium.soon }, best: dictionary.premium.soon,
+    faq: dictionary.faq.map((entry, index) => index === 2 ? { ...entry, a: copy.privacy } : entry),
+  }];
+})) as Record<Lang, LandingDict>;
