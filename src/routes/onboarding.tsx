@@ -79,7 +79,7 @@ function Onboarding() {
   const [answers, setAnswers] = React.useState<Record<string, string>>({});
   const [saving, setSaving] = React.useState(false);
   const [advancing, setAdvancing] = React.useState(false);
-  const advanceTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const advanceTimer = React.useRef<number | null>(null);
   React.useEffect(() => () => { if (advanceTimer.current) clearTimeout(advanceTimer.current); }, []);
   const total = QUESTIONS.length;
 
