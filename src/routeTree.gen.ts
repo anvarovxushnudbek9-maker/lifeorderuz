@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as ParolTiklashRouteImport } from './routes/parol-tiklash'
+import { Route as UlashishRouteImport } from './routes/ulashish'
 import { Route as AuthenticatedAiRouteImport } from './routes/_authenticated/ai'
 import { Route as AuthenticatedAnalizRouteImport } from './routes/_authenticated/analiz'
 import { Route as AuthenticatedBilimRouteImport } from './routes/_authenticated/bilim'
@@ -53,6 +54,11 @@ const OnboardingRoute = OnboardingRouteImport.update({
 const ParolTiklashRoute = ParolTiklashRouteImport.update({
   id: '/parol-tiklash',
   path: '/parol-tiklash',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UlashishRoute = UlashishRouteImport.update({
+  id: '/ulashish',
+  path: '/ulashish',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAiRoute = AuthenticatedAiRouteImport.update({
@@ -142,6 +148,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/onboarding': typeof OnboardingRoute
   '/parol-tiklash': typeof ParolTiklashRoute
+  '/ulashish': typeof UlashishRoute
   '/ai': typeof AuthenticatedAiRoute
   '/analiz': typeof AuthenticatedAnalizRoute
   '/bilim': typeof AuthenticatedBilimRoute
@@ -164,6 +171,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/onboarding': typeof OnboardingRoute
   '/parol-tiklash': typeof ParolTiklashRoute
+  '/ulashish': typeof UlashishRoute
   '/ai': typeof AuthenticatedAiRoute
   '/analiz': typeof AuthenticatedAnalizRoute
   '/bilim': typeof AuthenticatedBilimRoute
@@ -188,6 +196,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/onboarding': typeof OnboardingRoute
   '/parol-tiklash': typeof ParolTiklashRoute
+  '/ulashish': typeof UlashishRoute
   '/_authenticated/ai': typeof AuthenticatedAiRoute
   '/_authenticated/analiz': typeof AuthenticatedAnalizRoute
   '/_authenticated/bilim': typeof AuthenticatedBilimRoute
@@ -212,6 +221,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/onboarding'
     | '/parol-tiklash'
+    | '/ulashish'
     | '/ai'
     | '/analiz'
     | '/bilim'
@@ -234,6 +244,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/onboarding'
     | '/parol-tiklash'
+    | '/ulashish'
     | '/ai'
     | '/analiz'
     | '/bilim'
@@ -257,6 +268,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/onboarding'
     | '/parol-tiklash'
+    | '/ulashish'
     | '/_authenticated/ai'
     | '/_authenticated/analiz'
     | '/_authenticated/bilim'
@@ -281,6 +293,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   OnboardingRoute: typeof OnboardingRoute
   ParolTiklashRoute: typeof ParolTiklashRoute
+  UlashishRoute: typeof UlashishRoute
   ApiChatRoute: typeof ApiChatRoute
 }
 
@@ -319,6 +332,13 @@ declare module '@tanstack/react-router' {
       path: '/parol-tiklash'
       fullPath: '/parol-tiklash'
       preLoaderRoute: typeof ParolTiklashRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ulashish': {
+      id: '/ulashish'
+      path: '/ulashish'
+      fullPath: '/ulashish'
+      preLoaderRoute: typeof UlashishRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/ai': {
@@ -481,6 +501,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   OnboardingRoute: OnboardingRoute,
   ParolTiklashRoute: ParolTiklashRoute,
+  UlashishRoute: UlashishRoute,
   ApiChatRoute: ApiChatRoute,
 }
 export const routeTree = rootRouteImport
