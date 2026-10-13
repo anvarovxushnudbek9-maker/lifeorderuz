@@ -2,7 +2,7 @@
 
 - [ ] Uploaded master prompts: verify and strengthen daily loop, privacy, honest claims and installation
 - [ ] Offline public shell; private data never cached
-- [ ] Journal share/file draft survives sign-in
+- [x] Public share entry and expiring draft survive sign-in; signed-in prefill browser-tested
 - [ ] Live policy and browser checks; accurate completion report
 
 - [x] Auth va onboarding yo'naltirishini tuzatish
@@ -17,10 +17,12 @@
 - [ ] Telefon (SMS) orqali kirish — SMS xizmati kerak
 - [ ] Bilim/Odat/Davra bo'limlarida ham bosqichma-bosqich savollar
 - [x] Onboarding test javoblaridan kunlik 1–3 qadam (Life Engine)
-- [ ] Kechki review, fokus taymeri, haftalik AI tahlil
-- [ ] Landing matnlarini qayta yozish va animatsiyalar
+- [x] Fokus taymeri: boshlash/pauza browser-tested; 5 deterministic safety tests pass
+- [ ] Kechki xulosa saqlash va haftalik AI tahlilni to‘liq sinash
+- [x] Landing: to‘qima fikrlar olib tashlandi, haqiqiy limitlar va sotuvga ochilmagan Premium ko‘rsatiladi
 - [x] Sayt ichidagi vaqtli eslatmalar + dashboardda bajarilish
-- [ ] Eslatmalar: Telegram bot (ulanish kerak), keyin email (domen kerak)
-- [ ] Premium to'lov tizimi
+- [ ] Telegram: bot ulangan va getMe tekshirildi; foydalanuvchini bog‘lash va vaqtli yuborish hali yo‘q
+- [ ] Email eslatmalar — foydalanuvchiga tegishli yuboruvchi domen kerak
+- [ ] Premium to'lov tizimi — Paddle tasdiqlandi, Pro tarif bo‘lmagani uchun ulanmadi
 - [ ] Mobil va desktop oqimlarni brauzerda tekshirish
 - [x] Profil ma'lumotlari faqat egasiga ko'rinadi (xavfsizlik)

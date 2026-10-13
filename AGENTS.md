@@ -10,6 +10,8 @@
 <!-- LOVABLE:END -->
 
 ## Architecture rules
+- Install share/file/protocol handlers enter a public share route and retain an expiring session-scoped draft until explicit journal save. Why: sign-in must not lose shared content or save it without consent.
+- Deterministic planning regression tests use Bun's test runner. Why: time budgets, carry-over and age guards need repeatable checks.
 - New database changes use Lovable's Drizzle migration tool; retain historical Supabase files without replaying or squashing applied migrations. Why: preserves production data and migration identity.
 - Offline app-shell registration lives only in src/lib/pwa.ts; cache public landing and versioned assets, never authenticated HTML, API responses or user records. Why: avoids stale previews and cross-account disclosure.
 - Focus timing uses an absolute deadline; completing a timer never automatically marks a task done. Why: elapsed time is not evidence of execution.

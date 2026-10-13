@@ -21,15 +21,15 @@
     { "src": "/screenshots/narrow.png", "sizes": "540x960", "type": "image/png", "form_factor": "narrow", "label": "Life Order — bosh sahifa (telefon)" }
   ],
   "share_target": {
-    "action": "/kundalik",
+    "action": "/ulashish",
     "method": "GET",
     "params": { "title": "title", "text": "text", "url": "url" }
   },
   "protocol_handlers": [
-    { "protocol": "web+lifeorder", "url": "/kundalik?q=%s" }
+    { "protocol": "web+lifeorder", "url": "/ulashish?q=%s" }
   ],
   "file_handlers": [
-    { "action": "/kundalik", "accept": { "text/plain": [".txt"], "text/markdown": [".md"] } }
+    { "action": "/ulashish", "accept": { "text/plain": [".txt"], "text/markdown": [".md"] } }
   ],
   "note_taking": { "new_note_url": "/kundalik" },
   "edge_side_panel": { "preferred_width": 420 },

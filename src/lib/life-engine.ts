@@ -70,7 +70,7 @@ export function diagnose(input: EngineInput): Diagnosis {
   const reason = topReason(input.history);
   const rate = completionRate(input.history);
   if (reason === "Telefon chalg'itdi" || input.profile.biggest_obstacle === "Telefon chalg'itadi" || d["screen_time"] === "6 soatdan ko'p" || d["screen_time"] === "4–6 soat")
-    return { key: "phone", label: "Telefon diqqatni o'g'irlayapti", explain: reason ? "Oxirgi kunlarda vazifalar ko'pincha telefon sabab qoldi." : "Kuniga 4+ soat ekran vaqti — reja uchun eng katta to'siq." };
+    return { key: "phone", label: "Telefon diqqatni chalg‘itishi mumkin", explain: reason ? "Qaydlaringizda vazifalar ko‘pincha telefon sabab qoldi." : "Javoblaringizga ko‘ra telefon chalg‘itadi. Ekran vaqti avtomatik o‘lchanmagan." };
   if (reason === "Juda katta tuyuldi" || d["start_style"] === "Mukammal bo'lishini kutaman")
     return { key: "perfectionism", label: "Mukammallikni kutish", explain: "Vazifalar katta tuyulgani uchun boshlanmayapti — ularni kichraytiramiz." };
   if (reason === "Vaqt yetmadi" || input.profile.biggest_obstacle === "Vaqt topa olmayman")
@@ -81,7 +81,7 @@ export function diagnose(input: EngineInput): Diagnosis {
     return { key: "clarity", label: "Aniqlik yetishmaydi", explain: "Bitta aniq birinchi qadam belgilaymiz." };
   if ((rate !== null && rate < 0.5) || input.profile.biggest_obstacle === "Intizom yetishmaydi" || d["start_style"] === "Oxirgi daqiqagacha cho'zaman")
     return { key: "procrastination", label: "Kechiktirish", explain: rate !== null ? `Oxirgi rejalar bajarilishi ${Math.round(rate * 100)}% — yuklamani kamaytiramiz.` : "Boshlashni osonlashtiramiz: 2 daqiqalik qoida." };
-  return { key: "clarity", label: "Barqarorlik", explain: "Yaxshi ritmdasiz — muhim ishga ko'proq vaqt ajratamiz." };
+  return { key: "clarity", label: "Birinchi qadam", explain: input.history.length ? "Qaydlaringizga tayangan holda muhim ishga vaqt ajratamiz." : "Hali bajarilish tarixi yo‘q — kichik qadamdan boshlaymiz." };
 }
 
 function freeMinutes(p: EngineProfile) {
@@ -109,7 +109,8 @@ export function decide(input: EngineInput): { diagnosis: Diagnosis; actions: Pla
 
   // 1. Carry over yesterday's postponed items (max 1) — unfinished work first.
   const yesterday = [...input.history].sort((a, b) => b.plan_date.localeCompare(a.plan_date));
-  const carry = yesterday.find((h) => h.status === "postponed");
+  const latestDate = yesterday[0]?.plan_date;
+  const carry = yesterday.find((h) => h.plan_date === latestDate && h.status === "postponed" && !input.history.some((later) => later.title === h.title && later.plan_date > h.plan_date && later.status === "done"));
   if (carry) actions.push({ title: carry.title, why: "Kecha keyinga surilgan edi — bugun birinchi navbatda.", domain: carry.domain, minutes: Math.min(carry.minutes, mins(30)), source: "carry" });
 
   // 2. Main goal: the one action that moves the needle.
@@ -152,5 +153,6 @@ export function decide(input: EngineInput): { diagnosis: Diagnosis; actions: Pla
     actions.pop();
     total = actions.reduce((s, a) => s + a.minutes, 0);
   }
+  if (actions[0] && actions[0].minutes > budget) actions[0] = { ...actions[0], minutes: budget };
   return { diagnosis, actions, load };
 }
