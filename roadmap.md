@@ -1,5 +1,9 @@
 # Roadmap
 
+- [ ] Nov 4 confirmed Life OS requirements: five-screen onboarding, Google/Apple/email, gamification + hourly schedule
+- [ ] Confirmed commercial and safety requirements: Free 3 AI/day, max 5 reminders/day, minor-safe coaching, real Premium/trial/Click/Payme
+- [ ] Books/course library, single Davra chat, privacy/terms/account deletion, first-visit guidance
+
 - [ ] Uploaded master prompts: verify and strengthen daily loop, privacy, honest claims and installation
 - [ ] Offline public shell; private data never cached
 - [x] Public share entry and expiring draft survive sign-in; signed-in prefill browser-tested
