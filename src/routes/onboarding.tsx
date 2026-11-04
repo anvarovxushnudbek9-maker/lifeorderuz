@@ -8,9 +8,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import { GOALS, SPORTS } from "@/lib/plan";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ONBOARDING_GROUPS, isMinorAge, onboardingError } from "@/lib/onboarding";
+import { decide } from "@/lib/life-engine";
+import { todayISO } from "@/lib/date";
 
 const TITLE = "Tizimingizni sozlash — Life Order";
-const DESC = "1 daqiqalik test: javoblaringiz asosida Life Order sizga har kuni 3 ta eng muhim qadamni tanlaydi.";
+const DESC = "Besh bosqichli test: javoblaringiz asosida Life Order sizga har kuni 3 ta eng muhim qadamni tanlaydi.";
 
 export const Route = createFileRoute("/onboarding")({
   ssr: false,
@@ -57,7 +63,7 @@ const QUESTIONS: Q[] = [
     { v: "high", t: "Faol", d: "Deyarli har kuni" },
   ] },
   { key: "goal_type", section: "Tana", q: "Tana bo'yicha maqsadingiz?", options: (a) =>
-    GOALS.filter((g) => !(a["age_range"] === "18 dan kichik" && g.v === "lose")).map((g) => ({ v: g.v, t: g.t, d: g.d })) },
+    GOALS.filter((g) => !(isMinorAge(a["age"] ?? "") && ["lose", "gain"].includes(g.v))).map((g) => ({ v: g.v, t: g.t, d: g.d })) },
   { key: "sport_preference", section: "Tana", q: "Qaysi harakat turi sizga yoqadi?", options: () => o(SPORTS) },
 ];
 
@@ -69,7 +75,8 @@ const AREA_BY_GOAL: Record<string, string[]> = {
   "Ish va karyerada o'sish": ["Karyera", "Bilim"],
 };
 
-const PROFILE_KEYS = new Set(["main_goal", "why_now", "biggest_obstacle", "activity_level", "goal_type", "sport_preference"]);
+const PROFILE_KEYS = new Set(["main_goal", "why_now", "biggest_obstacle", "activity_level", "goal_type", "sport_preference", "full_name", "age", "gender", "height_cm", "weight_kg"]);
+const STEP_TITLES = ["Yo‘nalishingiz", "Sizni nima to‘xtatyapti?", "Telefon odatlaringiz", "Kuningizning ritmi", "Siz va salomatligingiz"];
 
 function Onboarding() {
   const { session, user, loading } = useAuth();
@@ -78,10 +85,8 @@ function Onboarding() {
   const [step, setStep] = React.useState(0);
   const [answers, setAnswers] = React.useState<Record<string, string>>({});
   const [saving, setSaving] = React.useState(false);
-  const [advancing, setAdvancing] = React.useState(false);
-  const advanceTimer = React.useRef<number | null>(null);
-  React.useEffect(() => () => { if (advanceTimer.current) clearTimeout(advanceTimer.current); }, []);
-  const total = QUESTIONS.length;
+  const [showResult, setShowResult] = React.useState(false);
+  const total = ONBOARDING_GROUPS.length;
 
   React.useEffect(() => {
     if (!loading && !session) navigate({ to: "/auth", replace: true });
@@ -91,10 +96,15 @@ function Onboarding() {
     if (!user) return;
     setSaving(true);
     try {
-      const digital: Record<string, string> = {};
+      const digital: Record<string, string> = { age_range: isMinorAge(a["age"] ?? "") ? "18 dan kichik" : Number(a["age"]) < 25 ? "18–24" : Number(a["age"]) < 35 ? "25–34" : "35+" };
       for (const [k, v] of Object.entries(a)) if (!PROFILE_KEYS.has(k)) digital[k] = v;
       const { error } = await supabase.from("profiles").upsert({
         id: user.id,
+        full_name: a["full_name"]?.trim() ?? null,
+        age: Number(a["age"]),
+        gender: a["gender"] || null,
+        height_cm: a["height_cm"] ? Number(a["height_cm"]) : null,
+        weight_kg: a["weight_kg"] ? Number(a["weight_kg"]) : null,
         main_goal: a["main_goal"] ?? null,
         focus_areas: AREA_BY_GOAL[a["main_goal"] ?? ""] ?? [],
         why_now: a["why_now"] ?? null,
@@ -116,78 +126,65 @@ function Onboarding() {
     }
   }
 
-  function pick(v: string) {
-    if (advancing || saving) return;
-    const q = QUESTIONS[step];
-    if (!q) return;
-    setAdvancing(true);
-    const next = { ...answers, [q.key]: v };
-    setAnswers(next);
-    advanceTimer.current = window.setTimeout(() => {
-      setAdvancing(false);
-      if (step + 1 < total) setStep(step + 1);
-      else void finish(next);
-    }, 220);
+  function setAnswer(key: string, value: string) {
+    setAnswers((old) => ({ ...old, [key]: value, ...(key === "age" && isMinorAge(value) ? { goal_type: "health" } : {}) }));
   }
 
-  const q = QUESTIONS[step];
-  if (!q) return null;
-  const pct = Math.round((step / total) * 100);
-  const remainingSec = Math.max(5, (total - step) * 5);
+  function next() {
+    const error = onboardingError(answers, step);
+    if (error) { toast.error(error); return; }
+    if (step + 1 < total) setStep(step + 1);
+    else setShowResult(true);
+  }
+
+  const keys = ONBOARDING_GROUPS[step];
+  if (!keys) return null;
+  const questions = QUESTIONS.filter((q) => keys.some((key) => key === q.key));
+  const pct = showResult ? 100 : Math.round(((step + 1) / total) * 100);
+  const preview = decide({ profile: { main_goal: answers["main_goal"] ?? null, biggest_obstacle: answers["biggest_obstacle"] ?? null, digital_habits: answers }, history: [], habitsTotal: 0, habitsDoneToday: 0, sleepHours: null, todayISO: todayISO() });
 
   return (
-    <main className="relative flex min-h-screen flex-col overflow-hidden bg-background px-5 py-8">
-      <div aria-hidden className="pointer-events-none absolute -top-40 left-1/2 size-[30rem] -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
-      <div className="relative mx-auto w-full max-w-md">
-        <div className="mb-2 flex items-center justify-between text-xs text-muted-foreground">
-          <button type="button" onClick={() => step > 0 && setStep(step - 1)} disabled={step === 0 || saving || advancing} className="flex items-center gap-1 disabled:opacity-0" aria-label="Orqaga">
-            <ArrowLeft className="size-3.5" /> Orqaga
-          </button>
-          <span>{step + 1} / {total} · ~{remainingSec} soniya qoldi</span>
+    <main className="min-h-screen bg-background px-5 py-8 sm:py-12">
+      <div className="mx-auto w-full max-w-3xl">
+        <div className="mb-4 flex items-center justify-between">
+          <Button variant="ghost" size="sm" onClick={() => showResult ? setShowResult(false) : setStep(step - 1)} disabled={(!showResult && step === 0) || saving}>
+            <ArrowLeft className="size-4" /> Orqaga
+          </Button>
+          <span className="text-sm text-muted-foreground">{showResult ? "Rejangiz" : `${step + 1} / ${total}`}</span>
         </div>
-        <div className="mb-8 h-1.5 overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
-          <div className="h-full gradient-primary transition-all duration-500 ease-out" style={{ width: `${Math.max(4, pct)}%` }} />
-        </div>
-
-        {saving ? (
-          <div className="flex flex-col items-center gap-3 py-20 text-center" style={{ animation: "osish-step 0.35s ease-out" }}>
-            <Loader2 className="size-8 animate-spin text-primary" />
-            <p className="font-semibold">Javoblaringiz tahlil qilinmoqda…</p>
-            <p className="text-sm text-muted-foreground">Bugungi shaxsiy rejangiz tuzilyapti.</p>
-          </div>
+        <progress className="mb-8 h-1.5 w-full accent-primary" max={100} value={pct} aria-label="Bosqichlar" />
+        {showResult ? (
+          <section className="space-y-6">
+            <h1 className="text-3xl font-bold">{answers["full_name"]}, birinchi rejangiz tayyor</h1>
+            <p className="text-muted-foreground">{preview.diagnosis.label}</p>
+            <ol className="divide-y divide-border">
+              {preview.actions.map((action, i) => <li key={action.title} className="flex items-center gap-4 py-5"><span className="text-lg font-semibold text-primary">{i + 1}</span><span className="flex-1 font-medium">{action.title}</span><span className="text-sm text-muted-foreground">{action.minutes} daqiqa</span></li>)}
+            </ol>
+            <Button size="lg" disabled={saving} onClick={() => void finish(answers)}>{saving ? <Loader2 className="size-4 animate-spin" /> : null}{saving ? "Saqlanmoqda…" : "Boshlash"}</Button>
+          </section>
         ) : (
-          <div key={step} className="space-y-5" style={{ animation: "osish-step 0.35s cubic-bezier(0.22,1,0.36,1)" }}>
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-primary">{q.section}</p>
-              <h1 className="mt-1 text-2xl font-bold tracking-tight">{q.q}</h1>
-              {q.hint && <p className="mt-1 text-sm text-muted-foreground">{q.hint}</p>}
-            </div>
-            <div className="space-y-2">
-              {q.options(answers).map((opt, i) => {
-                const on = answers[q.key] === opt.v;
-                return (
-                  <button
-                    key={opt.v}
-                    type="button"
-                    disabled={advancing}
-                    onClick={() => pick(opt.v)}
-                    style={{ animation: `osish-step 0.4s ${i * 40}ms both cubic-bezier(0.22,1,0.36,1)` }}
-                    className={cn(
-                      "flex w-full items-center gap-3 rounded-xl border px-4 py-3.5 text-left text-sm transition-all duration-200 active:scale-[0.98]",
-                      on ? "border-primary bg-primary/5 shadow-elegant" : "border-border hover:border-primary/40 hover:bg-accent",
-                    )}
-                  >
-                    {opt.e && <span className="text-xl">{opt.e}</span>}
-                    <span className="flex-1">
-                      <span className="block font-medium">{opt.t}</span>
-                      {opt.d && <span className="block text-xs text-muted-foreground">{opt.d}</span>}
-                    </span>
-                    {on && <Check className="size-4 shrink-0 text-primary" />}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+          <form className="space-y-8" onSubmit={(e) => { e.preventDefault(); next(); }}>
+            <h1 className="text-3xl font-bold">{STEP_TITLES[step]}</h1>
+            {step === 4 && <div className="grid gap-5 sm:grid-cols-2">
+              <div className="space-y-2"><Label htmlFor="full-name">Ismingiz</Label><Input id="full-name" autoComplete="given-name" maxLength={80} value={answers["full_name"] ?? ""} onChange={(e) => setAnswer("full_name", e.target.value)} required /></div>
+              <div className="space-y-2"><Label htmlFor="age">Yoshingiz</Label><Input id="age" type="number" min={13} max={120} value={answers["age"] ?? ""} onChange={(e) => setAnswer("age", e.target.value)} required /></div>
+              <div className="space-y-2"><Label htmlFor="height">Bo‘y (sm, ixtiyoriy)</Label><Input id="height" type="number" min={80} max={250} value={answers["height_cm"] ?? ""} onChange={(e) => setAnswer("height_cm", e.target.value)} /></div>
+              <div className="space-y-2"><Label htmlFor="weight">Vazn (kg, ixtiyoriy)</Label><Input id="weight" type="number" min={20} max={300} step="0.1" value={answers["weight_kg"] ?? ""} onChange={(e) => setAnswer("weight_kg", e.target.value)} /></div>
+              <fieldset className="space-y-2 sm:col-span-2"><legend className="text-sm font-medium">Jins (ixtiyoriy)</legend><div className="flex flex-wrap gap-2">{[{ v: "male", t: "Erkak" }, { v: "female", t: "Ayol" }, { v: "", t: "Aytishni istamayman" }].map((opt) => <Button key={opt.t} type="button" variant={answers["gender"] === opt.v ? "default" : "outline"} onClick={() => setAnswer("gender", opt.v)}>{opt.t}</Button>)}</div></fieldset>
+              {isMinorAge(answers["age"] ?? "") && <p className="text-sm text-muted-foreground sm:col-span-2">18 yoshgacha reja uyqu, o‘qish va xavfsiz harakatga qaratiladi. Vazn yoki kaloriya cheklash rejasi berilmaydi.</p>}
+            </div>}
+            {questions.map((q) => <fieldset key={q.key} className="space-y-3">
+              <legend className="font-semibold">{q.q}</legend>
+              {q.hint && <p className="text-sm text-muted-foreground">{q.hint}</p>}
+              <div className="grid gap-2 sm:grid-cols-2">
+                {q.options(answers).map((opt) => <Button key={opt.v} type="button" variant="outline" aria-pressed={answers[q.key] === opt.v} onClick={() => setAnswer(q.key, opt.v)} className={cn("h-auto min-h-12 justify-start whitespace-normal py-3 text-left", answers[q.key] === opt.v && "border-primary bg-primary/5")}>
+                  <span className="flex-1"><span className="block">{opt.e} {opt.t}</span>{opt.d && <span className="block text-xs text-muted-foreground">{opt.d}</span>}</span>{answers[q.key] === opt.v && <Check className="size-4 shrink-0 text-primary" />}
+                </Button>)}
+              </div>
+            </fieldset>)}
+            {step === 0 && <div className="space-y-2"><Label htmlFor="extra">Yana nima muhim? (ixtiyoriy)</Label><Input id="extra" maxLength={500} value={answers["extra_note"] ?? ""} onChange={(e) => setAnswer("extra_note", e.target.value)} /></div>}
+            <div className="border-t border-border pt-6"><Button type="submit" size="lg" className="w-full sm:w-auto">{step === 4 ? "Rejamni ko‘rish" : "Davom etish"}</Button></div>
+          </form>
         )}
       </div>
     </main>
