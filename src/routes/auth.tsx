@@ -102,7 +102,6 @@ function AuthPage() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [showPass, setShowPass] = React.useState(false);
-  const [name, setName] = React.useState("");
   const [busy, setBusy] = React.useState(false);
   const [googleBusy, setGoogleBusy] = React.useState(false);
 
@@ -131,7 +130,6 @@ function AuthPage() {
           password,
           options: {
             emailRedirectTo: window.location.origin,
-            data: { full_name: name },
           },
         });
         if (error) throw error;
@@ -269,24 +267,6 @@ function AuthPage() {
             </div>
 
             <form className="space-y-4" onSubmit={submit}>
-              <div
-                className={cn(
-                  "grid overflow-hidden transition-all duration-300",
-                  mode === "signup" ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
-                )}
-              >
-                <div className="min-h-0 space-y-1.5">
-                  <Label htmlFor="name">Ism</Label>
-                  <Input
-                    id="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required={mode === "signup"}
-                    placeholder="Ismingiz"
-                  />
-                </div>
-              </div>
-
               <div className="space-y-1.5">
                 <Label htmlFor="email">Email</Label>
                 <Input
