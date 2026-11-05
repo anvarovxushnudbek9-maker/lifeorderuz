@@ -80,7 +80,7 @@ function Dashboard() {
   );
   const habitPct = habits.length ? Math.round((doneToday.size / habits.length) * 100) : 0;
   const weekMinutes = (data?.workouts ?? []).reduce((s, w) => s + (w.duration_min ?? 0), 0);
-  const name = (user?.user_metadata?.["full_name"] as string | undefined)?.split(" ")[0];
+  const name = ((data?.profile?.full_name as string | null | undefined) ?? (user?.user_metadata?.["full_name"] as string | undefined))?.trim().split(" ")[0];
 
   const h = Number(data?.profile?.height_cm ?? 0);
   const w = Number(data?.profile?.weight_kg ?? 0);
