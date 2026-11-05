@@ -92,6 +92,30 @@ function Onboarding() {
     if (!loading && !session) navigate({ to: "/auth", replace: true });
   }, [loading, session, navigate]);
 
+  // Keep progress across reloads or auth re-renders for this browser tab only.
+  const draftKey = user ? `lo-onboarding:${user.id}` : null;
+  const [restored, setRestored] = React.useState(false);
+  React.useEffect(() => {
+    if (!draftKey || restored) return;
+    try {
+      const raw = sessionStorage.getItem(draftKey);
+      if (raw) {
+        const d = JSON.parse(raw) as { step?: unknown; answers?: unknown };
+        if (d.answers && typeof d.answers === "object") {
+          const clean: Record<string, string> = {};
+          for (const [k, v] of Object.entries(d.answers as Record<string, unknown>)) if (typeof v === "string" && v.length <= 500) clean[k] = v;
+          setAnswers((old) => ({ ...clean, ...old }));
+        }
+        if (typeof d.step === "number" && d.step >= 0 && d.step < total) setStep((old) => (old === 0 ? (d.step as number) : old));
+      }
+    } catch { /* ignore broken draft */ }
+    setRestored(true);
+  }, [draftKey, restored, total]);
+  React.useEffect(() => {
+    if (!draftKey || !restored) return;
+    try { sessionStorage.setItem(draftKey, JSON.stringify({ step, answers })); } catch { /* storage full or blocked */ }
+  }, [draftKey, restored, step, answers]);
+
   async function finish(a: Record<string, string>) {
     if (!user) return;
     setSaving(true);
@@ -116,6 +140,7 @@ function Onboarding() {
         onboarding_completed: true,
       });
       if (error) throw error;
+      try { sessionStorage.removeItem(`lo-onboarding:${user.id}`); } catch { /* ignore */ }
       qc.setQueryData(["profile", user.id], (old: Record<string, unknown> | null | undefined) => ({ ...(old ?? {}), onboarding_completed: true }));
       await qc.invalidateQueries({ queryKey: ["profile", user.id] });
       toast.success("Tizimingiz tayyor — bugungi 3 qadam sizni kutmoqda!");
