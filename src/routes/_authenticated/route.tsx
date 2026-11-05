@@ -29,8 +29,8 @@ function AuthenticatedLayout() {
   }, [loading, session, navigate]);
 
   useEffect(() => {
-    if (profile && !profile.onboarding_completed) navigate({ to: "/onboarding", replace: true });
-  }, [profile, navigate]);
+    if (!profilePending && session && !profile?.onboarding_completed) navigate({ to: "/onboarding", replace: true });
+  }, [profile, profilePending, session, navigate]);
 
   // Wait for the profile so pages never act (e.g. generate a plan) before onboarding is done.
   if (loading || !session || profilePending || !profile?.onboarding_completed) {
