@@ -38,7 +38,7 @@ export function CommandCenter() {
     queryFn: async () => {
       const from = lastNDays(14)[0] ?? today;
       const [profile, history, habits, logs, metrics] = await Promise.all([
-        supabase.from("profiles").select("main_goal,goal_type,biggest_obstacle,focus_areas,activity_level,digital_habits").eq("id", uid).maybeSingle(),
+        supabase.from("profiles").select("main_goal,goal_type,biggest_obstacle,focus_areas,activity_level,digital_habits,onboarding_completed").eq("id", uid).maybeSingle(),
         supabase.from("daily_plan_items").select("*").eq("user_id", uid).gte("plan_date", from).order("position"),
         supabase.from("habits").select("id").eq("user_id", uid).eq("archived", false),
         supabase.from("habit_logs").select("habit_id").eq("user_id", uid).eq("log_date", today),
@@ -56,7 +56,7 @@ export function CommandCenter() {
         sleepHours: metrics.data?.sleep_hours != null ? Number(metrics.data.sleep_hours) : null,
         todayISO: today,
       });
-      if (todays.length === 0 && result.actions.length) {
+      if (todays.length === 0 && result.actions.length && profile.data?.onboarding_completed) {
         const { data: inserted, error } = await supabase
           .from("daily_plan_items")
           .upsert(

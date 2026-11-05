@@ -15,7 +15,7 @@ function AuthenticatedLayout() {
   const { session, user, loading } = useAuth();
   const navigate = useNavigate();
 
-  const { data: profile } = useQuery({
+  const { data: profile, isPending: profilePending } = useQuery({
     queryKey: ["profile", user?.id ?? ""],
     enabled: !!user?.id,
     queryFn: async () => {
@@ -29,10 +29,11 @@ function AuthenticatedLayout() {
   }, [loading, session, navigate]);
 
   useEffect(() => {
-    if (profile && !profile.onboarding_completed) navigate({ to: "/onboarding", replace: true });
-  }, [profile, navigate]);
+    if (!profilePending && session && !profile?.onboarding_completed) navigate({ to: "/onboarding", replace: true });
+  }, [profile, profilePending, session, navigate]);
 
-  if (loading || !session) {
+  // Wait for the profile so pages never act (e.g. generate a plan) before onboarding is done.
+  if (loading || !session || profilePending || !profile?.onboarding_completed) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="size-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
