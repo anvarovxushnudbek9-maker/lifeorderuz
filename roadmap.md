@@ -22,7 +22,9 @@
 - [ ] Bilim/Odat/Davra bo'limlarida ham bosqichma-bosqich savollar
 - [x] Onboarding test javoblaridan kunlik 1–3 qadam (Life Engine)
 - [x] Fokus taymeri: boshlash/pauza browser-tested; 5 deterministic safety tests pass
-- [ ] Kechki xulosa saqlash va haftalik AI tahlilni to‘liq sinash
+- [x] Kechki xulosa saqlash browser-tested (Kundalikda ko‘rinadi)
+- [ ] Haftalik AI tahlilni to‘liq sinash
+- [x] Ro‘yxatdan o‘tish → 5 bosqich → dashboard browser-tested; reja onboardingdan oldin yaratilmaydi
 - [x] Landing: to‘qima fikrlar olib tashlandi, haqiqiy limitlar va sotuvga ochilmagan Premium ko‘rsatiladi
 - [x] Sayt ichidagi vaqtli eslatmalar + dashboardda bajarilish
 - [ ] Telegram: bot ulangan va getMe tekshirildi; foydalanuvchini bog‘lash va vaqtli yuborish hali yo‘q
