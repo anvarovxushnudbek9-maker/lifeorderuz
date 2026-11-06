@@ -63,6 +63,7 @@ export type Database = {
           metric_date: string
           mood: number | null
           sleep_hours: number | null
+          sleep_quality: number | null
           steps: number
           user_id: string
           water_ml: number
@@ -74,6 +75,7 @@ export type Database = {
           metric_date?: string
           mood?: number | null
           sleep_hours?: number | null
+          sleep_quality?: number | null
           steps?: number
           user_id: string
           water_ml?: number
@@ -85,6 +87,7 @@ export type Database = {
           metric_date?: string
           mood?: number | null
           sleep_hours?: number | null
+          sleep_quality?: number | null
           steps?: number
           user_id?: string
           water_ml?: number
@@ -127,6 +130,27 @@ export type Database = {
           status?: string
           title?: string
           total_pages?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      buddy_links: {
+        Row: {
+          created_at: string
+          invite_code: string
+          partner_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          invite_code: string
+          partner_id?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          invite_code?: string
+          partner_id?: string | null
           user_id?: string
         }
         Relationships: []
@@ -306,6 +330,33 @@ export type Database = {
         }
         Relationships: []
       }
+      distraction_logs: {
+        Row: {
+          created_at: string
+          id: string
+          logged_on: string
+          minutes: number
+          source: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          logged_on?: string
+          minutes: number
+          source: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          logged_on?: string
+          minutes?: number
+          source?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       habit_logs: {
         Row: {
           created_at: string
@@ -444,6 +495,7 @@ export type Database = {
           avatar_url: string | null
           biggest_obstacle: string | null
           bio: string | null
+          coach_mode: string
           created_at: string
           digital_habits: Json
           focus_areas: string[]
@@ -465,6 +517,7 @@ export type Database = {
           avatar_url?: string | null
           biggest_obstacle?: string | null
           bio?: string | null
+          coach_mode?: string
           created_at?: string
           digital_habits?: Json
           focus_areas?: string[]
@@ -486,6 +539,7 @@ export type Database = {
           avatar_url?: string | null
           biggest_obstacle?: string | null
           bio?: string | null
+          coach_mode?: string
           created_at?: string
           digital_habits?: Json
           focus_areas?: string[]
@@ -574,6 +628,33 @@ export type Database = {
         }
         Relationships: []
       }
+      schedule_blocks: {
+        Row: {
+          block_date: string
+          created_at: string
+          hour: number
+          id: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          block_date?: string
+          created_at?: string
+          hour: number
+          id?: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          block_date?: string
+          created_at?: string
+          hour?: number
+          id?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       telegram_links: {
         Row: {
           chat_id: number | null
@@ -600,6 +681,36 @@ export type Database = {
           link_code?: string | null
           linked_at?: string | null
           timezone?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      top_tasks: {
+        Row: {
+          created_at: string
+          done: boolean
+          id: string
+          position: number
+          task_date: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          done?: boolean
+          id?: string
+          position: number
+          task_date?: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          done?: boolean
+          id?: string
+          position?: number
+          task_date?: string
+          title?: string
           user_id?: string
         }
         Relationships: []
@@ -645,6 +756,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      accept_buddy: { Args: { _code: string }; Returns: boolean }
+      buddy_today: {
+        Args: never
+        Returns: {
+          done: number
+          partner_name: string
+          total: number
+        }[]
+      }
       is_circle_member: {
         Args: { _circle: string; _user: string }
         Returns: boolean
