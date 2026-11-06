@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ListenButton } from "@/components/ListenButton";
 import { LIBRARY, LIBRARY_CATEGORIES, youtubeId, type LibraryBook } from "@/lib/book-library";
 import { cn } from "@/lib/utils";
 
@@ -410,6 +411,7 @@ function Library() {
                         ))}
                       </ol>
                     </div>
+                    <ListenButton text={`${b.title}. ${b.idea} ${b.summary} Saboqlar: ${b.lessons.join(" ")}`} />
                   </div>
                 )}
                 <div className="mt-3 flex flex-wrap gap-2">
