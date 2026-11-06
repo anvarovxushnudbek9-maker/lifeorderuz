@@ -1,0 +1,155 @@
+// Curated summaries written for Life Order (own words, no copied text).
+export type LibraryBook = {
+  id: string;
+  title: string;
+  author: string;
+  category: "Odat" | "Fokus" | "Fikrlash" | "Pul" | "Munosabat" | "Ma'no" | "Sog'liq";
+  pages: number;
+  idea: string;
+  summary: string;
+  lessons: [string, string, string];
+};
+
+export const LIBRARY: LibraryBook[] = [
+  { id: "atomic-habits", title: "Atomic Habits", author: "James Clear", category: "Odat", pages: 320,
+    idea: "Katta natija — har kungi 1% yaxshilanishlar yig‘indisi.",
+    summary: "Odat to‘rt bosqichdan iborat: ishora, istak, harakat, mukofot. Yaxshi odatni ko‘rinadigan, jozibali, oson va qoniqarli qiling; yomonini aksincha. Maqsaddan ko‘ra tizim va o‘zlik muhimroq.",
+    lessons: ["“Men kimman?” deb boshlang: o‘zlikka asoslangan odat barqarorroq.", "Odatni 2 daqiqagacha kichraytiring.", "Muhitni o‘zgartiring — iroda emas, atrof boshqaradi."] },
+  { id: "deep-work", title: "Deep Work", author: "Cal Newport", category: "Fokus", pages: 296,
+    idea: "Chalg‘imasdan chuqur ishlash — XXI asrning eng qimmat ko‘nikmasi.",
+    summary: "Sayoz ishlar (xabar, tarmoq) kunni yeydi. Chuqur ish uchun vaqtni oldindan bloklash, zerikishga chidash va ijtimoiy tarmoqlarni qattiq saralash kerak.",
+    lessons: ["Har kuni bitta 60–90 daqiqalik chalg‘itishsiz blok ajrating.", "Telefonni boshqa xonaga qo‘ying.", "Ish kunini aniq vaqtda yakunlang."] },
+  { id: "7-habits", title: "Yuksak samarali odamlarning 7 ko‘nikmasi", author: "Stephen Covey", category: "Odat", pages: 380,
+    idea: "Samaradorlik tamoyillar va xarakterdan boshlanadi.",
+    summary: "Proaktiv bo‘ling, oxirini ko‘zlab boshlang, muhimini birinchi qiling; keyin g‘alaba-g‘alaba, avval tushunish, sinergiya va doimiy yangilanish.",
+    lessons: ["Faqat ta’sir doirangizdagi narsaga energiya sarflang.", "Haftani muhim, lekin shoshilinch bo‘lmagan ishlardan rejalang.", "Gapirishdan oldin tinglab tushuning."] },
+  { id: "mans-search", title: "Inson ma’no izlab", author: "Viktor Frankl", category: "Ma'no", pages: 184,
+    idea: "Hayotning ma’nosi bo‘lsa, inson har qanday “qanday”ga chidaydi.",
+    summary: "Konslager tajribasi asosida Frankl ko‘rsatadiki, vaziyatni tanlay olmasak ham, unga munosabatimizni tanlaymiz. Ma’no ish, sevgi va azobga munosabat orqali topiladi.",
+    lessons: ["Har kuni “nima uchun?” javobingizni yozing.", "Qiyinchilikka munosabatni tanlash — erkinlik.", "Ma’no boshqalarga xizmatda paydo bo‘ladi."] },
+  { id: "thinking-fast", title: "Thinking, Fast and Slow", author: "Daniel Kahneman", category: "Fikrlash", pages: 499,
+    idea: "Miya ikki tizim bilan ishlaydi: tez-intuitiv va sekin-mantiqiy.",
+    summary: "1-tizim tez, lekin xatoga moyil (langar, mavjudlik, yo‘qotishdan qo‘rqish). Muhim qarorlarda 2-tizimni ataylab yoqish kerak.",
+    lessons: ["Muhim qarorni bir kecha kutib qabul qiling.", "Rejalashda vaqtni 1.5 baravar ko‘p hisoblang.", "Birinchi eshitgan raqam fikringizni langarlaydi — tekshiring."] },
+  { id: "power-of-habit", title: "Odat kuchi", author: "Charles Duhigg", category: "Odat", pages: 371,
+    idea: "Odatni yo‘q qilib bo‘lmaydi, lekin uning harakatini almashtirish mumkin.",
+    summary: "Ishora–odat–mukofot halqasi. Ishora va mukofotni saqlab, o‘rtadagi harakatni almashtirsangiz, odat o‘zgaradi. “Kalit odatlar” boshqa sohalarni ham tortadi.",
+    lessons: ["Yomon odat oldidan nima bo‘lishini yozib boring.", "Mukofotni saqlab, harakatni almashtiring.", "Bitta kalit odat tanlang (masalan, mashq)."] },
+  { id: "mindset", title: "Mindset", author: "Carol Dweck", category: "Fikrlash", pages: 320,
+    idea: "Qobiliyat o‘sadi deb ishonish natijani o‘zgartiradi.",
+    summary: "Qotgan fikrlash xatodan qochadi, o‘suvchi fikrlash xatodan o‘rganadi. Iste’dodni emas, harakat va strategiyani maqtash kerak.",
+    lessons: ["“Hali qila olmayman” deb gapiring.", "Xatoni tahlil qiling, o‘zingizni emas.", "Qiyin vazifani o‘sish imkoniyati deb ko‘ring."] },
+  { id: "rich-dad", title: "Boy ota, kambag‘al ota", author: "Robert Kiyosaki", category: "Pul", pages: 336,
+    idea: "Boylar pul uchun emas, pul ular uchun ishlaydi.",
+    summary: "Aktiv cho‘ntakka pul qo‘shadi, passiv — oladi. Moliyaviy savodxonlik, aktivlar qurish va xarajatni nazorat qilish erkinlikka olib boradi.",
+    lessons: ["Har oy daromaddan avval o‘zingizga to‘lang (jamg‘arma).", "Har bir xaridni aktiv yoki passiv deb ajrating.", "Moliyaviy bilimga vaqt ajrating."] },
+  { id: "psychology-money", title: "Pul psixologiyasi", author: "Morgan Housel", category: "Pul", pages: 256,
+    idea: "Pul bilan muvaffaqiyat aqldan ko‘ra xulq-atvorga bog‘liq.",
+    summary: "Murakkab foiz, sabr va “yetarli”ni bilish boylikni belgilaydi. Ko‘rinadigan boylik — sarflangan pul, haqiqiy boylik — ko‘rinmaydi.",
+    lessons: ["Uzoq muddat va sabr murakkab foizni ishlatadi.", "“Yetarli” chegarangizni belgilang.", "Kutilmagan holat uchun zaxira saqlang."] },
+  { id: "how-to-win", title: "Do‘st orttirish va odamlarga ta’sir qilish", author: "Dale Carnegie", category: "Munosabat", pages: 288,
+    idea: "Odamlar o‘zlariga chin qiziqish ko‘rsatganlarni yoqtiradi.",
+    summary: "Tanqid qilmang, samimiy maqtang, ismni eslang, ko‘proq tinglang va suhbatdoshni muhim his qildiring.",
+    lessons: ["Suhbatda o‘zingizdan ko‘ra unga savol bering.", "Odamning ismini eslab, ishlating.", "Bahsni yutishdan ko‘ra munosabatni saqlang."] },
+  { id: "can-t-hurt-me", title: "Can’t Hurt Me", author: "David Goggins", category: "Ma'no", pages: 364,
+    idea: "Ko‘pchilik o‘z imkoniyatining 40% ida to‘xtaydi.",
+    summary: "Goggins og‘ir bolalikdan Navy SEAL va ultramarafonchigacha bo‘lgan yo‘lini aytadi: o‘zingga halol bo‘lish, noqulaylikni tanlash va aqlni chiniqtirish.",
+    lessons: ["“Haqiqat oynasi”: o‘zingiz haqingizda yolg‘onsiz yozing.", "Har kuni bitta noqulay ishni ataylab qiling.", "Yutuqlaringiz ro‘yxatini qiyin paytda o‘qing."] },
+  { id: "eat-that-frog", title: "Qurbaqani yeng!", author: "Brian Tracy", category: "Fokus", pages: 144,
+    idea: "Eng og‘ir va muhim ishni ertalab birinchi qiling.",
+    summary: "Kechiktirishni yengish uchun vazifalarni ABC bo‘yicha saralang, eng katta ta’sirli ishni birinchi bajaring va boshqasiga o‘tmaguncha tugating.",
+    lessons: ["Kechqurun ertangi “qurbaqa”ni tanlang.", "80/20: 20% ish 80% natija beradi.", "Bitta ishni tugatmaguncha keyingisiga o‘tmang."] },
+  { id: "essentialism", title: "Essentialism", author: "Greg McKeown", category: "Fokus", pages: 272,
+    idea: "Kamroq, lekin yaxshiroq.",
+    summary: "Hamma narsaga “ha” deyish kuchni tarqatadi. Muhimini aniqlab, qolganiga hurmat bilan “yo‘q” deyish va tizim qurish kerak.",
+    lessons: ["“Bu aniq ha emasmi? Demak yo‘q.”", "Kunda 1–3 ustuvor ish yetarli.", "Bufer vaqt qoldiring."] },
+  { id: "4-hour-week", title: "Haftasiga 4 soat ishlash", author: "Tim Ferriss", category: "Pul", pages: 416,
+    idea: "Vaqt va joy erkinligi — yangi boylik.",
+    summary: "DEAL: aniqlash, yo‘q qilish, avtomatlashtirish, ozod bo‘lish. Keraksiz ishlarni kesib, qolganini tizimga topshirish.",
+    lessons: ["Qo‘rquvlaringizni yozib, eng yomon holatni baholang.", "Xabarlarni kuniga 1–2 marta tekshiring.", "Takroriy ishni avtomatlashtiring."] },
+  { id: "why-we-sleep", title: "Nega uxlaymiz", author: "Matthew Walker", category: "Sog'liq", pages: 368,
+    idea: "Uyqu — sog‘liq, xotira va kayfiyatning asosi.",
+    summary: "7–9 soat uyqu xotirani mustahkamlaydi, immunitet va gormonlarni tartibga soladi. Uyqu yetishmovchiligi diqqat va qarorni sezilarli pasaytiradi.",
+    lessons: ["Har kuni bir vaqtda yoting va turing.", "Yotishdan oldin 1 soat ekransiz.", "Kechki kofeindan voz keching."] },
+  { id: "the-alchemist", title: "Alkimyogar", author: "Paulo Coelho", category: "Ma'no", pages: 208,
+    idea: "Orzuga yo‘lning o‘zi — xazina.",
+    summary: "Cho‘pon Santyago orzusi ortidan yo‘lga chiqadi va yo‘lda belgilarni o‘qishni, qo‘rquvni yengishni o‘rganadi.",
+    lessons: ["Orzuni qo‘rquv sabab qoldirmang.", "Yo‘ldagi saboqlar maqsad kabi qimmat.", "Kichik belgilarga e’tibor bering."] },
+  { id: "compound-effect", title: "Murakkab samara", author: "Darren Hardy", category: "Odat", pages: 192,
+    idea: "Kichik, aqlli tanlovlar + izchillik + vaqt = katta farq.",
+    summary: "Har kungi kichik qarorlar uzoqda ulkan natija beradi. Odatlarni kuzatish, ta’sirlarni boshqarish va ritmni saqlash muhim.",
+    lessons: ["Bir hafta xarajat yoki vaqtni yozib boring.", "Ertalabki va kechki ritual quring.", "Natijani emas, izchillikni o‘lchang."] },
+  { id: "48-laws", title: "Hokimiyatning 48 qonuni", author: "Robert Greene", category: "Munosabat", pages: 452,
+    idea: "Kuch o‘yinini tushunish — undan himoyalanish.",
+    summary: "Tarixiy misollar orqali ta’sir, obro‘ va strategiya qonunlari. Asosiy foyda — manipulyatsiyani tanib olish va o‘zingizni boshqarish.",
+    lessons: ["Kerakdan ortiq gapirmang.", "Obro‘ni ehtiyot qiling.", "Hissiyot bilan emas, strategiya bilan javob bering."] },
+  { id: "the-prince", title: "Hukmdor", author: "Niccolò Machiavelli", category: "Fikrlash", pages: 140,
+    idea: "Dunyoni qanday bo‘lishi kerakligiga emas, qandayligiga qarab harakat qiling.",
+    summary: "Makiavelli hokimiyatni saqlash haqida realistik qarashni beradi: omad va jasorat, qat’iyat va vaziyatga moslashish.",
+    lessons: ["Faqat omadga tayanmang — tayyorgarlik ko‘ring.", "Qarorda qat’iyatli bo‘ling.", "Odamlarni so‘zlariga emas, ishlariga qarab baholang."] },
+  { id: "meditations", title: "O‘yloqlar", author: "Marcus Aurelius", category: "Ma'no", pages: 256,
+    idea: "Nazoratingizdagi narsaga e’tibor bering, qolganini qabul qiling.",
+    summary: "Rim imperatorining shaxsiy yozuvlari: stoitsizm, burch, vaqtinchalikni anglash va ichki tinchlik.",
+    lessons: ["Har tong qiyin odamlarga tayyor bo‘ling.", "Nazoratingizdan tashqaridagi narsaga qayg‘urmang.", "Kunni yozib xulosa qiling."] },
+  { id: "ego-enemy", title: "Ego is the Enemy", author: "Ryan Holiday", category: "Fikrlash", pages: 256,
+    idea: "Eng katta to‘siq — o‘zimizning egoimiz.",
+    summary: "Orzu, muvaffaqiyat va muvaffaqiyatsizlik bosqichlarida ego bizni o‘rganishdan, tinglashdan va ishlashdan to‘xtatadi.",
+    lessons: ["Gapirish o‘rniga ishlang.", "Doim o‘quvchi bo‘lib qoling.", "Muvaffaqiyatsizlikni shaxsiy emas, ma’lumot deb oling."] },
+  { id: "obstacle-way", title: "To‘siq — yo‘lning o‘zi", author: "Ryan Holiday", category: "Ma'no", pages: 224,
+    idea: "To‘siq harakatni to‘xtatmaydi, yo‘nalish beradi.",
+    summary: "Stoik uslub: idrok (vaziyatni xolis ko‘rish), harakat (kichik qadamlar) va iroda (qabul qilish).",
+    lessons: ["Muammoni his emas, fakt sifatida yozing.", "Keyingi bitta qadamga e’tibor bering.", "Ozgarmasni qabul qilib, energiyani tejang."] },
+  { id: "digital-minimalism", title: "Raqamli minimalizm", author: "Cal Newport", category: "Fokus", pages: 304,
+    idea: "Texnologiyani siz boshqaring, u sizni emas.",
+    summary: "30 kunlik raqamli tozalash: keraksiz ilovalarni olib tashlang, keyin faqat qadriyatingizga xizmat qiladiganlarini qaytaring.",
+    lessons: ["Ijtimoiy tarmoqni 30 kun to‘xtatib ko‘ring.", "Bildirishnomalarni o‘chiring.", "Yolg‘izlikda fikrlashga vaqt ajrating."] },
+  { id: "indistractable", title: "Indistractable", author: "Nir Eyal", category: "Fokus", pages: 304,
+    idea: "Chalg‘ish ichki noqulaylikdan qochishdan boshlanadi.",
+    summary: "Ichki triggerlarni boshqaring, vaqtni oldindan rejalang, tashqi triggerlarni kamaytiring va o‘zingizga “oldindan va’da” bering.",
+    lessons: ["Chalg‘ish oldidagi hissni yozing.", "Kunni vaqt bloklari bilan rejalang.", "Telefonni fokus vaqtida qulflang."] },
+  { id: "grit", title: "Grit", author: "Angela Duckworth", category: "Odat", pages: 352,
+    idea: "Ehtiros va sabr iste’doddan muhimroq.",
+    summary: "Uzoq muddatli maqsadga sodiqlik va qiyinchilikda davom etish muvaffaqiyatni bashorat qiladi. Ataylab mashq, maqsad va umid buni o‘stiradi.",
+    lessons: ["Bitta uzoq maqsad tanlang.", "Kuchsiz joyingizni ataylab mashq qiling.", "Qiyin ishni yarim yo‘lda tashlamang."] },
+  { id: "rich-babylon", title: "Bobilning eng boy odami", author: "George Clason", category: "Pul", pages: 144,
+    idea: "Daromadning kamida 10% ini o‘zingizda qoldiring.",
+    summary: "Qadimiy masallar orqali: jamg‘arish, xarajatni nazorat, pulni ko‘paytirish va ehtiyotkor investitsiya.",
+    lessons: ["Har daromaddan 10% jamg‘aring.", "Xarajatni daromaddan past tuting.", "Bilmagan sohangizga pul tikmang."] },
+  { id: "start-with-why", title: "Start With Why", author: "Simon Sinek", category: "Ma'no", pages: 256,
+    idea: "Odamlar nima qilayotganingizni emas, nega qilayotganingizni sotib oladi.",
+    summary: "Oltin doira: Nega → Qanday → Nima. Ilhomlantiradigan yetakchilar va brendlar “nega”dan boshlaydi.",
+    lessons: ["O‘z “nega”ngizni bir gapda yozing.", "Qarorlarni shu “nega” bilan tekshiring.", "Jamoaga avval maqsadni tushuntiring."] },
+  { id: "subtle-art", title: "Hech narsaga parvo qilmaslikning nozik san’ati", author: "Mark Manson", category: "Fikrlash", pages: 224,
+    idea: "Hamma narsaga emas, muhimiga e’tibor bering.",
+    summary: "Baxt muammosiz hayotdan emas, yaxshi muammolarni tanlashdan keladi. Mas’uliyatni olish va qadriyatlarni saralash kerak.",
+    lessons: ["Qaysi og‘riqqa tayyor ekaningizni aniqlang.", "Aybdor bo‘lmasangiz ham mas’uliyatni oling.", "Ijobiylikka majburlamang — haqiqatni qabul qiling."] },
+  { id: "make-time", title: "Make Time", author: "Jake Knapp, John Zeratsky", category: "Fokus", pages: 304,
+    idea: "Har kuni bitta “yorqin nuqta” tanlang.",
+    summary: "Kundalik tizim: diqqatni jamlaydigan bitta ish (highlight), chalg‘itishlarga to‘siq, energiya va kechki xulosa.",
+    lessons: ["Ertalab kunning bitta asosiy ishini tanlang.", "Telefoningizdan qiziqarli ilovalarni olib tashlang.", "Kechqurun nima ishladi — yozing."] },
+  { id: "outliers", title: "Outliers", author: "Malcolm Gladwell", category: "Fikrlash", pages: 309,
+    idea: "Muvaffaqiyat iste’dod, imkoniyat va ko‘p yillik mashq kesishmasida.",
+    summary: "Muallif muvaffaqiyatli odamlar orqasidagi madaniyat, vaqt va ming soatlab mashqni ko‘rsatadi.",
+    lessons: ["Ko‘nikma uchun yillar davomida mashq qiling.", "Imkoniyat kelganda tayyor bo‘ling.", "Muhitingiz natijangizga ta’sir qiladi."] },
+];
+
+export const LIBRARY_CATEGORIES = ["Hammasi", "Odat", "Fokus", "Fikrlash", "Pul", "Munosabat", "Ma'no", "Sog'liq"] as const;
+
+/** YouTube video id from a watch/short/embed URL, or null. */
+export function youtubeId(url: string | null | undefined): string | null {
+  if (!url) return null;
+  try {
+    const u = new URL(url);
+    const host = u.hostname.replace(/^www\.|^m\./, "");
+    if (host === "youtu.be") return /^[\w-]{11}$/.test(u.pathname.slice(1)) ? u.pathname.slice(1) : null;
+    if (host === "youtube.com" || host === "youtube-nocookie.com") {
+      const v = u.searchParams.get("v");
+      if (v && /^[\w-]{11}$/.test(v)) return v;
+      const m = /^\/(?:embed|shorts|live)\/([\w-]{11})/.exec(u.pathname);
+      return m?.[1] ?? null;
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
