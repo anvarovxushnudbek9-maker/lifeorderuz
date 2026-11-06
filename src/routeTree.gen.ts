@@ -24,6 +24,7 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedKundalikRouteImport } from './routes/_authenticated/kundalik'
 import { Route as AuthenticatedMaqsadRouteImport } from './routes/_authenticated/maqsad'
 import { Route as AuthenticatedOdatRouteImport } from './routes/_authenticated/odat'
+import { Route as AuthenticatedPlannerRouteImport } from './routes/_authenticated/planner'
 import { Route as AuthenticatedProfilRouteImport } from './routes/_authenticated/profil'
 import { Route as AuthenticatedRejaRouteImport } from './routes/_authenticated/reja'
 import { Route as AuthenticatedShaxsiyRejaRouteImport } from './routes/_authenticated/shaxsiy-reja'
@@ -110,6 +111,11 @@ const AuthenticatedOdatRoute = AuthenticatedOdatRouteImport.update({
   path: '/odat',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPlannerRoute = AuthenticatedPlannerRouteImport.update({
+  id: '/planner',
+  path: '/planner',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedProfilRoute = AuthenticatedProfilRouteImport.update({
   id: '/profil',
   path: '/profil',
@@ -184,6 +190,7 @@ export interface FileRoutesByFullPath {
   '/kundalik': typeof AuthenticatedKundalikRoute
   '/maqsad': typeof AuthenticatedMaqsadRoute
   '/odat': typeof AuthenticatedOdatRoute
+  '/planner': typeof AuthenticatedPlannerRoute
   '/profil': typeof AuthenticatedProfilRoute
   '/reja': typeof AuthenticatedRejaRoute
   '/shaxsiy-reja': typeof AuthenticatedShaxsiyRejaRoute
@@ -211,6 +218,7 @@ export interface FileRoutesByTo {
   '/kundalik': typeof AuthenticatedKundalikRoute
   '/maqsad': typeof AuthenticatedMaqsadRoute
   '/odat': typeof AuthenticatedOdatRoute
+  '/planner': typeof AuthenticatedPlannerRoute
   '/profil': typeof AuthenticatedProfilRoute
   '/reja': typeof AuthenticatedRejaRoute
   '/shaxsiy-reja': typeof AuthenticatedShaxsiyRejaRoute
@@ -240,6 +248,7 @@ export interface FileRoutesById {
   '/_authenticated/kundalik': typeof AuthenticatedKundalikRoute
   '/_authenticated/maqsad': typeof AuthenticatedMaqsadRoute
   '/_authenticated/odat': typeof AuthenticatedOdatRoute
+  '/_authenticated/planner': typeof AuthenticatedPlannerRoute
   '/_authenticated/profil': typeof AuthenticatedProfilRoute
   '/_authenticated/reja': typeof AuthenticatedRejaRoute
   '/_authenticated/shaxsiy-reja': typeof AuthenticatedShaxsiyRejaRoute
@@ -269,6 +278,7 @@ export interface FileRouteTypes {
     | '/kundalik'
     | '/maqsad'
     | '/odat'
+    | '/planner'
     | '/profil'
     | '/reja'
     | '/shaxsiy-reja'
@@ -296,6 +306,7 @@ export interface FileRouteTypes {
     | '/kundalik'
     | '/maqsad'
     | '/odat'
+    | '/planner'
     | '/profil'
     | '/reja'
     | '/shaxsiy-reja'
@@ -324,6 +335,7 @@ export interface FileRouteTypes {
     | '/_authenticated/kundalik'
     | '/_authenticated/maqsad'
     | '/_authenticated/odat'
+    | '/_authenticated/planner'
     | '/_authenticated/profil'
     | '/_authenticated/reja'
     | '/_authenticated/shaxsiy-reja'
@@ -458,6 +470,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOdatRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/planner': {
+      id: '/_authenticated/planner'
+      path: '/planner'
+      fullPath: '/planner'
+      preLoaderRoute: typeof AuthenticatedPlannerRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/profil': {
       id: '/_authenticated/profil'
       path: '/profil'
@@ -546,6 +565,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedKundalikRoute: typeof AuthenticatedKundalikRoute
   AuthenticatedMaqsadRoute: typeof AuthenticatedMaqsadRoute
   AuthenticatedOdatRoute: typeof AuthenticatedOdatRoute
+  AuthenticatedPlannerRoute: typeof AuthenticatedPlannerRoute
   AuthenticatedProfilRoute: typeof AuthenticatedProfilRoute
   AuthenticatedRejaRoute: typeof AuthenticatedRejaRoute
   AuthenticatedShaxsiyRejaRoute: typeof AuthenticatedShaxsiyRejaRoute
@@ -564,6 +584,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedKundalikRoute: AuthenticatedKundalikRoute,
   AuthenticatedMaqsadRoute: AuthenticatedMaqsadRoute,
   AuthenticatedOdatRoute: AuthenticatedOdatRoute,
+  AuthenticatedPlannerRoute: AuthenticatedPlannerRoute,
   AuthenticatedProfilRoute: AuthenticatedProfilRoute,
   AuthenticatedRejaRoute: AuthenticatedRejaRoute,
   AuthenticatedShaxsiyRejaRoute: AuthenticatedShaxsiyRejaRoute,

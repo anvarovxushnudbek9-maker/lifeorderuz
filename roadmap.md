@@ -35,3 +35,6 @@
 - [ ] Premium to'lov tizimi — Paddle tasdiqlandi, Pro tarif bo‘lmagani uchun ulanmadi
 - [ ] Mobil va desktop oqimlarni brauzerda tekshirish
 - [x] Profil ma'lumotlari faqat egasiga ko'rinadi (xavfsizlik)
+
+- [x] 11 ta yangi: 3 asosiy ish, soatbay jadval, suv, uyqu, qat'iy AI rejim, fokus tovushlari, audio xulosa, hamkor, dopamin xaritasi, A4 planner, tanishtiruv
+- [ ] Trial/Click/Payme/Stripe, Web Push, email, Apple, SMS — tashqi hisob/xizmat kerak

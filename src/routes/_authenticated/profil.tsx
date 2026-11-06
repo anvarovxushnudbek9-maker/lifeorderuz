@@ -145,6 +145,17 @@ function Profile() {
         <Switch checked={theme === "dark"} onCheckedChange={toggle} />
       </div>
 
+      <div className="mt-4 flex items-center justify-between rounded-2xl border border-border bg-card p-5">
+        <div>
+          <p className="text-sm font-medium">Qat&apos;iy intizom rejimi</p>
+          <p className="text-xs text-muted-foreground">AI murabbiy bahonalarni qabul qilmaydi, qisqa va talabchan gapiradi. 18 yoshgacha yumshoq qoladi.</p>
+        </div>
+        <Switch checked={profile?.coach_mode === "hardcore"} onCheckedChange={async (on) => {
+          const { error } = await supabase.from("profiles").update({ coach_mode: on ? "hardcore" : "normal" }).eq("id", uid);
+          if (error) toast.error(error.message); else { toast.success(on ? "Qat'iy rejim yoqildi" : "Oddiy rejim"); qc.invalidateQueries({ queryKey: ["profile"] }); }
+        }} />
+      </div>
+
       <Button variant="outline" className="mt-4 w-full" onClick={signOut}>
         <LogOut className="mr-2 size-4" /> Hisobdan chiqish
       </Button>
