@@ -1,8 +1,10 @@
 import * as React from "react";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { LogOut } from "lucide-react";
+import { LogOut, Trash2 } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { deleteMyAccount } from "@/lib/account.functions";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -74,6 +76,18 @@ function Profile() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const del = useServerFn(deleteMyAccount);
+  const remove = useMutation({
+    mutationFn: () => del(),
+    onSuccess: async () => {
+      qc.clear();
+      await supabase.auth.signOut();
+      toast.success("Hisob va barcha ma'lumotlar o'chirildi");
+      navigate({ to: "/", replace: true });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   async function signOut() {
     await qc.cancelQueries();
     qc.clear();
@@ -134,6 +148,22 @@ function Profile() {
       <Button variant="outline" className="mt-4 w-full" onClick={signOut}>
         <LogOut className="mr-2 size-4" /> Hisobdan chiqish
       </Button>
+
+      <Button
+        variant="destructive"
+        className="mt-3 w-full"
+        disabled={remove.isPending}
+        onClick={() => {
+          if (window.prompt("Barcha ma'lumotlar butunlay o'chadi. Tasdiqlash uchun O'CHIRISH deb yozing") === "O'CHIRISH") remove.mutate();
+        }}
+      >
+        <Trash2 className="mr-2 size-4" /> Hisobni o&apos;chirish
+      </Button>
+
+      <p className="mt-4 flex justify-center gap-4 text-xs text-muted-foreground">
+        <Link to="/maxfiylik">Maxfiylik siyosati</Link>
+        <Link to="/shartlar">Foydalanish shartlari</Link>
+      </p>
     </div>
   );
 }

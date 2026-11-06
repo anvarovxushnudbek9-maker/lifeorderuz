@@ -12,8 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as MaxfiylikRouteImport } from './routes/maxfiylik'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as ParolTiklashRouteImport } from './routes/parol-tiklash'
+import { Route as ShartlarRouteImport } from './routes/shartlar'
 import { Route as UlashishRouteImport } from './routes/ulashish'
 import { Route as AuthenticatedAiRouteImport } from './routes/_authenticated/ai'
 import { Route as AuthenticatedAnalizRouteImport } from './routes/_authenticated/analiz'
@@ -48,6 +50,11 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MaxfiylikRoute = MaxfiylikRouteImport.update({
+  id: '/maxfiylik',
+  path: '/maxfiylik',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OnboardingRoute = OnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
@@ -56,6 +63,11 @@ const OnboardingRoute = OnboardingRouteImport.update({
 const ParolTiklashRoute = ParolTiklashRouteImport.update({
   id: '/parol-tiklash',
   path: '/parol-tiklash',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShartlarRoute = ShartlarRouteImport.update({
+  id: '/shartlar',
+  path: '/shartlar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const UlashishRoute = UlashishRouteImport.update({
@@ -160,8 +172,10 @@ const ApiPublicTelegramWebhookRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/maxfiylik': typeof MaxfiylikRoute
   '/onboarding': typeof OnboardingRoute
   '/parol-tiklash': typeof ParolTiklashRoute
+  '/shartlar': typeof ShartlarRoute
   '/ulashish': typeof UlashishRoute
   '/ai': typeof AuthenticatedAiRoute
   '/analiz': typeof AuthenticatedAnalizRoute
@@ -185,8 +199,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/maxfiylik': typeof MaxfiylikRoute
   '/onboarding': typeof OnboardingRoute
   '/parol-tiklash': typeof ParolTiklashRoute
+  '/shartlar': typeof ShartlarRoute
   '/ulashish': typeof UlashishRoute
   '/ai': typeof AuthenticatedAiRoute
   '/analiz': typeof AuthenticatedAnalizRoute
@@ -212,8 +228,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/maxfiylik': typeof MaxfiylikRoute
   '/onboarding': typeof OnboardingRoute
   '/parol-tiklash': typeof ParolTiklashRoute
+  '/shartlar': typeof ShartlarRoute
   '/ulashish': typeof UlashishRoute
   '/_authenticated/ai': typeof AuthenticatedAiRoute
   '/_authenticated/analiz': typeof AuthenticatedAnalizRoute
@@ -239,8 +257,10 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/maxfiylik'
     | '/onboarding'
     | '/parol-tiklash'
+    | '/shartlar'
     | '/ulashish'
     | '/ai'
     | '/analiz'
@@ -264,8 +284,10 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/maxfiylik'
     | '/onboarding'
     | '/parol-tiklash'
+    | '/shartlar'
     | '/ulashish'
     | '/ai'
     | '/analiz'
@@ -290,8 +312,10 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/maxfiylik'
     | '/onboarding'
     | '/parol-tiklash'
+    | '/shartlar'
     | '/ulashish'
     | '/_authenticated/ai'
     | '/_authenticated/analiz'
@@ -317,8 +341,10 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  MaxfiylikRoute: typeof MaxfiylikRoute
   OnboardingRoute: typeof OnboardingRoute
   ParolTiklashRoute: typeof ParolTiklashRoute
+  ShartlarRoute: typeof ShartlarRoute
   UlashishRoute: typeof UlashishRoute
   ApiChatRoute: typeof ApiChatRoute
   ApiPublicJobsTelegramRemindersRoute: typeof ApiPublicJobsTelegramRemindersRoute
@@ -348,6 +374,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/maxfiylik': {
+      id: '/maxfiylik'
+      path: '/maxfiylik'
+      fullPath: '/maxfiylik'
+      preLoaderRoute: typeof MaxfiylikRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/onboarding': {
       id: '/onboarding'
       path: '/onboarding'
@@ -360,6 +393,13 @@ declare module '@tanstack/react-router' {
       path: '/parol-tiklash'
       fullPath: '/parol-tiklash'
       preLoaderRoute: typeof ParolTiklashRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shartlar': {
+      id: '/shartlar'
+      path: '/shartlar'
+      fullPath: '/shartlar'
+      preLoaderRoute: typeof ShartlarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ulashish': {
@@ -541,8 +581,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  MaxfiylikRoute: MaxfiylikRoute,
   OnboardingRoute: OnboardingRoute,
   ParolTiklashRoute: ParolTiklashRoute,
+  ShartlarRoute: ShartlarRoute,
   UlashishRoute: UlashishRoute,
   ApiChatRoute: ApiChatRoute,
   ApiPublicJobsTelegramRemindersRoute: ApiPublicJobsTelegramRemindersRoute,
