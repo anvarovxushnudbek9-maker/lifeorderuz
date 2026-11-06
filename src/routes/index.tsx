@@ -370,7 +370,11 @@ function Landing() {
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-5 sm:flex-row">
           <Logo />
           <p className="text-sm text-muted-foreground">{t.footer}</p>
-          <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} Life Order</p>
+          <p className="flex gap-3 text-xs text-muted-foreground">
+            <Link to="/maxfiylik">Maxfiylik</Link>
+            <Link to="/shartlar">Shartlar</Link>
+            <span>© {new Date().getFullYear()} Life Order</span>
+          </p>
         </div>
       </footer>
     </div>

@@ -4,7 +4,8 @@
 - [ ] Confirmed commercial and safety requirements: Free 3 AI/day, max 5 reminders/day, minor-safe coaching, real Premium/trial/Click/Payme
 - [x] Kitoblar kutubxonasi (30 ta: g‘oya, xulosa, 3 saboq) + YouTube kurslar ilova ichida — browser-tested
 - [x] Bepul AI: 24 soatda 3 ta (server limiti + test)
-- [ ] Single Davra chat, privacy/terms/account deletion, first-visit guidance
+- [x] Privacy/terms pages + account deletion
+- [ ] Single Davra chat, first-visit guidance
 
 - [ ] Uploaded master prompts: verify and strengthen daily loop, privacy, honest claims and installation
 - [ ] Offline public shell; private data never cached
