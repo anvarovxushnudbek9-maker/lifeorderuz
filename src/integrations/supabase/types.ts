@@ -765,6 +765,14 @@ export type Database = {
           total: number
         }[]
       }
+      circle_leaderboard: {
+        Args: { _circle: string }
+        Returns: {
+          display_name: string
+          is_me: boolean
+          points: number
+        }[]
+      }
       is_circle_member: {
         Args: { _circle: string; _user: string }
         Returns: boolean

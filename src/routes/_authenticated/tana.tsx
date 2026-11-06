@@ -1,3 +1,4 @@
+import { ExerciseGuide } from "@/components/ExerciseGuide";
 import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -50,6 +51,7 @@ function Body() {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="mashq">
+          <ExerciseGuide />
           <Workouts />
         </TabsContent>
         <TabsContent value="ovqat">

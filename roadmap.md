@@ -38,3 +38,5 @@
 
 - [x] 11 ta yangi: 3 asosiy ish, soatbay jadval, suv, uyqu, qat'iy AI rejim, fokus tovushlari, audio xulosa, hamkor, dopamin xaritasi, A4 planner, tanishtiruv
 - [ ] Trial/Click/Payme/Stripe, Web Push, email, Apple, SMS — tashqi hisob/xizmat kerak
+- [x] Chala: XP/daraja + streak muzlatish, 2 ta yangi nishon, kutubxona 37 ta, davra haftalik reytingi, uskunasiz mashq ko'rsatmalari
+- [ ] Chala qolganlar: ichki sahifalar tarjimasi, shaxsiy rejani oflayn ko'rish, haftalik AI va hisobni o'chirishni kirgan holda sinash (sinov hisobi kerak), Telegram (alohida bot kerak)

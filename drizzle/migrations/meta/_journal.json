@@ -50,6 +50,13 @@
       "when": 1793984938059,
       "tag": "0006_fix_accept_buddy_code",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1793985304786,
+      "tag": "0007_circle_weekly_leaderboard",
+      "breakpoints": true
     }
   ]
 }
