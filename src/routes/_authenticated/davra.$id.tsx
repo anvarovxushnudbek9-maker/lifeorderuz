@@ -1,3 +1,4 @@
+import { CircleLeaderboard } from "@/components/CircleLeaderboard";
 import * as React from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -101,6 +102,7 @@ function CircleChat() {
           <p className="text-xs text-muted-foreground">{circle?.topic}</p>
         </div>
       </div>
+      <CircleLeaderboard circleId={id} />
 
       <div className="flex-1 space-y-3">
         {(messages ?? []).length === 0 ? (
