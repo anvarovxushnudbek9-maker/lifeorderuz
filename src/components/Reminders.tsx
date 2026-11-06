@@ -9,6 +9,7 @@ import { useReminders } from "@/hooks/useReminders";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { TelegramConnect } from "@/components/TelegramConnect";
 import { appliesOn, hhmm, isDone, localISO, REPEAT_LABEL } from "@/lib/reminders";
 
 const schema = z
@@ -167,6 +168,7 @@ export function RemindersManager() {
           </Button>
         )}
       </div>
+      <TelegramConnect />
       <form
         className="mt-4 grid gap-3 sm:grid-cols-6"
         onSubmit={(e) => {

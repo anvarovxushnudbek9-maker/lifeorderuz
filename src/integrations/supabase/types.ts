@@ -503,6 +503,38 @@ export type Database = {
         }
         Relationships: []
       }
+      reminder_deliveries: {
+        Row: {
+          channel: string
+          local_date: string
+          reminder_id: string
+          sent_at: string
+          user_id: string
+        }
+        Insert: {
+          channel?: string
+          local_date: string
+          reminder_id: string
+          sent_at?: string
+          user_id: string
+        }
+        Update: {
+          channel?: string
+          local_date?: string
+          reminder_id?: string
+          sent_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reminder_deliveries_reminder_id_fkey"
+            columns: ["reminder_id"]
+            isOneToOne: false
+            referencedRelation: "reminders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reminders: {
         Row: {
           created_at: string
@@ -538,6 +570,36 @@ export type Database = {
           repeat?: string
           start_time?: string
           title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      telegram_links: {
+        Row: {
+          chat_id: number | null
+          code_expires_at: string | null
+          created_at: string
+          link_code: string | null
+          linked_at: string | null
+          timezone: string
+          user_id: string
+        }
+        Insert: {
+          chat_id?: number | null
+          code_expires_at?: string | null
+          created_at?: string
+          link_code?: string | null
+          linked_at?: string | null
+          timezone?: string
+          user_id: string
+        }
+        Update: {
+          chat_id?: number | null
+          code_expires_at?: string | null
+          created_at?: string
+          link_code?: string | null
+          linked_at?: string | null
+          timezone?: string
           user_id?: string
         }
         Relationships: []
