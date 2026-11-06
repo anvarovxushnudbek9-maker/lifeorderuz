@@ -87,11 +87,14 @@ async function authorize(request: Request): Promise<Response | Authed> {
   return { sb, userId };
 }
 
+const HARDCORE = `\nQAT'IY REJIM yoqilgan: bahonalarni qabul qilma, to'g'ridan-to'g'ri va qisqa gapir, har javobni "Hozir qil:" bilan boshlanadigan bitta aniq harakat bilan tugat. Haqorat qilma, sog'liqqa xavfli talab qo'yma.`;
+const hardcoreByUser = new Map<string, boolean>();
+
 async function buildLifeModel({ sb, userId }: Authed) {
   const today = new Date().toISOString().slice(0, 10);
   const from = new Date(Date.now() - 14 * 86_400_000).toISOString().slice(0, 10);
   const [p, plan, habits, logs, workouts, metrics] = await Promise.all([
-    sb.from("profiles").select("main_goal,goal_type,biggest_obstacle,why_now,activity_level,digital_habits,age").eq("id", userId).maybeSingle(),
+    sb.from("profiles").select("main_goal,goal_type,biggest_obstacle,why_now,activity_level,digital_habits,age,coach_mode").eq("id", userId).maybeSingle(),
     sb.from("daily_plan_items").select("plan_date,title,status,skip_reason").eq("user_id", userId).gte("plan_date", from),
     sb.from("habits").select("title").eq("user_id", userId).eq("archived", false),
     sb.from("habit_logs").select("log_date").eq("user_id", userId).gte("log_date", from),
@@ -103,6 +106,7 @@ async function buildLifeModel({ sb, userId }: Authed) {
   const reasons = items.map((i) => i.skip_reason).filter(Boolean);
   const dh = (p.data?.digital_habits ?? {}) as Record<string, string>;
   const minor = dh["age_range"] === "18 dan kichik";
+  hardcoreByUser.set(userId, p.data?.coach_mode === "hardcore" && !minor);
   return [
     `Maqsad: ${p.data?.main_goal ?? "-"}; tana maqsadi: ${p.data?.goal_type ?? "-"}; to'siq: ${p.data?.biggest_obstacle ?? "-"}`,
     `Yosh: ${dh["age_range"] ?? "-"}; bandlik: ${dh["life_stage"] ?? "-"}; ekran vaqti: ${dh["screen_time"] ?? "-"}; bo'sh vaqt: ${dh["free_time"] ?? "-"}; samarali vaqt: ${dh["peak_time"] ?? "-"}; ish uslubi: ${dh["start_style"] ?? "-"}`,
@@ -135,7 +139,7 @@ export const Route = createFileRoute("/api/chat")({
         // Context is built on the server from verified data; client context is ignored.
         const context = serverContext;
         const input = [
-          { role: "system", content: [{ type: "input_text", text: SYSTEM }] },
+          { role: "system", content: [{ type: "input_text", text: SYSTEM + (hardcoreByUser.get(auth.userId) ? HARDCORE : "") }] },
           ...(context
             ? [
                 {
