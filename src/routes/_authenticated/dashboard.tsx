@@ -1,4 +1,11 @@
 import { TodayReminders } from "@/components/Reminders";
+import { TopThree } from "@/components/day/TopThree";
+import { HourlySchedule } from "@/components/day/HourlySchedule";
+import { WaterSleep } from "@/components/day/WaterSleep";
+import { DopamineMap } from "@/components/day/DopamineMap";
+import { BuddyCard } from "@/components/day/BuddyCard";
+import { AppTour } from "@/components/day/AppTour";
+import { Printer } from "lucide-react";
 import { CommandCenter } from "@/components/CommandCenter";
 import { EveningReview } from "@/components/EveningReview";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -120,6 +127,13 @@ function Dashboard() {
         subtitle="Bugun kichik bir qadam — ertaga katta farq."
       />
 
+      <AppTour />
+      <div className="mb-4 space-y-4">
+        <TopThree />
+        <HourlySchedule />
+        <WaterSleep weightKg={Number(data?.profile?.weight_kg ?? 0) || null} />
+        <Link to="/planner" className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card py-3 text-sm font-medium hover:bg-accent"><Printer className="size-4" />A4 kunlik planner (chop etish / PDF)</Link>
+      </div>
       <div className="mb-4">
         <CommandCenter />
       </div>
@@ -206,6 +220,7 @@ function Dashboard() {
         <TodayReminders />
       </div>
       <EveningReview />
+      <div className="mt-6 grid gap-4 lg:grid-cols-2"><DopamineMap /><BuddyCard /></div>
 
       <h2 className="mt-8 text-base font-semibold">Odatlar</h2>
       <div className="mt-3 space-y-2">
