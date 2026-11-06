@@ -31,6 +31,8 @@ import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AuthenticatedDavraIndexRouteImport } from './routes/_authenticated/davra.index'
 import { Route as AuthenticatedDavraIdRouteImport } from './routes/_authenticated/davra.$id'
 import { Route as AuthenticatedHubHubRouteImport } from './routes/_authenticated/hub.$hub'
+import { Route as ApiPublicJobsTelegramRemindersRouteImport } from './routes/api/public/jobs/telegram-reminders'
+import { Route as ApiPublicTelegramWebhookRouteImport } from './routes/api/public/telegram/webhook'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -142,6 +144,18 @@ const AuthenticatedHubHubRoute = AuthenticatedHubHubRouteImport.update({
   path: '/hub/$hub',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiPublicJobsTelegramRemindersRoute =
+  ApiPublicJobsTelegramRemindersRouteImport.update({
+    id: '/api/public/jobs/telegram-reminders',
+    path: '/api/public/jobs/telegram-reminders',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicTelegramWebhookRoute =
+  ApiPublicTelegramWebhookRouteImport.update({
+    id: '/api/public/telegram/webhook',
+    path: '/api/public/telegram/webhook',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -165,6 +179,8 @@ export interface FileRoutesByFullPath {
   '/davra/$id': typeof AuthenticatedDavraIdRoute
   '/hub/$hub': typeof AuthenticatedHubHubRoute
   '/davra/': typeof AuthenticatedDavraIndexRoute
+  '/api/public/jobs/telegram-reminders': typeof ApiPublicJobsTelegramRemindersRoute
+  '/api/public/telegram/webhook': typeof ApiPublicTelegramWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -188,6 +204,8 @@ export interface FileRoutesByTo {
   '/davra/$id': typeof AuthenticatedDavraIdRoute
   '/hub/$hub': typeof AuthenticatedHubHubRoute
   '/davra': typeof AuthenticatedDavraIndexRoute
+  '/api/public/jobs/telegram-reminders': typeof ApiPublicJobsTelegramRemindersRoute
+  '/api/public/telegram/webhook': typeof ApiPublicTelegramWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -213,6 +231,8 @@ export interface FileRoutesById {
   '/_authenticated/davra/$id': typeof AuthenticatedDavraIdRoute
   '/_authenticated/hub/$hub': typeof AuthenticatedHubHubRoute
   '/_authenticated/davra/': typeof AuthenticatedDavraIndexRoute
+  '/api/public/jobs/telegram-reminders': typeof ApiPublicJobsTelegramRemindersRoute
+  '/api/public/telegram/webhook': typeof ApiPublicTelegramWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -238,6 +258,8 @@ export interface FileRouteTypes {
     | '/davra/$id'
     | '/hub/$hub'
     | '/davra/'
+    | '/api/public/jobs/telegram-reminders'
+    | '/api/public/telegram/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -261,6 +283,8 @@ export interface FileRouteTypes {
     | '/davra/$id'
     | '/hub/$hub'
     | '/davra'
+    | '/api/public/jobs/telegram-reminders'
+    | '/api/public/telegram/webhook'
   id:
     | '__root__'
     | '/'
@@ -285,6 +309,8 @@ export interface FileRouteTypes {
     | '/_authenticated/davra/$id'
     | '/_authenticated/hub/$hub'
     | '/_authenticated/davra/'
+    | '/api/public/jobs/telegram-reminders'
+    | '/api/public/telegram/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -295,6 +321,8 @@ export interface RootRouteChildren {
   ParolTiklashRoute: typeof ParolTiklashRoute
   UlashishRoute: typeof UlashishRoute
   ApiChatRoute: typeof ApiChatRoute
+  ApiPublicJobsTelegramRemindersRoute: typeof ApiPublicJobsTelegramRemindersRoute
+  ApiPublicTelegramWebhookRoute: typeof ApiPublicTelegramWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -453,6 +481,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHubHubRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/jobs/telegram-reminders': {
+      id: '/api/public/jobs/telegram-reminders'
+      path: '/api/public/jobs/telegram-reminders'
+      fullPath: '/api/public/jobs/telegram-reminders'
+      preLoaderRoute: typeof ApiPublicJobsTelegramRemindersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/telegram/webhook': {
+      id: '/api/public/telegram/webhook'
+      path: '/api/public/telegram/webhook'
+      fullPath: '/api/public/telegram/webhook'
+      preLoaderRoute: typeof ApiPublicTelegramWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -503,6 +545,8 @@ const rootRouteChildren: RootRouteChildren = {
   ParolTiklashRoute: ParolTiklashRoute,
   UlashishRoute: UlashishRoute,
   ApiChatRoute: ApiChatRoute,
+  ApiPublicJobsTelegramRemindersRoute: ApiPublicJobsTelegramRemindersRoute,
+  ApiPublicTelegramWebhookRoute: ApiPublicTelegramWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
