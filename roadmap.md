@@ -2,7 +2,9 @@
 
 - [ ] Nov 4 confirmed Life OS requirements: five-screen onboarding, Google/Apple/email, gamification + hourly schedule
 - [ ] Confirmed commercial and safety requirements: Free 3 AI/day, max 5 reminders/day, minor-safe coaching, real Premium/trial/Click/Payme
-- [ ] Books/course library, single Davra chat, privacy/terms/account deletion, first-visit guidance
+- [x] Kitoblar kutubxonasi (30 ta: g‘oya, xulosa, 3 saboq) + YouTube kurslar ilova ichida — browser-tested
+- [x] Bepul AI: 24 soatda 3 ta (server limiti + test)
+- [ ] Single Davra chat, privacy/terms/account deletion, first-visit guidance
 
 - [ ] Uploaded master prompts: verify and strengthen daily loop, privacy, honest claims and installation
 - [ ] Offline public shell; private data never cached
@@ -27,7 +29,7 @@
 - [x] Ro‘yxatdan o‘tish → 5 bosqich → dashboard browser-tested; reja onboardingdan oldin yaratilmaydi
 - [x] Landing: to‘qima fikrlar olib tashlandi, haqiqiy limitlar va sotuvga ochilmagan Premium ko‘rsatiladi
 - [x] Sayt ichidagi vaqtli eslatmalar + dashboardda bajarilish
-- [ ] Telegram: bot ulangan va getMe tekshirildi; foydalanuvchini bog‘lash va vaqtli yuborish hali yo‘q
+- [ ] Telegram: ulash, /stop, vaqtli yuborish (kuniga ≤5) qurildi va sinaldi — Life Order uchun alohida bot kerak (hozirgi bot boshqa loyihaga ulangan); keyin webhook + har daqiqalik jadval
 - [ ] Email eslatmalar — foydalanuvchiga tegishli yuboruvchi domen kerak
 - [ ] Premium to'lov tizimi — Paddle tasdiqlandi, Pro tarif bo‘lmagani uchun ulanmadi
 - [ ] Mobil va desktop oqimlarni brauzerda tekshirish

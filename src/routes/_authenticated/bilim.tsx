@@ -34,7 +34,7 @@ export const Route = createFileRoute("/_authenticated/bilim")({
 function Knowledge() {
   return (
     <div>
-      <PageHeader title="Bilim" subtitle="Kitoblar va kurslar kutubxonangiz." />
+      <PageHeader title="Bilim" subtitle="Kitob xulosalari, o‘qish ro‘yxatingiz va kurslar." />
       <Tabs defaultValue="kutubxona">
         <TabsList className="mb-4 w-full">
           <TabsTrigger className="flex-1" value="kutubxona">
