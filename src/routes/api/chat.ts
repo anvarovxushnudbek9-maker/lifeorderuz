@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import type { Database } from "@/integrations/supabase/types";
+import { aiLimitReached, FREE_AI_DAILY_LIMIT } from "@/lib/ai-limits";
 
 const SYSTEM = `Sen "Life Order" nomli shaxsiy rivojlanish ilovasining AI murabbiysisan.
 Har doim o'zbek tilida (lotin yozuvida) javob ber.
@@ -37,8 +38,6 @@ function textResponse(text: string) {
   });
 }
 
-const HOURLY_LIMIT = 30;
-const DAILY_LIMIT = 120;
 
 function plain(text: string, status: number) {
   return new Response(text, {
@@ -80,8 +79,8 @@ async function authorize(request: Request): Promise<Response | Authed> {
     sb.from("ai_requests").select("id", { count: "exact", head: true }).eq("user_id", userId).gte("created_at", hourAgo),
     sb.from("ai_requests").select("id", { count: "exact", head: true }).eq("user_id", userId).gte("created_at", dayAgo),
   ]);
-  if ((hour.count ?? 0) >= HOURLY_LIMIT || (day.count ?? 0) >= DAILY_LIMIT) {
-    return plain("Bugungi AI so'rovlar soni tugadi. Birozdan so'ng qayta urinib ko'ring.", 429);
+  if (aiLimitReached(hour.count ?? 0, day.count ?? 0)) {
+    return plain(`Bepul tarifda 24 soatda ${FREE_AI_DAILY_LIMIT} ta AI tahlil bor — bugungi limit tugadi. Kunlik reja va boshqa bo'limlar AI'siz ishlashda davom etadi.`, 429);
   }
   const ins = await sb.from("ai_requests").insert({ user_id: userId });
   if (ins.error) return plain("So'rovni qayd etib bo'lmadi.", 500);
