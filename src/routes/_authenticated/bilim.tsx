@@ -338,6 +338,18 @@ function Library() {
   });
   const saved = new Set((mine ?? []).map((b) => b.title.toLowerCase()));
 
+  const tryToday = useMutation({
+    mutationFn: async (lesson: string) => {
+      const { error } = await supabase.from("daily_plan_items").upsert(
+        { user_id: uid, plan_date: todayISO(), position: 90, title: lesson.slice(0, 200), why: "Kitob saboqini amalda sinash.", domain: "bilim", minutes: 10, source: "user" },
+        { onConflict: "user_id,plan_date,title", ignoreDuplicates: true },
+      );
+      if (error) throw error;
+    },
+    onSuccess: () => { toast.success("Bugungi rejaga qo'shildi"); qc.invalidateQueries({ queryKey: ["life-engine"] }); },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   const add = useMutation({
     mutationFn: async (b: LibraryBook) => {
       const { error } = await supabase.from("books").insert({ user_id: uid, title: b.title, author: b.author, total_pages: b.pages });
@@ -407,7 +419,10 @@ function Library() {
                       <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">3 ta saboq</p>
                       <ol className="list-decimal space-y-1 pl-5">
                         {b.lessons.map((l) => (
-                          <li key={l}>{l}</li>
+                          <li key={l} className="flex items-start justify-between gap-2">
+                            <span>{l}</span>
+                            <Button size="sm" variant="ghost" className="h-7 shrink-0 px-2 text-xs" disabled={!uid || tryToday.isPending} onClick={() => tryToday.mutate(l)}>Bugun sinab ko'rish</Button>
+                          </li>
                         ))}
                       </ol>
                     </div>

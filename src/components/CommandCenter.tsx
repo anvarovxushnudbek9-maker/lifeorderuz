@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Check, Clock, SkipForward, Target, Undo2, Zap, Play } from "lucide-react";
+import { Check, Clock, Siren, SkipForward, Target, Undo2, Zap, Play } from "lucide-react";
 import { FocusTimer } from "@/components/FocusTimer";
 import { toast } from "sonner";
 
@@ -31,6 +31,10 @@ export function CommandCenter() {
   const [skipFor, setSkipFor] = React.useState<string | null>(null);
   const [focus, setFocus] = React.useState<Item | null>(null);
   const key = ["life-engine", uid, today];
+  const emKey = `lo-emergency-${today}`;
+  const [emergency, setEmergency] = React.useState(false);
+  React.useEffect(() => { setEmergency(localStorage.getItem(emKey) === "1"); }, [emKey]);
+  const toggleEmergency = () => { const v = !emergency; setEmergency(v); if (v) localStorage.setItem(emKey, "1"); else localStorage.removeItem(emKey); };
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: key,
@@ -99,7 +103,9 @@ export function CommandCenter() {
     },
   });
 
-  const items = data?.items ?? [];
+  const allItems = data?.items ?? [];
+  const firstTodo = allItems.find((i) => i.status === "todo") ?? allItems[0];
+  const items = emergency ? allItems.filter((i) => i === firstTodo || i.status === "done") : allItems;
   const done = items.filter((i) => i.status === "done").length;
   const pct = items.length ? Math.round((done / items.length) * 100) : 0;
   const next = items.find((item) => item.status === "todo");
@@ -118,6 +124,10 @@ export function CommandCenter() {
         <span className="text-2xl font-bold text-primary">{pct}%</span>
       </div>
       <Progress value={pct} className="mt-3" />
+      <Button type="button" variant={emergency ? "destructive" : "outline"} size="sm" className="mt-3" onClick={toggleEmergency} aria-pressed={emergency}>
+        <Siren className="size-4" />{emergency ? "Favqulodda rejim yoqilgan — o'chirish" : "Og'ir kun? Favqulodda rejim"}
+      </Button>
+      {emergency && <p className="mt-2 text-xs text-muted-foreground">Bugun faqat bitta eng muhim qadam qoldi. Qolganlari o'chirilmadi, shunchaki yashirildi.</p>}
       {error && <div role="alert" className="mt-3 text-sm text-destructive">Rejangizni yuklab bo‘lmadi. <Button variant="outline" size="sm" onClick={() => void refetch()}>Qayta urinish</Button></div>}
       {next && <Button className="mt-4 max-w-full whitespace-normal text-left" onClick={() => setFocus(next)}><Play className="size-4 shrink-0" />Hozir boshlash · {next.minutes} daq</Button>}
       {focus && <FocusTimer key={focus.id} title={focus.title} minutes={focus.minutes} onClose={() => setFocus(null)} onComplete={() => { update.mutate({ id: focus.id, status: "done" }); setFocus(null); }} />}
