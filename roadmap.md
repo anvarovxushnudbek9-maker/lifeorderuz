@@ -40,3 +40,5 @@
 - [ ] Trial/Click/Payme/Stripe, Web Push, email, Apple, SMS — tashqi hisob/xizmat kerak
 - [x] Chala: XP/daraja + streak muzlatish, 2 ta yangi nishon, kutubxona 37 ta, davra haftalik reytingi, uskunasiz mashq ko'rsatmalari
 - [ ] Chala qolganlar: ichki sahifalar tarjimasi, shaxsiy rejani oflayn ko'rish, haftalik AI va hisobni o'chirishni kirgan holda sinash (sinov hisobi kerak), Telegram (alohida bot kerak)
+- [x] Sinov hisobida tekshirildi: 3 asosiy ish, suv, hamkor kodi, dopamin, XP, planner, Tana, qat'iy AI, hisobni o'chirish
+- [x] Apple orqali kirish tugmasi
