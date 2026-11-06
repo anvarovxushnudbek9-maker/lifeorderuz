@@ -36,6 +36,20 @@
       "when": 1793981076513,
       "tag": "0004_telegram_reminder_links",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793984914249,
+      "tag": "0005_daily_top3_schedule_distractions_buddy",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793984938059,
+      "tag": "0006_fix_accept_buddy_code",
+      "breakpoints": true
     }
   ]
 }
