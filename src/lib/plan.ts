@@ -53,21 +53,6 @@ export type NutritionPlan = {
   note: string;
 };
 
-export function bmiOf(height_cm?: number | null, weight_kg?: number | null) {
-  const h = Number(height_cm ?? 0);
-  const w = Number(weight_kg ?? 0);
-  if (h <= 0 || w <= 0) return null;
-  return w / (h / 100) ** 2;
-}
-
-export function bmiLabel(bmi: number | null) {
-  if (bmi === null) return "—";
-  if (bmi < 18.5) return "Kam vazn";
-  if (bmi < 25) return "Normal";
-  if (bmi < 30) return "Ortiqcha";
-  return "Semizlik";
-}
-
 export function buildNutrition(p: ProfileInput): NutritionPlan | null {
   const age = Number(p.age ?? 0);
   const h = Number(p.height_cm ?? 0);
