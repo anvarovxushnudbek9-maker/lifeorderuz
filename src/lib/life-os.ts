@@ -20,14 +20,19 @@ export function energyMessage(energy: Energy | null) {
   return null;
 }
 
-/** Shutdown ritual is offered from 21:00 local time until 04:59. */
+/** Shutdown ritual is offered from 21:00 until midnight (after midnight it is already a new plan day). */
 export function isShutdownTime(hour: number) {
-  return hour >= 21 || hour < 5;
+  return hour >= 21 && hour <= 23;
 }
 export const SHUTDOWN_CARRY = "Kun yopilishida ertaga ko‘chirildi";
 export const SHUTDOWN_DROP = "Kun yopilishida rejadan olib tashlandi";
 
 /** Lowest free top-3 position (1–3) for tomorrow, or null when all are taken. */
+/** Tomorrow's local ISO date. */
+export function tomorrowISO(now = new Date()) {
+  const d = new Date(now); d.setDate(d.getDate() + 1);
+  return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+}
 export function freeTopPosition(taken: number[]) {
   for (const p of [1, 2, 3]) if (!taken.includes(p)) return p;
   return null;

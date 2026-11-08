@@ -112,11 +112,11 @@ export function decide(input: EngineInput): { diagnosis: Diagnosis; actions: Pla
 
   const actions: PlannedAction[] = [];
 
-  // 1. Carry over yesterday's postponed items (max 1) — unfinished work first.
   const yesterday = [...input.history].sort((a, b) => b.plan_date.localeCompare(a.plan_date));
   const latestDate = yesterday[0]?.plan_date;
-  const carry = yesterday.find((h) => h.plan_date === latestDate && h.status === "postponed" && !input.history.some((later) => later.title === h.title && later.plan_date > h.plan_date && later.status === "done"));
-  if (carry) actions.push({ title: carry.title, why: "Kecha keyinga surilgan edi — bugun birinchi navbatda.", domain: carry.domain, minutes: Math.min(carry.minutes, mins(30)), source: "carry" });
+  // 1. Carry over the latest day's postponed items (max 2) — unfinished work first.
+  const carries = yesterday.filter((h) => h.plan_date === latestDate && h.status === "postponed" && !input.history.some((later) => later.title === h.title && later.plan_date > h.plan_date && later.status === "done")).slice(0, 2);
+  for (const carry of carries) actions.push({ title: carry.title, why: "Kecha keyinga surilgan edi — bugun birinchi navbatda.", domain: carry.domain, minutes: Math.min(carry.minutes, mins(30)), source: "carry" });
 
   // 2. Main goal: the one action that moves the needle.
   const goal = input.profile.main_goal?.trim();

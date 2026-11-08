@@ -29,3 +29,11 @@ describe("archetypes", () => {
     expect(decide(base).actions).toHaveLength(1);
   });
 });
+describe("shutdown carry-over", () => {
+  test("up to two postponed items move to the next day", () => {
+    const h = (title: string) => ({ plan_date: "2026-11-07", title, status: "postponed", minutes: 10, domain: "reja", skip_reason: "x" });
+    const plan = decide({ profile: {}, history: [h("A"), h("B"), h("C")], habitsTotal: 0, habitsDoneToday: 0, sleepHours: null, todayISO: "2026-11-08" });
+    expect(plan.actions.filter((a) => a.source === "carry").map((a) => a.title)).toEqual(["A", "B"]);
+  });
+  test("shutdown not offered after midnight", () => expect(isShutdownTime(0)).toBe(false));
+});
