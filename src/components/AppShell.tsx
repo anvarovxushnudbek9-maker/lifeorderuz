@@ -19,7 +19,6 @@ import {
   Settings,
   LogOut,
   Sparkles,
-  Library,
   CalendarDays,
   Heart,
 } from "lucide-react";
@@ -51,13 +50,21 @@ const NAV = [
   { to: "/davra", label: "Davra", icon: Users },
 ] as const;
 
+// Side menu lists only pages that are NOT already in the bottom nav.
 const MENU_GROUPS = [
   {
     title: "Asosiy",
     items: [
-      { to: "/dashboard", label: "Asosiy panel", icon: LayoutGrid },
-      { to: "/shaxsiy-reja", label: "Shaxsiy reja (kkal/mashq)", icon: Heart },
       { to: "/ai", label: "AI murabbiy", icon: Sparkles },
+      { to: "/shaxsiy-reja", label: "Shaxsiy reja (kkal/mashq)", icon: Heart },
+    ],
+  },
+  {
+    title: "Rejalashtirish",
+    items: [
+      { to: "/maqsad", label: "Maqsadlar", icon: Target },
+      { to: "/reja", label: "Haftalik reja", icon: CalendarDays },
+      { to: "/kundalik", label: "Kundalik", icon: NotebookPen },
     ],
   },
   {
@@ -65,24 +72,6 @@ const MENU_GROUPS = [
     items: [
       { to: "/analiz", label: "Analiz va statistika", icon: BarChart3 },
       { to: "/yutuqlar", label: "Yutuqlar", icon: Trophy },
-    ],
-  },
-  {
-    title: "Rejalashtirish",
-    items: [
-      { to: "/maqsad", label: "Maqsadlar", icon: Target },
-      { to: "/kundalik", label: "Kundalik", icon: NotebookPen },
-      { to: "/reja", label: "Haftalik reja", icon: CalendarDays },
-    ],
-  },
-  {
-    title: "Bo'limlar",
-    items: [
-      { to: "/bilim", label: "Kutubxona", icon: Library },
-      { to: "/tana", label: "Tana", icon: Dumbbell },
-      { to: "/odat", label: "Odatlar", icon: CheckCircle2 },
-      { to: "/davra", label: "Davra", icon: Users },
-      { to: "/bilim", label: "Kurslar", icon: BookOpen },
     ],
   },
 ] as const;
@@ -188,9 +177,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => navigate({ to: "/profil" })}>
                   <Settings className="mr-2 size-4" /> Profil
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate({ to: "/analiz" })}>
-                  <BarChart3 className="mr-2 size-4" /> Analiz
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={signOut}>

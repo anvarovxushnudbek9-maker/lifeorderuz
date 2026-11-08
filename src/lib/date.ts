@@ -15,8 +15,6 @@ export function lastNDays(n: number) {
   return out;
 }
 
-export const WEEKDAYS_UZ = ["Yak", "Dush", "Sesh", "Chor", "Pay", "Jum", "Shan"];
-
 export function shortDate(iso: string) {
   const d = new Date(iso + "T00:00:00");
   return `${d.getDate()}.${String(d.getMonth() + 1).padStart(2, "0")}`;

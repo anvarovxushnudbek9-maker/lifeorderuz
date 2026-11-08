@@ -30,7 +30,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { PageHeader } from "@/components/PageHeader";
 import { Progress } from "@/components/ui/progress";
 import { todayISO, lastNDays } from "@/lib/date";
-import { HUBS } from "@/lib/hubs";
 import { AiInsight } from "@/components/AiInsight";
 import { buildNutrition } from "@/lib/plan";
 
