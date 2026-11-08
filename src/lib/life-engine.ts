@@ -145,8 +145,10 @@ export function decide(input: EngineInput): { diagnosis: Diagnosis; actions: Pla
   // 4. Body / habits by goal.
   const arch = archetypeById(input.archetype);
   if (actions.length < 3) {
-    if (arch && !(input.habitsTotal > 0 && input.habitsDoneToday < input.habitsTotal))
-      actions.push({ ...arch.action, minutes: Math.max(2, Math.min(240, Math.round(arch.action.minutes * load))), source: "engine" });
+    const room = budget - actions.reduce((s, a) => s + a.minutes, 0);
+    const archMin = arch ? Math.min(240, Math.round(arch.action.minutes * load), room) : 0;
+    if (arch && archMin >= 10 && !(input.habitsTotal > 0 && input.habitsDoneToday < input.habitsTotal))
+      actions.push({ ...arch.action, title: archMin < arch.action.minutes ? `${arch.action.title} (${archMin} daq)` : arch.action.title, minutes: archMin, source: "engine" });
     else if (input.habitsTotal > 0 && input.habitsDoneToday < input.habitsTotal)
       actions.push({ title: "Bugungi odatlaringizni belgilang", why: `${input.habitsTotal - input.habitsDoneToday} ta odat kutmoqda — zanjirni uzmang.`, domain: "odat", minutes: 10, source: "engine" });
     else if (input.profile.goal_type === "lose" || input.profile.goal_type === "gain" || input.profile.activity_level === "low")
