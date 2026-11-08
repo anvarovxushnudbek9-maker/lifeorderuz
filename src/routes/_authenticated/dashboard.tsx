@@ -6,6 +6,8 @@ import { DopamineMap } from "@/components/day/DopamineMap";
 import { BuddyCard } from "@/components/day/BuddyCard";
 import { AppTour } from "@/components/day/AppTour";
 import { LifeRadar } from "@/components/day/LifeRadar";
+import { ShutdownRitual } from "@/components/day/ShutdownRitual";
+import { ArchetypeCard } from "@/components/day/ArchetypeCard";
 import { Printer } from "lucide-react";
 import { CommandCenter } from "@/components/CommandCenter";
 import { EveningReview } from "@/components/EveningReview";
@@ -130,8 +132,10 @@ function Dashboard() {
 
       <AppTour />
       <div className="mb-4 space-y-4">
+        <ShutdownRitual />
         <TopThree />
         <HourlySchedule />
+        <ArchetypeCard />
         <LifeRadar />
         <WaterSleep weightKg={Number(data?.profile?.weight_kg ?? 0) || null} />
         <Link to="/planner" className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card py-3 text-sm font-medium hover:bg-accent"><Printer className="size-4" />A4 kunlik planner (chop etish / PDF)</Link>
