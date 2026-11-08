@@ -11,6 +11,8 @@ import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { todayISO, lastNDays } from "@/lib/date";
 import { decide, SKIP_REASONS, type EngineProfile } from "@/lib/life-engine";
+import { ENERGY_OPTIONS, energyMessage, type Energy } from "@/lib/life-os";
+import { BatteryLow, BatteryMedium, BatteryFull } from "lucide-react";
 
 type Item = {
   id: string;
@@ -41,14 +43,16 @@ export function CommandCenter() {
     enabled: !!uid,
     queryFn: async () => {
       const from = lastNDays(14)[0] ?? today;
-      const [profile, history, habits, logs, metrics] = await Promise.all([
-        supabase.from("profiles").select("main_goal,goal_type,biggest_obstacle,focus_areas,activity_level,digital_habits,onboarding_completed").eq("id", uid).maybeSingle(),
+      const [profile, history, habits, logs, metrics, checkin] = await Promise.all([
+        supabase.from("profiles").select("main_goal,goal_type,biggest_obstacle,focus_areas,activity_level,digital_habits,onboarding_completed,archetype").eq("id", uid).maybeSingle(),
         supabase.from("daily_plan_items").select("*").eq("user_id", uid).gte("plan_date", from).order("position"),
         supabase.from("habits").select("id").eq("user_id", uid).eq("archived", false),
         supabase.from("habit_logs").select("habit_id").eq("user_id", uid).eq("log_date", today),
         supabase.from("body_metrics").select("sleep_hours").eq("user_id", uid).eq("metric_date", today).maybeSingle(),
+        supabase.from("daily_checkins").select("energy").eq("user_id", uid).eq("checkin_date", today).maybeSingle(),
       ]);
-      for (const response of [profile, history, habits, logs, metrics]) if (response.error) throw response.error;
+      for (const response of [profile, history, habits, logs, metrics, checkin]) if (response.error) throw response.error;
+      const energy = (checkin.data?.energy ?? null) as Energy | null;
       const all = history.data ?? [];
       const past = all.filter((i) => i.plan_date < today);
       let todays = all.filter((i) => i.plan_date === today);
@@ -59,8 +63,11 @@ export function CommandCenter() {
         habitsDoneToday: new Set((logs.data ?? []).map((l) => l.habit_id)).size,
         sleepHours: metrics.data?.sleep_hours != null ? Number(metrics.data.sleep_hours) : null,
         todayISO: today,
+        energy,
+        archetype: profile.data?.archetype ?? null,
       });
-      if (todays.length === 0 && result.actions.length && profile.data?.onboarding_completed) {
+      // Wait for the morning energy answer before generating today's plan.
+      if (todays.length === 0 && energy !== null && result.actions.length && profile.data?.onboarding_completed) {
         const { data: inserted, error } = await supabase
           .from("daily_plan_items")
           .upsert(
@@ -78,6 +85,7 @@ export function CommandCenter() {
         items: todays.sort((a, b) => a.position - b.position) as Item[],
         diagnosis: result.diagnosis,
         load: result.load,
+        energy,
         weekRate: past.length ? Math.round((pastDone / past.length) * 100) : null,
       };
     },
@@ -103,9 +111,19 @@ export function CommandCenter() {
     },
   });
 
+  const setEnergy = useMutation({
+    mutationFn: async (energy: Energy) => {
+      const { error } = await supabase.from("daily_checkins").upsert({ user_id: uid, checkin_date: today, energy }, { onConflict: "user_id,checkin_date" });
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: key }),
+    onError: (e: Error) => toast.error(e.message),
+  });
+  const energy = data?.energy ?? null;
+  const lowEnergy = energy === 1;
   const allItems = data?.items ?? [];
   const firstTodo = allItems.find((i) => i.status === "todo") ?? allItems[0];
-  const items = emergency ? allItems.filter((i) => i === firstTodo || i.status === "done") : allItems;
+  const items = emergency || lowEnergy ? allItems.filter((i) => i === firstTodo || i.status === "done") : allItems;
   const done = items.filter((i) => i.status === "done").length;
   const pct = items.length ? Math.round((done / items.length) * 100) : 0;
   const next = items.find((item) => item.status === "todo");
@@ -118,12 +136,36 @@ export function CommandCenter() {
             <Target className="size-3.5" /> Bugungi asosiy qadamlar
           </p>
           <h2 className="mt-1 text-lg font-bold">
-            {items.length === 0 ? "Rejangiz tayyorlanmoqda" : done === items.length ? "Bugun g'alaba! 🎉" : `${items.length - done} ta qadam qoldi`}
+            {items.length === 0 ? (data && energy === null ? "Avval quvvatingizni belgilang" : "Rejangiz tayyorlanmoqda") : done === items.length ? "Bugun g'alaba! 🎉" : `${items.length - done} ta qadam qoldi`}
           </h2>
         </div>
         <span className="text-2xl font-bold text-primary">{pct}%</span>
       </div>
       <Progress value={pct} className="mt-3" />
+      {data && energy === null && (
+        <div className="mt-4 rounded-xl border border-primary/30 bg-primary/5 p-4" role="group" aria-label="Bugungi quvvat">
+          <p className="text-sm font-semibold">Bugun quvvating qanday?</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">10 soniyalik savol — reja shunga moslashadi.</p>
+          <div className="mt-3 grid grid-cols-3 gap-2">
+            {ENERGY_OPTIONS.map((o) => {
+              const Icon = o.value === 1 ? BatteryLow : o.value === 2 ? BatteryMedium : BatteryFull;
+              return (
+                <Button key={o.value} type="button" variant="outline" className="h-auto flex-col gap-1 py-3" disabled={setEnergy.isPending || !uid} onClick={() => setEnergy.mutate(o.value)}>
+                  <Icon className="size-5 text-primary" />
+                  <span className="text-sm font-medium">{o.label}</span>
+                  <span className="text-[11px] font-normal text-muted-foreground">{o.hint}</span>
+                </Button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+      {energy !== null && (
+        <p className="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+          <span>{energyMessage(energy)}</span>
+          <button type="button" className="text-primary underline-offset-2 hover:underline" onClick={() => setEnergy.mutate(energy === 3 ? 1 : ((energy + 1) as Energy))}>Quvvatni o‘zgartirish</button>
+        </p>
+      )}
       <Button type="button" variant={emergency ? "destructive" : "outline"} size="sm" className="mt-3" onClick={toggleEmergency} aria-pressed={emergency}>
         <Siren className="size-4" />{emergency ? "Favqulodda rejim yoqilgan — o'chirish" : "Og'ir kun? Favqulodda rejim"}
       </Button>
