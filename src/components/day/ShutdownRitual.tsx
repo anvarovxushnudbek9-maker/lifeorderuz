@@ -18,7 +18,7 @@ export function ShutdownRitual() {
   const [calm, setCalm] = React.useState(false);
   React.useEffect(() => { const t = () => setHour(new Date().getHours()); t(); const i = setInterval(t, 60000); return () => clearInterval(i); }, []);
   const key = ["shutdown", uid, today];
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: key, enabled: !!uid && hour !== null && isShutdownTime(hour),
     queryFn: async () => {
       const [plan, top, chk] = await Promise.all([
@@ -71,7 +71,7 @@ export function ShutdownRitual() {
     ) : (
       <section className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-primary/30 bg-primary/5 p-4" aria-label="Kunni yopish">
         <div><p className="flex items-center gap-2 text-sm font-semibold"><MoonStar className="size-4 text-primary" />Kunni rasman yopish</p><p className="mt-0.5 text-xs text-muted-foreground">2 daqiqa: bajarilganini ko‘ring, chala ishlarni joyiga qo‘ying.</p></div>
-        <Button size="sm" onClick={() => setOpen(true)}>Kunni yopish</Button>
+        <Button size="sm" onClick={() => { void refetch(); setOpen(true); }}>Kunni yopish</Button>
       </section>
     )}
     <Dialog open={open} onOpenChange={setOpen}>
