@@ -42,3 +42,4 @@
 - [ ] Chala qolganlar: ichki sahifalar tarjimasi, shaxsiy rejani oflayn ko'rish, haftalik AI va hisobni o'chirishni kirgan holda sinash (sinov hisobi kerak), Telegram (alohida bot kerak)
 - [x] Sinov hisobida tekshirildi: 3 asosiy ish, suv, hamkor kodi, dopamin, XP, planner, Tana, qat'iy AI, hisobni o'chirish
 - [x] Apple orqali kirish tugmasi
+- [x] Sprint 1 Life OS: ertalabki quvvat savoli, kunni yopish (21:00+), dopamin qafasi + tiklanish XP, 3 ta hayot arxetipi — browser-tested

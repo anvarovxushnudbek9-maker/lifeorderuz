@@ -1,6 +1,7 @@
-/** Deterministic XP: habit check 10, top-3 task 20, workout 15, journal 10, book added 5. */
-export function totalXp(c: { logs: number; tasks: number; workouts: number; journal: number; books: number }) {
-  return c.logs * 10 + c.tasks * 20 + c.workouts * 15 + c.journal * 10 + c.books * 5;
+import { breachPenalty } from "./life-os";
+/** Deterministic XP: habit check 10, top-3 task 20, workout 15, journal 10, book added 5; minus 10 per unrecovered distraction breach. */
+export function totalXp(c: { logs: number; tasks: number; workouts: number; journal: number; books: number; breaches?: number }) {
+  return Math.max(0, c.logs * 10 + c.tasks * 20 + c.workouts * 15 + c.journal * 10 + c.books * 5 - breachPenalty(c.breaches ?? 0));
 }
 /** Level n needs 100·n·(n−1)/2 XP: L2 at 100, L3 at 300, L4 at 600… */
 export function levelFor(xp: number) {

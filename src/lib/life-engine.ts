@@ -1,5 +1,6 @@
 // Life Engine: Understand → Diagnose → Decide. Deterministic rules on verified
 // user data, so the daily plan works even when AI is unavailable.
+import { applyEnergy, archetypeById, type Energy } from "./life-os";
 
 export type EngineProfile = {
   main_goal?: string | null;
@@ -48,6 +49,8 @@ export type EngineInput = {
   habitsDoneToday: number;
   sleepHours: number | null;
   todayISO: string;
+  energy?: Energy | null;
+  archetype?: string | null;
 };
 
 function completionRate(history: PastItem[]) {
@@ -102,16 +105,18 @@ export function decide(input: EngineInput): { diagnosis: Diagnosis; actions: Pla
   else if (rate !== null && rate < 0.7) load = 0.75;
   else if (rate !== null && rate > 0.9 && input.history.length >= 6) load = 1.2;
   if (diagnosis.key === "perfectionism" || diagnosis.key === "energy") load = Math.min(load, 0.75);
+  if (input.energy === 1) load = Math.min(load, 0.5);
+  if (input.energy === 3) load = Math.max(load, 1);
   const budget = Math.max(15, Math.round(freeMinutes(input.profile) * load));
   const mins = (m: number) => Math.max(2, Math.round(m * load));
 
   const actions: PlannedAction[] = [];
 
-  // 1. Carry over yesterday's postponed items (max 1) — unfinished work first.
   const yesterday = [...input.history].sort((a, b) => b.plan_date.localeCompare(a.plan_date));
   const latestDate = yesterday[0]?.plan_date;
-  const carry = yesterday.find((h) => h.plan_date === latestDate && h.status === "postponed" && !input.history.some((later) => later.title === h.title && later.plan_date > h.plan_date && later.status === "done"));
-  if (carry) actions.push({ title: carry.title, why: "Kecha keyinga surilgan edi — bugun birinchi navbatda.", domain: carry.domain, minutes: Math.min(carry.minutes, mins(30)), source: "carry" });
+  // 1. Carry over the latest day's postponed items (max 2) — unfinished work first.
+  const carries = yesterday.filter((h) => h.plan_date === latestDate && h.status === "postponed" && !input.history.some((later) => later.title === h.title && later.plan_date > h.plan_date && later.status === "done")).slice(0, 2);
+  for (const carry of carries) actions.push({ title: carry.title, why: "Kecha keyinga surilgan edi — bugun birinchi navbatda.", domain: carry.domain, minutes: Math.min(carry.minutes, mins(30)), source: "carry" });
 
   // 2. Main goal: the one action that moves the needle.
   const goal = input.profile.main_goal?.trim();
@@ -138,8 +143,13 @@ export function decide(input: EngineInput): { diagnosis: Diagnosis; actions: Pla
   if (actions.length < 3) actions.push(fix[diagnosis.key]);
 
   // 4. Body / habits by goal.
+  const arch = archetypeById(input.archetype);
   if (actions.length < 3) {
-    if (input.habitsTotal > 0 && input.habitsDoneToday < input.habitsTotal)
+    const room = budget - actions.reduce((s, a) => s + a.minutes, 0);
+    const archMin = arch ? Math.min(240, Math.round(arch.action.minutes * load), room) : 0;
+    if (arch && archMin >= 10 && !(input.habitsTotal > 0 && input.habitsDoneToday < input.habitsTotal))
+      actions.push({ ...arch.action, title: archMin < arch.action.minutes ? `${arch.action.title} (${archMin} daq)` : arch.action.title, minutes: archMin, source: "engine" });
+    else if (input.habitsTotal > 0 && input.habitsDoneToday < input.habitsTotal)
       actions.push({ title: "Bugungi odatlaringizni belgilang", why: `${input.habitsTotal - input.habitsDoneToday} ta odat kutmoqda — zanjirni uzmang.`, domain: "odat", minutes: 10, source: "engine" });
     else if (input.profile.goal_type === "lose" || input.profile.goal_type === "gain" || input.profile.activity_level === "low")
       actions.push({ title: `${mins(20)} daqiqa yurish yoki mashq`, why: "Harakat energiya va kayfiyatni ko'taradi.", domain: "tana", minutes: mins(20), source: "engine" });
@@ -154,5 +164,5 @@ export function decide(input: EngineInput): { diagnosis: Diagnosis; actions: Pla
     total = actions.reduce((s, a) => s + a.minutes, 0);
   }
   if (actions[0] && actions[0].minutes > budget) actions[0] = { ...actions[0], minutes: budget };
-  return { diagnosis, actions, load };
+  return { diagnosis, actions: input.energy === 1 ? applyEnergy(actions, 1) : actions, load };
 }

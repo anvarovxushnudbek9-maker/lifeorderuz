@@ -23,3 +23,4 @@
 - `/api/chat` builds the user's context server-side from the database and ignores client-sent context. Why: AI advice must rest on verified data.
 - Telegram reminders: users link via a one-time `/start` code in `public.telegram_links`; only the webhook (service role) sets `chat_id`; the cron job claims a `public.reminder_deliveries` row before sending. Why: prevents redirecting messages to foreign chats and double-sends.
 - Book summaries live as static curated data in `src/lib/book-library.ts`, written in our own words. Why: no copyrighted text and no DB dependency for shared content.
+- Sprint-1 Life OS rules (energy check-in, shutdown ritual, dopamine recovery, day archetypes) live as pure functions in `src/lib/life-os.ts`; energy and shutdown state are per-day rows in `public.daily_checkins`, and the Life Engine waits for the day's energy answer before generating a plan. Why: one deterministic, testable source that also works without AI.

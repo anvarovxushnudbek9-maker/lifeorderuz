@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { LogOut, Trash2 } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { deleteMyAccount } from "@/lib/account.functions";
+import { ArchetypeCard } from "@/components/day/ArchetypeCard";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -155,6 +156,8 @@ function Profile() {
           if (error) toast.error(error.message); else { toast.success(on ? "Qat'iy rejim yoqildi" : "Oddiy rejim"); qc.invalidateQueries({ queryKey: ["profile"] }); }
         }} />
       </div>
+
+      <div className="mt-4"><ArchetypeCard /></div>
 
       <Button variant="outline" className="mt-4 w-full" onClick={signOut}>
         <LogOut className="mr-2 size-4" /> Hisobdan chiqish

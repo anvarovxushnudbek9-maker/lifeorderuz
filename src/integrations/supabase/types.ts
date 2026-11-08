@@ -282,6 +282,30 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_checkins: {
+        Row: {
+          checkin_date: string
+          closed_at: string | null
+          created_at: string
+          energy: number | null
+          user_id: string
+        }
+        Insert: {
+          checkin_date?: string
+          closed_at?: string | null
+          created_at?: string
+          energy?: number | null
+          user_id: string
+        }
+        Update: {
+          checkin_date?: string
+          closed_at?: string | null
+          created_at?: string
+          energy?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       daily_plan_items: {
         Row: {
           completed_at: string | null
@@ -332,26 +356,35 @@ export type Database = {
       }
       distraction_logs: {
         Row: {
+          breach: boolean
           created_at: string
           id: string
           logged_on: string
           minutes: number
+          recovered_at: string | null
+          recovery: string | null
           source: string
           user_id: string
         }
         Insert: {
+          breach?: boolean
           created_at?: string
           id?: string
           logged_on?: string
           minutes: number
+          recovered_at?: string | null
+          recovery?: string | null
           source: string
           user_id: string
         }
         Update: {
+          breach?: boolean
           created_at?: string
           id?: string
           logged_on?: string
           minutes?: number
+          recovered_at?: string | null
+          recovery?: string | null
           source?: string
           user_id?: string
         }
@@ -492,12 +525,14 @@ export type Database = {
         Row: {
           activity_level: string | null
           age: number | null
+          archetype: string | null
           avatar_url: string | null
           biggest_obstacle: string | null
           bio: string | null
           coach_mode: string
           created_at: string
           digital_habits: Json
+          dopamine_triggers: string[]
           focus_areas: string[]
           full_name: string | null
           gender: string | null
@@ -514,12 +549,14 @@ export type Database = {
         Insert: {
           activity_level?: string | null
           age?: number | null
+          archetype?: string | null
           avatar_url?: string | null
           biggest_obstacle?: string | null
           bio?: string | null
           coach_mode?: string
           created_at?: string
           digital_habits?: Json
+          dopamine_triggers?: string[]
           focus_areas?: string[]
           full_name?: string | null
           gender?: string | null
@@ -536,12 +573,14 @@ export type Database = {
         Update: {
           activity_level?: string | null
           age?: number | null
+          archetype?: string | null
           avatar_url?: string | null
           biggest_obstacle?: string | null
           bio?: string | null
           coach_mode?: string
           created_at?: string
           digital_habits?: Json
+          dopamine_triggers?: string[]
           focus_areas?: string[]
           full_name?: string | null
           gender?: string | null

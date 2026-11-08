@@ -34,7 +34,7 @@ function Achievements() {
     queryKey: ["achievements", uid],
     enabled: !!uid,
     queryFn: async () => {
-      const [logs, workouts, books, journal, members, tasks] = await Promise.all([
+      const [logs, workouts, books, journal, members, tasks, breaches] = await Promise.all([
         supabase.from("habit_logs").select("id", { count: "exact", head: true }).eq("user_id", uid),
         supabase.from("workouts").select("id", { count: "exact", head: true }).eq("user_id", uid),
         supabase.from("books").select("id", { count: "exact", head: true }).eq("user_id", uid),
@@ -47,6 +47,7 @@ function Achievements() {
           .select("circle_id", { count: "exact", head: true })
           .eq("user_id", uid),
         supabase.from("top_tasks").select("id", { count: "exact", head: true }).eq("user_id", uid).eq("done", true),
+        supabase.from("distraction_logs").select("id", { count: "exact", head: true }).eq("user_id", uid).eq("breach", true).is("recovered_at", null),
       ]);
       return {
         logs: logs.count ?? 0,
@@ -55,6 +56,7 @@ function Achievements() {
         journal: journal.count ?? 0,
         circles: members.count ?? 0,
         tasks: tasks.count ?? 0,
+        breaches: breaches.count ?? 0,
       };
     },
   });
@@ -84,7 +86,7 @@ function Achievements() {
           <p className="text-sm font-semibold text-primary">{xp} XP</p>
         </div>
         <Progress value={(lv.into / lv.need) * 100} className="mt-3" />
-        <p className="mt-2 text-xs text-muted-foreground">Keyingi darajagacha {lv.need - lv.into} XP. Odat 10, asosiy ish 20, mashq 15, kundalik 10, kitob 5 XP.</p>
+        <p className="mt-2 text-xs text-muted-foreground">Keyingi darajagacha {lv.need - lv.into} XP. Odat 10, asosiy ish 20, mashq 15, kundalik 10, kitob 5 XP. Tiklanmagan chalg‘ish −10 XP.</p>
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
         {badges.map((b) => (
