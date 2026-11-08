@@ -163,7 +163,9 @@ export function CommandCenter() {
       {energy !== null && (
         <p className="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
           <span>{energyMessage(energy)}</span>
-          <button type="button" className="text-primary underline-offset-2 hover:underline" onClick={() => setEnergy.mutate(energy === 3 ? 1 : ((energy + 1) as Energy))}>Quvvatni o‘zgartirish</button>
+          {ENERGY_OPTIONS.filter((o) => o.value !== energy).map((o) => (
+            <button key={o.value} type="button" disabled={setEnergy.isPending} className="rounded-full border border-border px-2 py-0.5 text-primary hover:bg-accent" onClick={() => setEnergy.mutate(o.value)}>{o.label}</button>
+          ))}
         </p>
       )}
       <Button type="button" variant={emergency ? "destructive" : "outline"} size="sm" className="mt-3" onClick={toggleEmergency} aria-pressed={emergency}>
