@@ -33,7 +33,6 @@ import { Route as AuthenticatedYutuqlarRouteImport } from './routes/_authenticat
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as AuthenticatedDavraIndexRouteImport } from './routes/_authenticated/davra.index'
 import { Route as AuthenticatedDavraIdRouteImport } from './routes/_authenticated/davra.$id'
-import { Route as AuthenticatedHubHubRouteImport } from './routes/_authenticated/hub.$hub'
 import { Route as ApiPublicJobsTelegramRemindersRouteImport } from './routes/api/public/jobs/telegram-reminders'
 import { Route as ApiPublicTelegramWebhookRouteImport } from './routes/api/public/telegram/webhook'
 
@@ -157,11 +156,6 @@ const AuthenticatedDavraIdRoute = AuthenticatedDavraIdRouteImport.update({
   path: '/davra/$id',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedHubHubRoute = AuthenticatedHubHubRouteImport.update({
-  id: '/hub/$hub',
-  path: '/hub/$hub',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 const ApiPublicJobsTelegramRemindersRoute =
   ApiPublicJobsTelegramRemindersRouteImport.update({
     id: '/api/public/jobs/telegram-reminders',
@@ -198,7 +192,6 @@ export interface FileRoutesByFullPath {
   '/yutuqlar': typeof AuthenticatedYutuqlarRoute
   '/api/chat': typeof ApiChatRoute
   '/davra/$id': typeof AuthenticatedDavraIdRoute
-  '/hub/$hub': typeof AuthenticatedHubHubRoute
   '/davra/': typeof AuthenticatedDavraIndexRoute
   '/api/public/jobs/telegram-reminders': typeof ApiPublicJobsTelegramRemindersRoute
   '/api/public/telegram/webhook': typeof ApiPublicTelegramWebhookRoute
@@ -226,7 +219,6 @@ export interface FileRoutesByTo {
   '/yutuqlar': typeof AuthenticatedYutuqlarRoute
   '/api/chat': typeof ApiChatRoute
   '/davra/$id': typeof AuthenticatedDavraIdRoute
-  '/hub/$hub': typeof AuthenticatedHubHubRoute
   '/davra': typeof AuthenticatedDavraIndexRoute
   '/api/public/jobs/telegram-reminders': typeof ApiPublicJobsTelegramRemindersRoute
   '/api/public/telegram/webhook': typeof ApiPublicTelegramWebhookRoute
@@ -256,7 +248,6 @@ export interface FileRoutesById {
   '/_authenticated/yutuqlar': typeof AuthenticatedYutuqlarRoute
   '/api/chat': typeof ApiChatRoute
   '/_authenticated/davra/$id': typeof AuthenticatedDavraIdRoute
-  '/_authenticated/hub/$hub': typeof AuthenticatedHubHubRoute
   '/_authenticated/davra/': typeof AuthenticatedDavraIndexRoute
   '/api/public/jobs/telegram-reminders': typeof ApiPublicJobsTelegramRemindersRoute
   '/api/public/telegram/webhook': typeof ApiPublicTelegramWebhookRoute
@@ -286,7 +277,6 @@ export interface FileRouteTypes {
     | '/yutuqlar'
     | '/api/chat'
     | '/davra/$id'
-    | '/hub/$hub'
     | '/davra/'
     | '/api/public/jobs/telegram-reminders'
     | '/api/public/telegram/webhook'
@@ -314,7 +304,6 @@ export interface FileRouteTypes {
     | '/yutuqlar'
     | '/api/chat'
     | '/davra/$id'
-    | '/hub/$hub'
     | '/davra'
     | '/api/public/jobs/telegram-reminders'
     | '/api/public/telegram/webhook'
@@ -343,7 +332,6 @@ export interface FileRouteTypes {
     | '/_authenticated/yutuqlar'
     | '/api/chat'
     | '/_authenticated/davra/$id'
-    | '/_authenticated/hub/$hub'
     | '/_authenticated/davra/'
     | '/api/public/jobs/telegram-reminders'
     | '/api/public/telegram/webhook'
@@ -533,13 +521,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDavraIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/hub/$hub': {
-      id: '/_authenticated/hub/$hub'
-      path: '/hub/$hub'
-      fullPath: '/hub/$hub'
-      preLoaderRoute: typeof AuthenticatedHubHubRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/api/public/jobs/telegram-reminders': {
       id: '/api/public/jobs/telegram-reminders'
       path: '/api/public/jobs/telegram-reminders'
@@ -572,7 +553,6 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedTanaRoute: typeof AuthenticatedTanaRoute
   AuthenticatedYutuqlarRoute: typeof AuthenticatedYutuqlarRoute
   AuthenticatedDavraIdRoute: typeof AuthenticatedDavraIdRoute
-  AuthenticatedHubHubRoute: typeof AuthenticatedHubHubRoute
   AuthenticatedDavraIndexRoute: typeof AuthenticatedDavraIndexRoute
 }
 
@@ -591,7 +571,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedTanaRoute: AuthenticatedTanaRoute,
   AuthenticatedYutuqlarRoute: AuthenticatedYutuqlarRoute,
   AuthenticatedDavraIdRoute: AuthenticatedDavraIdRoute,
-  AuthenticatedHubHubRoute: AuthenticatedHubHubRoute,
   AuthenticatedDavraIndexRoute: AuthenticatedDavraIndexRoute,
 }
 
