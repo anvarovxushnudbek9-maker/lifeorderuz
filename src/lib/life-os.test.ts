@@ -37,3 +37,11 @@ describe("shutdown carry-over", () => {
   });
   test("shutdown not offered after midnight", () => expect(isShutdownTime(0)).toBe(false));
 });
+import { dayPhase, isWeeklyReviewDay } from "./life-os";
+describe("dashboard day phase", () => {
+  test("08:00 is morning", () => expect(dayPhase(8)).toBe("morning"));
+  test("12:00 switches to day", () => { expect(dayPhase(11)).toBe("morning"); expect(dayPhase(12)).toBe("day"); });
+  test("21:00 switches to evening", () => { expect(dayPhase(20)).toBe("day"); expect(dayPhase(21)).toBe("evening"); });
+  test("03:00 is still evening", () => expect(dayPhase(3)).toBe("evening"));
+  test("weekly review only on Sunday", () => { expect(isWeeklyReviewDay(0)).toBe(true); expect(isWeeklyReviewDay(1)).toBe(false); });
+});

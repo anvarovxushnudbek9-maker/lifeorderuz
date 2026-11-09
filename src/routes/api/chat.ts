@@ -100,9 +100,17 @@ async function buildLifeModel({ sb, userId }: Authed) {
     sb.from("habits").select("title").eq("user_id", userId).eq("archived", false),
     sb.from("habit_logs").select("log_date").eq("user_id", userId).gte("log_date", from),
     sb.from("workouts").select("duration_min").eq("user_id", userId).gte("performed_on", from),
-    sb.from("body_metrics").select("sleep_hours,water_ml,steps").eq("user_id", userId).eq("metric_date", today).maybeSingle(),
+    sb.from("body_metrics").select("metric_date,sleep_hours,water_ml,steps").eq("user_id", userId).gte("metric_date", from),
   ]);
   const items = plan.data ?? [];
+  const mrows = metrics.data ?? [];
+  const todayM = mrows.find((m) => m.metric_date === today);
+  const WD = ["Yak", "Dush", "Sesh", "Chor", "Pay", "Jum", "Shan"];
+  const byDay = Array.from({ length: 14 }, (_, i) => new Date(Date.now() - (13 - i) * 86_400_000).toISOString().slice(0, 10)).map((d) => {
+    const di = items.filter((i) => i.plan_date === d);
+    const m = mrows.find((x) => x.metric_date === d);
+    return `${d} ${WD[new Date(d + "T12:00:00Z").getUTCDay()]}: reja ${di.filter((i) => i.status === "done").length}/${di.length}, uyqu ${m?.sleep_hours ?? "-"}, suv ${m?.water_ml ?? "-"}`;
+  });
   const done = items.filter((i) => i.status === "done").length;
   const reasons = items.map((i) => i.skip_reason).filter(Boolean);
   const dh = (p.data?.digital_habits ?? {}) as Record<string, string>;
@@ -115,7 +123,8 @@ async function buildLifeModel({ sb, userId }: Authed) {
     `14 kunlik reja: ${done}/${items.length} bajarilgan. Qoldirish sabablari: ${reasons.slice(-8).join(", ") || "yo'q"}`,
     `Bugungi reja: ${items.filter((i) => i.plan_date === today).map((i) => `${i.title} [${i.status}]`).join("; ") || "yo'q"}`,
     `Odatlar: ${(habits.data ?? []).map((h) => h.title).join(", ") || "yo'q"}; 14 kunda belgilar: ${logs.data?.length ?? 0}`,
-    `14 kunlik mashq: ${(workouts.data ?? []).reduce((s, w) => s + (w.duration_min ?? 0), 0)} daq; bugun uyqu ${metrics.data?.sleep_hours ?? "-"} s, suv ${metrics.data?.water_ml ?? 0} ml`,
+    `14 kunlik mashq: ${(workouts.data ?? []).reduce((s, w) => s + (w.duration_min ?? 0), 0)} daq; bugun uyqu ${todayM?.sleep_hours ?? "-"} s, suv ${todayM?.water_ml ?? 0} ml`,
+    `Kunma-kun (14 kun):\n${byDay.join("\n")}`,
   ].filter(Boolean).join("\n").slice(0, 3000);
 }
 
