@@ -134,10 +134,7 @@ function Dashboard() {
         <ShutdownRitual />
         <TopThree />
         <HourlySchedule />
-        <ArchetypeCard />
-        <LifeRadar />
         <WaterSleep weightKg={Number(data?.profile?.weight_kg ?? 0) || null} />
-        <Link to="/planner" className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card py-3 text-sm font-medium hover:bg-accent"><Printer className="size-4" />A4 kunlik planner (chop etish / PDF)</Link>
       </div>
       <div className="mb-4">
         <CommandCenter />
@@ -224,6 +221,8 @@ function Dashboard() {
       <div className="mt-6">
         <TodayReminders />
       </div>
+      <div className="mt-4 space-y-4"><LifeRadar /><ArchetypeCard />
+        <Link to="/planner" className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card py-3 text-sm font-medium hover:bg-accent"><Printer className="size-4" />A4 kunlik planner (chop etish / PDF)</Link></div>
       <EveningReview />
       <div className="mt-6 grid gap-4 lg:grid-cols-2"><DopamineMap /><BuddyCard /></div>
 

@@ -43,3 +43,5 @@
 - [x] Sinov hisobida tekshirildi: 3 asosiy ish, suv, hamkor kodi, dopamin, XP, planner, Tana, qat'iy AI, hisobni o'chirish
 - [x] Apple orqali kirish tugmasi
 - [x] Sprint 1 Life OS: ertalabki quvvat savoli, kunni yopish (21:00+), dopamin qafasi + tiklanish XP, 3 ta hayot arxetipi — browser-tested
+- [x] 1-qism (a): Nadir 3 ohang, kontekstli 8 amalli + tugma, Dashboard tartibi (3 ish → jadval → odat → grafik)
+- [ ] 1-qism (b): Davra yagona umumiy chat
