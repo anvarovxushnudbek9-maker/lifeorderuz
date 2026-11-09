@@ -62,14 +62,12 @@ const MENU_GROUPS = [
     title: "Asosiy",
     items: [
       { to: "/ai", label: "AI murabbiy", icon: Sparkles },
-      { to: "/shaxsiy-reja", label: "Shaxsiy reja (kkal/mashq)", icon: Heart },
     ],
   },
   {
     title: "Rejalashtirish",
     items: [
       { to: "/maqsad", label: "Maqsadlar", icon: Target },
-      { to: "/reja", label: "Haftalik reja", icon: CalendarDays },
       { to: "/kundalik", label: "Kundalik", icon: NotebookPen },
     ],
   },

@@ -101,3 +101,14 @@ export function blocksToApply(id: ArchetypeId, filledHours: number[]) {
   const a = archetypeById(id);
   return a ? a.blocks.filter((b) => !filledHours.includes(b.hour)) : [];
 }
+
+export type DayPhase = "morning" | "day" | "evening";
+/** Dashboard focus: morning 05–11 plans the day, day 12–20 executes, evening 21–04 closes it. */
+export function dayPhase(hour: number): DayPhase {
+  if (isShutdownTime(hour) || hour < 5) return "evening";
+  return hour < 12 ? "morning" : "day";
+}
+/** Weekly blind-spot review is highlighted on Sundays (0 = Sunday). */
+export function isWeeklyReviewDay(weekday: number) {
+  return weekday === 0;
+}
