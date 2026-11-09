@@ -4,7 +4,7 @@ import { z } from "zod";
 import type { Database } from "@/integrations/supabase/types";
 import { aiLimitReached, FREE_AI_DAILY_LIMIT } from "@/lib/ai-limits";
 
-const SYSTEM = `Sen "Life Order" nomli shaxsiy rivojlanish ilovasining AI murabbiysisan.
+const SYSTEM = `Sen "Life Order" nomli shaxsiy rivojlanish ilovasining AI murabbiysi — Nadirsan.
 Har doim o'zbek tilida (lotin yozuvida) javob ber.
 Vazifang: foydalanuvchining tana (mashq, ovqat, uyqu), bilim (kitob, kurs), odatlar va davra bo'yicha ko'rsatkichlarini tahlil qilib, aniq, qisqa va amaliy tavsiyalar berish.
 Uslub: iliq, motivatsion, lekin ortiqcha gapirmaydigan. Javoblarni markdown ro'yxatlari bilan tuzilgan holda ber.
@@ -88,7 +88,8 @@ async function authorize(request: Request): Promise<Response | Authed> {
 }
 
 const HARDCORE = `\nQAT'IY REJIM yoqilgan: bahonalarni qabul qilma, to'g'ridan-to'g'ri va qisqa gapir, har javobni "Hozir qil:" bilan boshlanadigan bitta aniq harakat bilan tugat. Haqorat qilma, sog'liqqa xavfli talab qo'yma.`;
-const hardcoreByUser = new Map<string, boolean>();
+const SAGE = `\nDONO OQSOQOL REJIMI: sokin, hikmatli va sabrli gapir; qisqa misol yoki hikmat bilan tushuntir, keyin bitta kichik amaliy qadam ber.`;
+const toneByUser = new Map<string, string>();
 
 async function buildLifeModel({ sb, userId }: Authed) {
   const today = new Date().toISOString().slice(0, 10);
@@ -106,7 +107,7 @@ async function buildLifeModel({ sb, userId }: Authed) {
   const reasons = items.map((i) => i.skip_reason).filter(Boolean);
   const dh = (p.data?.digital_habits ?? {}) as Record<string, string>;
   const minor = dh["age_range"] === "18 dan kichik";
-  hardcoreByUser.set(userId, p.data?.coach_mode === "hardcore" && !minor);
+  toneByUser.set(userId, p.data?.coach_mode === "hardcore" && !minor ? HARDCORE : p.data?.coach_mode === "sage" ? SAGE : "");
   return [
     `Maqsad: ${p.data?.main_goal ?? "-"}; tana maqsadi: ${p.data?.goal_type ?? "-"}; to'siq: ${p.data?.biggest_obstacle ?? "-"}`,
     `Yosh: ${dh["age_range"] ?? "-"}; bandlik: ${dh["life_stage"] ?? "-"}; ekran vaqti: ${dh["screen_time"] ?? "-"}; bo'sh vaqt: ${dh["free_time"] ?? "-"}; samarali vaqt: ${dh["peak_time"] ?? "-"}; ish uslubi: ${dh["start_style"] ?? "-"}`,
@@ -139,7 +140,7 @@ export const Route = createFileRoute("/api/chat")({
         // Context is built on the server from verified data; client context is ignored.
         const context = serverContext;
         const input = [
-          { role: "system", content: [{ type: "input_text", text: SYSTEM + (hardcoreByUser.get(auth.userId) ? HARDCORE : "") }] },
+          { role: "system", content: [{ type: "input_text", text: SYSTEM + (toneByUser.get(auth.userId) ?? "") }] },
           ...(context
             ? [
                 {

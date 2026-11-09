@@ -146,15 +146,17 @@ function Profile() {
         <Switch checked={theme === "dark"} onCheckedChange={toggle} />
       </div>
 
-      <div className="mt-4 flex items-center justify-between rounded-2xl border border-border bg-card p-5">
-        <div>
-          <p className="text-sm font-medium">Qat&apos;iy intizom rejimi</p>
-          <p className="text-xs text-muted-foreground">AI murabbiy bahonalarni qabul qilmaydi, qisqa va talabchan gapiradi. 18 yoshgacha yumshoq qoladi.</p>
+      <div className="mt-4 rounded-2xl border border-border bg-card p-5">
+        <p className="text-sm font-medium">Nadir murabbiy ohangi</p>
+        <p className="text-xs text-muted-foreground">18 yoshgacha qat&apos;iy rejim yumshoq qoladi.</p>
+        <div className="mt-3 grid grid-cols-3 gap-2">
+          {([["normal", "Muvozanatli"], ["hardcore", "Qattiqqo'l armiya"], ["sage", "Dono oqsoqol"]] as const).map(([v, l]) => (
+            <Button key={v} size="sm" variant={(profile?.coach_mode ?? "normal") === v ? "default" : "outline"} onClick={async () => {
+              const { error } = await supabase.from("profiles").update({ coach_mode: v }).eq("id", uid);
+              if (error) toast.error(error.message); else { toast.success(`${l} ohangi tanlandi`); qc.invalidateQueries({ queryKey: ["profile"] }); }
+            }}>{l}</Button>
+          ))}
         </div>
-        <Switch checked={profile?.coach_mode === "hardcore"} onCheckedChange={async (on) => {
-          const { error } = await supabase.from("profiles").update({ coach_mode: on ? "hardcore" : "normal" }).eq("id", uid);
-          if (error) toast.error(error.message); else { toast.success(on ? "Qat'iy rejim yoqildi" : "Oddiy rejim"); qc.invalidateQueries({ queryKey: ["profile"] }); }
-        }} />
       </div>
 
       <div className="mt-4"><ArchetypeCard /></div>
