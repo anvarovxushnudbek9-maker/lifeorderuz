@@ -45,3 +45,30 @@
 - [x] Sprint 1 Life OS: ertalabki quvvat savoli, kunni yopish (21:00+), dopamin qafasi + tiklanish XP, 3 ta hayot arxetipi — browser-tested
 - [x] 1-qism (a): Nadir 3 ohang, kontekstli 8 amalli + tugma, Dashboard tartibi (3 ish → jadval → odat → grafik)
 - [ ] 1-qism (b): Davra yagona umumiy chat
+
+## 24 ta ish — boshlash va tekshirish
+Hozirgi so‘rov barcha 24 blokni boshlashdir; mavjud funksiyalar takror qurilmaydi.
+- [ ] 1. Auth: bitta parol ko‘rsatish belgisi
+- [ ] 2. Tezlik: yopiq batafsil bloklar so‘rov yubormasin
+- [ ] 3. Onboarding: beshinchi qadam tanlovlarini tekshirish
+- [ ] 4. Landing: halol Bepul/Premium farqi
+- [ ] 5. Dashboard: XP → kun tartibi → odatlar → grafik
+- [ ] 6. Yetti kunlik sinov: haqiqiy Premium huquqlari bilan
+- [ ] 7. Ikki streak qalqoni
+- [ ] 8. Kitob sabog‘idan odat
+- [ ] 9. Kunlik amaliy donishmandlik
+- [ ] 10. Bo‘limlar sinergiyasi
+- [ ] 11. AI murabbiy ohanglari
+- [ ] 12. Onboarding shaxsiylashtirish
+- [ ] 13. Profil va obuna holati
+- [ ] 14. Xavfsiz dopamin tiklanishi
+- [ ] 15. Amaliy xulosalar daftari
+- [ ] 16. Yagona Davra chati
+- [ ] 17. Buddy ulanishi
+- [ ] 18. Mashq qo‘llanmalari
+- [ ] 19. Original kitob xulosalarini kengaytirish
+- [ ] 20. Ichki sahifalar: to‘rt til
+- [ ] 21. Xavfsiz PWA
+- [ ] 22. To‘lov buyurtmalari va tasdiqlangan Premium huquqlari
+- [ ] 23. Haftalik AI audit
+- [ ] 24. Ichki eslatmalar
