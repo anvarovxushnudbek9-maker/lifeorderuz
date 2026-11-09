@@ -35,7 +35,7 @@ import {
 import { Reveal } from "@/hooks/useReveal";
 import { useTheme } from "@/hooks/useTheme";
 import { Logo } from "@/components/Logo";
-import { LANDING, LANGS, useLang } from "@/lib/i18n";
+import { LANDING, LANGS, useLang, type Lang } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 const TITLE = "Life Order — motivatsiya tugaydi, tizim qoladi";
@@ -106,6 +106,13 @@ function TodayCard({ title, items, streak }: { title: string; items: string[]; s
     </div>
   );
 }
+
+const FOUNDER: Record<Lang, { k: string; t: string; p: string[]; sign: string }> = {
+  uz: { k: "Asoschi hikoyasi", t: "Nega Life Order paydo bo‘ldi", p: ["Men 2 yil umrimni yomon odatlar qo‘lida o‘tkazib yubordim. Perfeksionizm va ishni ertaga qoldirish (prokrastinatsiya) meni har safar to‘xtatib qo‘yardi.", "Motivatsiya bir necha kunda tugardi. Shunda tushundim: menga ilhom emas, tizim kerak. Life Order shu muammoni avvalo o‘zim uchun yechish uchun paydo bo‘ldi.", "Endi maqsadim — o‘zgarishni istagan yoshlarga o‘z salohiyatiga erishishda yordam berish."], sign: "Anvarov Xushnudbek, 15 yosh — asoschi" },
+  uzc: { k: "Асосчи ҳикояси", t: "Нега Life Order пайдо бўлди", p: ["Мен 2 йил умримни ёмон одатлар қўлида ўтказиб юбордим. Перфекционизм ва ишни эртага қолдириш (прокрастинация) мени ҳар сафар тўхтатиб қўярди.", "Мотивация бир неча кунда тугарди. Шунда тушундим: менга илҳом эмас, тизим керак. Life Order шу муаммони аввало ўзим учун ечиш учун пайдо бўлди.", "Энди мақсадим — ўзгаришни истаган ёшларга ўз салоҳиятига эришишда ёрдам бериш."], sign: "Анваров Хушнудбек, 15 ёш — асосчи" },
+  ru: { k: "История основателя", t: "Почему появился Life Order", p: ["Я потерял 2 года жизни во власти вредных привычек. Перфекционизм и прокрастинация каждый раз меня останавливали.", "Мотивация заканчивалась за несколько дней. Тогда я понял: мне нужно не вдохновение, а система. Life Order появился, чтобы сначала решить эту проблему для себя.", "Теперь моя цель — помочь молодым людям, которые хотят измениться, раскрыть свой потенциал."], sign: "Анваров Хушнудбек, 15 лет — основатель" },
+  en: { k: "Founder’s story", t: "Why Life Order exists", p: ["I lost two years of my life to bad habits. Perfectionism and procrastination stopped me every single time.", "Motivation ran out within days. That’s when I realised I didn’t need inspiration — I needed a system. Life Order started as my way of solving this problem for myself.", "Now my goal is to help young people who want to change reach their full potential."], sign: "Khushnudbek Anvarov, 15 — founder" },
+};
 
 function Landing() {
   const { lang, setLang } = useLang();
@@ -273,6 +280,20 @@ function Landing() {
             );
           })}
         </div>
+      </section>
+
+      {/* Founder story */}
+      <section className="mx-auto max-w-3xl px-5 pb-24">
+        <Reveal>
+          <figure className="rounded-2xl border border-border bg-card p-7 sm:p-10">
+            <p className="text-xs font-semibold uppercase tracking-wider text-primary">{FOUNDER[lang].k}</p>
+            <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">{FOUNDER[lang].t}</h2>
+            <blockquote className="mt-5 space-y-3 border-l-2 border-primary pl-5 leading-relaxed text-muted-foreground">
+              {FOUNDER[lang].p.map((x) => <p key={x}>{x}</p>)}
+            </blockquote>
+            <figcaption className="mt-5 text-sm font-semibold">— {FOUNDER[lang].sign}</figcaption>
+          </figure>
+        </Reveal>
       </section>
 
       {/* Pricing */}
