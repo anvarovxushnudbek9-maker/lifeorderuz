@@ -1,0 +1,2 @@
+ALTER TABLE public.profiles DROP CONSTRAINT IF EXISTS profiles_coach_mode_check;
+ALTER TABLE public.profiles ADD CONSTRAINT profiles_coach_mode_check CHECK (coach_mode IN ('normal','hardcore','sage'));

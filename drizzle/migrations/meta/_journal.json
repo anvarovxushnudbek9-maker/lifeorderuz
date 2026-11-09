@@ -64,6 +64,13 @@
       "when": 1794119574083,
       "tag": "0008_energy_shutdown_dopamine_archetype",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1794214246566,
+      "tag": "0009_coach_mode_sage",
+      "breakpoints": true
     }
   ]
 }
