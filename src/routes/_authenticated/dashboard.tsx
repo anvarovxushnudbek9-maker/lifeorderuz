@@ -8,7 +8,10 @@ import { AppTour } from "@/components/day/AppTour";
 import { LifeRadar } from "@/components/day/LifeRadar";
 import { ShutdownRitual } from "@/components/day/ShutdownRitual";
 import { ArchetypeCard } from "@/components/day/ArchetypeCard";
-import { Printer } from "lucide-react";
+import { Printer, CalendarDays, HeartPulse, Clock } from "lucide-react";
+import * as React from "react";
+import { WeeklyReview } from "@/components/day/WeeklyReview";
+import { dayPhase, isWeeklyReviewDay, type DayPhase } from "@/lib/life-os";
 import { CommandCenter } from "@/components/CommandCenter";
 import { EveningReview } from "@/components/EveningReview";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -55,6 +58,13 @@ function Dashboard() {
   const uid = user?.id ?? "";
   const today = todayISO();
   const week = lastNDays(7);
+  const [phase, setPhase] = React.useState<DayPhase>("morning");
+  const [sunday, setSunday] = React.useState(false);
+  React.useEffect(() => {
+    const now = new Date();
+    setPhase(dayPhase(now.getHours()));
+    setSunday(isWeeklyReviewDay(now.getDay()));
+  }, []);
 
   const { data } = useQuery({
     queryKey: ["dashboard", uid, today],
@@ -130,16 +140,44 @@ function Dashboard() {
       />
 
       <AppTour />
-      <div className="mb-4 space-y-4">
-        <ShutdownRitual />
-        <TopThree />
-        <HourlySchedule />
-        <WaterSleep weightKg={Number(data?.profile?.weight_kg ?? 0) || null} />
-      </div>
-      <div className="mb-4">
-        <CommandCenter />
-      </div>
+      <PhaseSwitch phase={phase} onChange={setPhase} />
 
+      {phase === "evening" ? (
+        <div className="mb-4 space-y-4">
+          <ShutdownRitual />
+          <EveningReview />
+          {sunday && <WeeklyReview highlight />}
+        </div>
+      ) : (
+        <div className="mb-4 space-y-4">
+          {phase === "morning" && <CommandCenter />}
+          <TopThree />
+          {phase === "day" && <HourlySchedule />}
+          {phase === "morning" && <WaterSleep weightKg={Number(data?.profile?.weight_kg ?? 0) || null} />}
+          {sunday && <WeeklyReview highlight />}
+        </div>
+      )}
+
+      <section className="mb-4 rounded-2xl border border-border bg-card p-5">
+        <h2 className="text-sm font-semibold">Rejalar markazi</h2>
+        <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
+          <button type="button" onClick={() => setPhase("day")} className="flex items-center gap-2 rounded-xl border border-border p-3 text-left hover:bg-accent"><Clock className="size-4 text-primary" />Bugun soatbay</button>
+          <Link to="/reja" className="flex items-center gap-2 rounded-xl border border-border p-3 hover:bg-accent"><CalendarDays className="size-4 text-primary" />Haftalik reja</Link>
+          <Link to="/shaxsiy-reja" className="flex items-center gap-2 rounded-xl border border-border p-3 hover:bg-accent"><HeartPulse className="size-4 text-primary" />Tana rejasi</Link>
+          <Link to="/planner" className="flex items-center gap-2 rounded-xl border border-border p-3 hover:bg-accent"><Printer className="size-4 text-primary" />A4 chop etish</Link>
+        </div>
+      </section>
+
+      <details className="group rounded-2xl border border-border bg-card p-5">
+        <summary className="cursor-pointer text-sm font-semibold">Batafsil: statistika, balans va boshqa bo‘limlar</summary>
+        <div className="mt-4">
+      <div className="mb-4 space-y-4">
+        {phase !== "day" && <HourlySchedule />}
+        {phase !== "morning" && <WaterSleep weightKg={Number(data?.profile?.weight_kg ?? 0) || null} />}
+        {phase !== "morning" && <CommandCenter />}
+        {phase === "evening" ? null : <><ShutdownRitual /><EveningReview /></>}
+        {!sunday && <WeeklyReview highlight={false} />}
+      </div>
       <div className="rounded-2xl border border-border bg-card p-5">
         <div className="flex items-end justify-between">
           <div>
@@ -221,9 +259,7 @@ function Dashboard() {
       <div className="mt-6">
         <TodayReminders />
       </div>
-      <div className="mt-4 space-y-4"><LifeRadar /><ArchetypeCard />
-        <Link to="/planner" className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card py-3 text-sm font-medium hover:bg-accent"><Printer className="size-4" />A4 kunlik planner (chop etish / PDF)</Link></div>
-      <EveningReview />
+      <div className="mt-4 space-y-4"><LifeRadar /><ArchetypeCard /></div>
       <div className="mt-6 grid gap-4 lg:grid-cols-2"><DopamineMap /><BuddyCard /></div>
 
       <h2 className="mt-8 text-base font-semibold">Odatlar</h2>
@@ -258,6 +294,26 @@ function Dashboard() {
           ))
         )}
       </div>
+        </div>
+      </details>
+    </div>
+  );
+}
+
+function PhaseSwitch({ phase, onChange }: { phase: DayPhase; onChange: (p: DayPhase) => void }) {
+  const opts: { id: DayPhase; label: string }[] = [
+    { id: "morning", label: "Ertalab: bugun nima qilaman" },
+    { id: "day", label: "Kun: bajarish" },
+    { id: "evening", label: "Kechqurun: kunni yopish" },
+  ];
+  return (
+    <div className="mb-4 grid grid-cols-3 gap-1 rounded-xl border border-border bg-card p-1 text-xs">
+      {opts.map((o) => (
+        <button key={o.id} type="button" onClick={() => onChange(o.id)} aria-pressed={phase === o.id}
+          className={`rounded-lg px-2 py-2 font-medium ${phase === o.id ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"}`}>
+          {o.label}
+        </button>
+      ))}
     </div>
   );
 }
