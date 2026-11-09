@@ -25,3 +25,5 @@
 - Book summaries live as static curated data in `src/lib/book-library.ts`, written in our own words. Why: no copyrighted text and no DB dependency for shared content.
 - Sprint-1 Life OS rules (energy check-in, shutdown ritual, dopamine recovery, day archetypes) live as pure functions in `src/lib/life-os.ts`; energy and shutdown state are per-day rows in `public.daily_checkins`, and the Life Engine waits for the day's energy answer before generating a plan. Why: one deterministic, testable source that also works without AI.
 - Dashboard shows one focus per time of day via `dayPhase()` in `src/lib/life-os.ts`; secondary blocks live under a collapsed "Batafsil" section. Why: a single answer to "what now?" prevents overwhelm.
+- Dashboard secondary blocks mount only when details are opened; water updates invalidate relevant query families, not the entire cache. Why: hidden panels must not trigger avoidable data requests.
+- Daily wisdom uses original practical interpretations selected by calendar date, never fabricated verbatim quotations. Why: attribution remains honest and the lesson stays stable within a day.

@@ -8,6 +8,9 @@ import { AppTour } from "@/components/day/AppTour";
 import { LifeRadar } from "@/components/day/LifeRadar";
 import { ShutdownRitual } from "@/components/day/ShutdownRitual";
 import { ArchetypeCard } from "@/components/day/ArchetypeCard";
+import { DailyWisdom } from "@/components/day/DailyWisdom";
+import { ProgressSummary } from "@/components/day/ProgressSummary";
+import { Button } from "@/components/ui/button";
 import { Printer, CalendarDays, HeartPulse, Clock } from "lucide-react";
 import * as React from "react";
 import { WeeklyReview } from "@/components/day/WeeklyReview";
@@ -60,6 +63,7 @@ function Dashboard() {
   const week = lastNDays(7);
   const [phase, setPhase] = React.useState<DayPhase>("morning");
   const [sunday, setSunday] = React.useState(false);
+  const [detailsOpen, setDetailsOpen] = React.useState(false);
   React.useEffect(() => {
     const now = new Date();
     setPhase(dayPhase(now.getHours()));
@@ -140,6 +144,8 @@ function Dashboard() {
       />
 
       <AppTour />
+      <ProgressSummary uid={uid} />
+      <DailyWisdom date={today} />
       <PhaseSwitch phase={phase} onChange={setPhase} />
 
       {phase === "evening" ? (
@@ -152,7 +158,7 @@ function Dashboard() {
         <div className="mb-4 space-y-4">
           {phase === "morning" && <CommandCenter />}
           <TopThree />
-          {phase === "day" && <HourlySchedule />}
+          <HourlySchedule />
           {phase === "morning" && <WaterSleep weightKg={Number(data?.profile?.weight_kg ?? 0) || null} />}
           {sunday && <WeeklyReview highlight />}
         </div>
@@ -161,18 +167,36 @@ function Dashboard() {
       <section className="mb-4 rounded-2xl border border-border bg-card p-5">
         <h2 className="text-sm font-semibold">Rejalar markazi</h2>
         <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
-          <button type="button" onClick={() => setPhase("day")} className="flex items-center gap-2 rounded-xl border border-border p-3 text-left hover:bg-accent"><Clock className="size-4 text-primary" />Bugun soatbay</button>
+          <Button variant="outline" type="button" onClick={() => setPhase("day")} className="h-auto justify-start whitespace-normal p-3 text-left"><Clock className="size-4 text-primary" />Bugun soatbay</Button>
           <Link to="/reja" className="flex items-center gap-2 rounded-xl border border-border p-3 hover:bg-accent"><CalendarDays className="size-4 text-primary" />Haftalik reja</Link>
           <Link to="/shaxsiy-reja" className="flex items-center gap-2 rounded-xl border border-border p-3 hover:bg-accent"><HeartPulse className="size-4 text-primary" />Tana rejasi</Link>
           <Link to="/planner" className="flex items-center gap-2 rounded-xl border border-border p-3 hover:bg-accent"><Printer className="size-4 text-primary" />A4 chop etish</Link>
         </div>
       </section>
 
-      <details className="group rounded-2xl border border-border bg-card p-5">
+      <section className="mb-5" aria-label="Bugungi odatlar">
+        <h2 className="text-base font-semibold">Bugungi odatlar</h2>
+        <p className="mt-1 text-sm text-muted-foreground">{doneToday.size}/{habits.length} bajarildi</p>
+        <Progress value={habitPct} className="mt-3" />
+        <div className="mt-3 divide-y divide-border">
+          {habits.length === 0 ? <Link to="/odat" className="block py-4 text-sm text-primary">Birinchi odatni qo‘shish</Link> : habits.map((habit) => <Link key={habit.id} to="/odat" className="flex items-center justify-between gap-3 py-3 text-sm"><span>{habit.emoji} {habit.title}</span><span className="shrink-0 text-xs text-muted-foreground">{doneToday.has(habit.id) ? "Bajarildi" : "Kutilmoqda"}</span></Link>)}
+        </div>
+      </section>
+      <section className="mb-5 border-t border-border pt-5" aria-label="Haftalik odatlar grafigi">
+        <div className="flex items-center justify-between gap-3"><h2 className="text-sm font-semibold">Oxirgi 7 kun</h2><Link to="/analiz" className="text-xs text-primary">To‘liq tahlil</Link></div>
+        <div className="mt-4 grid h-28 grid-cols-7 items-end gap-2">
+          {week.map((day) => {
+            const count = (data?.logs ?? []).filter((log) => log.log_date === day).length;
+            const height = Math.max(4, Math.min(100, count / Math.max(habits.length, count, 1) * 100));
+            return <div key={day} className="flex h-full flex-col items-center justify-end gap-1"><span className="text-xs text-muted-foreground">{count}</span><div role="img" aria-label={`${day}: ${count} ta odat bajarilgan`} className="w-full max-w-10 rounded-t bg-primary/70" style={{ height: `${height}%` }} /><span className="text-[10px] text-muted-foreground">{day.slice(8)}</span></div>;
+          })}
+        </div>
+      </section>
+      <details className="group border-t border-border py-5" onToggle={(event) => setDetailsOpen(event.currentTarget.open)}>
         <summary className="cursor-pointer text-sm font-semibold">Batafsil: statistika, balans va boshqa bo‘limlar</summary>
-        <div className="mt-4">
+         {detailsOpen && <div className="mt-4">
       <div className="mb-4 space-y-4">
-        {phase !== "day" && <HourlySchedule />}
+        {phase === "evening" && <HourlySchedule />}
         {phase !== "morning" && <WaterSleep weightKg={Number(data?.profile?.weight_kg ?? 0) || null} />}
         {phase !== "morning" && <CommandCenter />}
         {phase === "evening" ? null : <><ShutdownRitual /><EveningReview /></>}
@@ -294,7 +318,7 @@ function Dashboard() {
           ))
         )}
       </div>
-        </div>
+        </div>}
       </details>
     </div>
   );
@@ -309,10 +333,10 @@ function PhaseSwitch({ phase, onChange }: { phase: DayPhase; onChange: (p: DayPh
   return (
     <div className="mb-4 grid grid-cols-3 gap-1 rounded-xl border border-border bg-card p-1 text-xs">
       {opts.map((o) => (
-        <button key={o.id} type="button" onClick={() => onChange(o.id)} aria-pressed={phase === o.id}
-          className={`rounded-lg px-2 py-2 font-medium ${phase === o.id ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-accent"}`}>
+        <Button key={o.id} type="button" variant={phase === o.id ? "default" : "ghost"} onClick={() => onChange(o.id)} aria-pressed={phase === o.id}
+          className="h-auto min-h-12 whitespace-normal px-2 py-2 text-xs font-medium">
           {o.label}
-        </button>
+        </Button>
       ))}
     </div>
   );

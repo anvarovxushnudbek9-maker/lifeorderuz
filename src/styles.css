@@ -133,6 +133,11 @@
 }
 
 @layer base {
+  /* Keep our accessible toggle; suppress Edge's duplicate native eye. */
+  input[type="password"]::-ms-reveal,
+  input[type="password"]::-ms-clear {
+    display: none;
+  }
   * {
     border-color: var(--color-border);
   }
