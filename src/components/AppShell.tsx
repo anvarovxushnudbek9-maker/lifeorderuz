@@ -19,8 +19,6 @@ import {
   Settings,
   LogOut,
   Sparkles,
-  CalendarDays,
-  Heart,
   Droplets,
   Timer,
   Moon as MoonIcon,
