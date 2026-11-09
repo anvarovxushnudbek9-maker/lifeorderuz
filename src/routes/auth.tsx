@@ -74,7 +74,7 @@ const STRENGTH = [
 
 function PasswordStrength({ value }: { value: string }) {
   const score = scorePassword(value);
-  const info = STRENGTH[score]!;
+  const info = STRENGTH[score] ?? STRENGTH[0];
   return (
     <div className="space-y-1.5 pt-1">
       <div className="flex gap-1">
@@ -314,14 +314,17 @@ function AuthPage() {
                       required
                       className="pr-10"
                     />
-                    <button
+                    <Button
                       type="button"
+                      variant="ghost"
+                      size="icon"
                       onClick={() => setShowPass((s) => !s)}
-                      aria-label="Parolni ko'rsatish"
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+                      aria-label={showPass ? "Parolni yashirish" : "Parolni ko'rsatish"}
+                      aria-pressed={showPass}
+                      className="absolute right-1 top-1/2 -translate-y-1/2 text-muted-foreground"
                     >
                       {showPass ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
-                    </button>
+                    </Button>
                   </div>
                   {mode === "signup" && password.length > 0 && (
                     <PasswordStrength value={password} />

@@ -107,7 +107,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       ? await supabase.from("body_metrics").update({ water_ml: water }).eq("id", data.id)
       : await supabase.from("body_metrics").insert({ user_id: user.id, metric_date: today, water_ml: water });
     if (r.error) toast.error(r.error.message);
-    else { toast.success(`Suv: ${water} ml`); qc.invalidateQueries(); }
+    else {
+      toast.success(`Suv: ${water} ml`);
+      for (const key of ["dashboard", "water-sleep", "body_metrics", "life-engine", "life-radar", "weekly-review"]) {
+        void qc.invalidateQueries({ queryKey: [key] });
+      }
+    }
   }
 
   type Fab = { id: string; label: string; icon: typeof Plus; run: () => void; hubs: string[] };

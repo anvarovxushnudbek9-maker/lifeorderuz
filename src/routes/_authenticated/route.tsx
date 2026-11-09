@@ -19,7 +19,9 @@ function AuthenticatedLayout() {
     queryKey: ["profile", user?.id ?? ""],
     enabled: !!user?.id,
     queryFn: async () => {
-      const { data } = await supabase.from("profiles").select("*").eq("id", user!.id).maybeSingle();
+      if (!user) return null;
+      const { data, error } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
+      if (error) throw error;
       return data;
     },
   });
