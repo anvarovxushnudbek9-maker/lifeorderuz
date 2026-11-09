@@ -21,7 +21,13 @@ import {
   Sparkles,
   CalendarDays,
   Heart,
+  Droplets,
+  Timer,
+  Moon as MoonIcon,
 } from "lucide-react";
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
+import { todayISO } from "@/lib/date";
 
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/Logo";
@@ -95,12 +101,32 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     navigate({ to: "/", replace: true });
   }
 
-  const miniFabs = [
-    { kind: "journal" as const, label: "Kundalik yozuv", icon: NotebookPen },
-    { kind: "habit" as const, label: "Odat qo'shish", icon: CheckCircle2 },
-    { kind: "workout" as const, label: "Mashq", icon: Dumbbell },
-    { kind: "meal" as const, label: "Ovqat", icon: Apple },
+  const qc = useQueryClient();
+  async function addWater() {
+    if (!user) return;
+    const today = todayISO();
+    const { data } = await supabase.from("body_metrics").select("id,water_ml").eq("user_id", user.id).eq("metric_date", today).maybeSingle();
+    const water = Math.min(8000, (data?.water_ml ?? 0) + 250);
+    const r = data?.id
+      ? await supabase.from("body_metrics").update({ water_ml: water }).eq("id", data.id)
+      : await supabase.from("body_metrics").insert({ user_id: user.id, metric_date: today, water_ml: water });
+    if (r.error) toast.error(r.error.message);
+    else { toast.success(`Suv: ${water} ml`); qc.invalidateQueries(); }
+  }
+
+  type Fab = { id: string; label: string; icon: typeof Plus; run: () => void; hubs: string[] };
+  const allFabs: Fab[] = [
+    { id: "meal", label: "Ovqat", icon: Apple, run: () => setQuick("meal"), hubs: ["/tana"] },
+    { id: "water", label: "+250 ml suv", icon: Droplets, run: addWater, hubs: ["/tana", "/dashboard"] },
+    { id: "workout", label: "Mashq", icon: Dumbbell, run: () => setQuick("workout"), hubs: ["/tana"] },
+    { id: "sleep", label: "Uyqu / tiklanish", icon: MoonIcon, run: () => navigate({ to: "/dashboard" }), hubs: ["/tana"] },
+    { id: "note", label: "Konspekt / kundalik", icon: NotebookPen, run: () => setQuick("journal"), hubs: ["/bilim", "/kundalik"] },
+    { id: "habit", label: "Odat qo'shish", icon: CheckCircle2, run: () => setQuick("habit"), hubs: ["/odat"] },
+    { id: "focus", label: "Fokus / vazifa", icon: Timer, run: () => navigate({ to: "/dashboard" }), hubs: ["/dashboard"] },
+    { id: "goal", label: "Maqsad", icon: Target, run: () => navigate({ to: "/maqsad" }), hubs: ["/maqsad"] },
   ];
+  // Context-aware: actions for the current hub come first (closest to the button).
+  const miniFabs = [...allFabs].sort((a, b) => Number(b.hubs.includes(pathname)) - Number(a.hubs.includes(pathname))).reverse();
 
   return (
     <div className="min-h-screen bg-background pb-24">
@@ -195,10 +221,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         {fabOpen &&
           miniFabs.map((f) => (
             <button
-              key={f.kind}
+              key={f.id}
               onClick={() => {
                 setFabOpen(false);
-                setQuick(f.kind);
+                f.run();
               }}
               className="pointer-events-auto flex items-center gap-2 rounded-full border border-border bg-card px-3 py-2 text-xs font-medium shadow-lg transition hover:bg-accent"
             >
@@ -217,7 +243,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
         <Link
           to="/ai"
-          aria-label="AI murabbiy"
+          aria-label="Nadir AI"
           className="pointer-events-auto flex size-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-xl shadow-primary/30 transition hover:brightness-110"
         >
           <Sparkles className="size-6" />
