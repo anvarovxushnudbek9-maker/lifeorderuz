@@ -71,6 +71,13 @@
       "when": 1794214246566,
       "tag": "0009_coach_mode_sage",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1794421832820,
+      "tag": "0010_life_os_trial_community_reviews_orders",
+      "breakpoints": true
     }
   ]
 }

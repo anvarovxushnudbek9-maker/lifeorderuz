@@ -1,5 +1,20 @@
 # Roadmap
 
+## Nov 11 — qolgan 19 ichki ishni yakunlash
+- [ ] Haqiqiy 7 kunlik sinov va profil obuna holati
+- [ ] Ikki streak qalqoni va sinovlar
+- [ ] Ixcham, halol Landing Bepul/Premium taqqoslash
+- [ ] Onboarding 5-qadam va shaxsiylashtirish
+- [ ] Tezlik, bo‘limlar sinergiyasi va Nadir konteksti
+- [ ] Dopamin tiklanishi va Buddy oqimlari
+- [ ] Yagona umumiy Davra suhbati
+- [ ] Mashq qo‘llanmalari va 50 dan ortiq kitob
+- [ ] Ichki sahifalarning to‘rt til tarjimasi
+- [ ] Xavfsiz PWA va shaxsiy oflayn ko‘rish
+- [ ] Click/Payme buyurtma poydevori (real to‘lov emas)
+- [ ] Saqlanadigan haftalik AI audit va ichki eslatmalar
+- [ ] Kirilgan hisobda va mobil ko‘rinishda yakuniy tekshiruv
+
 - [ ] Nov 4 confirmed Life OS requirements: five-screen onboarding, Google/Apple/email, gamification + hourly schedule
 - [ ] Confirmed commercial and safety requirements: Free 3 AI/day, max 5 reminders/day, minor-safe coaching, real Premium/trial/Click/Payme
 - [x] Kitoblar kutubxonasi (30 ta: g‘oya, xulosa, 3 saboq) + YouTube kurslar ilova ichida — browser-tested

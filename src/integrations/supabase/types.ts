@@ -56,6 +56,29 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_usage_counters: {
+        Row: {
+          request_times: string[]
+          user_id: string
+        }
+        Insert: {
+          request_times?: string[]
+          user_id: string
+        }
+        Update: {
+          request_times?: string[]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_usage_counters_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       body_metrics: {
         Row: {
           created_at: string
@@ -248,6 +271,35 @@ export type Database = {
           topic?: string
         }
         Relationships: []
+      }
+      community_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_messages_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       courses: {
         Row: {
@@ -521,6 +573,73 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_orders: {
+        Row: {
+          amount_uzs: number
+          created_at: string
+          id: string
+          provider: string
+          provider_reference: string | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          amount_uzs?: number
+          created_at?: string
+          id?: string
+          provider: string
+          provider_reference?: string | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          amount_uzs?: number
+          created_at?: string
+          id?: string
+          provider?: string
+          provider_reference?: string | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_orders_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plan_entitlements: {
+        Row: {
+          premium_until: string | null
+          trial_ends_at: string
+          trial_started_at: string
+          user_id: string
+        }
+        Insert: {
+          premium_until?: string | null
+          trial_ends_at?: string
+          trial_started_at?: string
+          user_id: string
+        }
+        Update: {
+          premium_until?: string | null
+          trial_ends_at?: string
+          trial_started_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plan_entitlements_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           activity_level: string | null
@@ -754,6 +873,38 @@ export type Database = {
         }
         Relationships: []
       }
+      weekly_reviews: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          user_id: string
+          week_start: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          user_id: string
+          week_start: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+          week_start?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "weekly_reviews_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       workouts: {
         Row: {
           calories: number | null
@@ -812,6 +963,7 @@ export type Database = {
           points: number
         }[]
       }
+      claim_life_ai_request: { Args: never; Returns: number }
       is_circle_member: {
         Args: { _circle: string; _user: string }
         Returns: boolean
