@@ -109,7 +109,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     if (r.error) toast.error(r.error.message);
     else {
       toast.success(`Suv: ${water} ml`);
-      for (const key of ["dashboard", "water-sleep", "body_metrics", "life-engine", "life-radar", "weekly-review"]) {
+      for (const key of ["dashboard", "metrics_today", "metrics", "life-engine", "life-radar", "weekly-review"]) {
         void qc.invalidateQueries({ queryKey: [key] });
       }
     }

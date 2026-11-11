@@ -44,16 +44,17 @@ function CircleChat() {
     },
   });
 
-  const { data: messages } = useQuery({
+  const { data: messages, isPending, isError, refetch } = useQuery({
     queryKey: ["circle-messages", id],
     queryFn: async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("circle_messages")
         .select("*")
         .eq("circle_id", id)
-        .order("created_at")
+        .order("created_at", { ascending: false })
         .limit(200);
-      return data ?? [];
+      if (error) throw error;
+      return (data ?? []).reverse();
     },
   });
 
@@ -105,7 +106,7 @@ function CircleChat() {
       <CircleLeaderboard circleId={id} />
 
       <div className="flex-1 space-y-3">
-        {(messages ?? []).length === 0 ? (
+        {isPending ? <p className="py-10 text-center text-sm text-muted-foreground">Xabarlar yuklanmoqda…</p> : isError ? <div className="py-10 text-center"><p className="text-sm text-muted-foreground">Xabarlarni yuklab bo‘lmadi.</p><Button variant="outline" className="mt-3" onClick={() => void refetch()}>Qayta urinish</Button></div> : (messages ?? []).length === 0 ? (
           <p className="py-10 text-center text-sm text-muted-foreground">
             Suhbatni birinchi bo&apos;lib boshlang.
           </p>
@@ -116,7 +117,7 @@ function CircleChat() {
               <div key={m.id} className={cn("flex", own ? "justify-end" : "justify-start")}>
                 <div
                   className={cn(
-                    "max-w-[80%] rounded-2xl px-4 py-2 text-sm",
+                    "max-w-[80%] break-words whitespace-pre-wrap rounded-2xl px-4 py-2 text-sm",
                     own
                       ? "bg-primary text-primary-foreground"
                       : "border border-border bg-card text-card-foreground",
@@ -139,11 +140,12 @@ function CircleChat() {
         }}
       >
         <Input
+          maxLength={2000}
           placeholder="Xabar yozing..."
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
-        <Button type="submit" size="icon" className="shrink-0" aria-label="Yuborish">
+        <Button type="submit" size="icon" className="shrink-0" aria-label="Yuborish" disabled={send.isPending || !text.trim()}>
           <Send className="size-4" />
         </Button>
       </form>

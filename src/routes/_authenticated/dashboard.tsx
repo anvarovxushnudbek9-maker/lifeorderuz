@@ -38,6 +38,7 @@ import { Progress } from "@/components/ui/progress";
 import { todayISO, lastNDays } from "@/lib/date";
 import { AiInsight } from "@/components/AiInsight";
 import { buildNutrition } from "@/lib/plan";
+import { activeHabitProgress } from "@/lib/habit-progress";
 
 const TITLE = "Asosiy panel — Life Order";
 const DESC = "Bugungi odatlar, mashqlar, o'qish va davra faoliyatingiz bitta ekranda.";
@@ -98,10 +99,7 @@ function Dashboard() {
   });
 
   const habits = data?.habits ?? [];
-  const doneToday = new Set(
-    (data?.logs ?? []).filter((l) => l.log_date === today).map((l) => l.habit_id),
-  );
-  const habitPct = habits.length ? Math.round((doneToday.size / habits.length) * 100) : 0;
+  const { done: doneToday, percent: habitPct } = activeHabitProgress(habits.map((habit) => habit.id), data?.logs ?? [], today);
   const weekMinutes = (data?.workouts ?? []).reduce((s, w) => s + (w.duration_min ?? 0), 0);
   const name = ((data?.profile?.full_name as string | null | undefined) ?? (user?.user_metadata?.["full_name"] as string | undefined))?.trim().split(" ")[0];
 

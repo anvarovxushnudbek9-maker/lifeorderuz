@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { todayISO } from "@/lib/date";
-import { BookOpen, Check, Play, Plus, Search, Trash2 } from "lucide-react";
+import { BookOpen, Check, CheckCircle2, Play, Plus, Search, Trash2 } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -338,6 +338,23 @@ function Library() {
     },
   });
   const saved = new Set((mine ?? []).map((b) => b.title.toLowerCase()));
+  const [habitLessons, setHabitLessons] = React.useState<string[]>([]);
+  const createHabit = useMutation({
+    mutationFn: async (lesson: string) => {
+      const title = lesson.slice(0, 200);
+      const existing = await supabase.from("habits").select("id").eq("user_id", uid).eq("archived", false).eq("title", title).limit(1);
+      if (existing.error) throw existing.error;
+      if (existing.data?.length) return;
+      const { error } = await supabase.from("habits").insert({ user_id: uid, title, category: "Bilim", emoji: "📚", target_per_week: 7 });
+      if (error) throw error;
+    },
+    onSuccess: (_, lesson) => {
+      setHabitLessons((old) => [...old, lesson]);
+      for (const key of ["habits", "dashboard", "life-engine"]) void qc.invalidateQueries({ queryKey: [key] });
+      toast.success("Saboq odatlar ro‘yxatiga qo‘shildi");
+    },
+    onError: (error: Error) => toast.error(error.message),
+  });
 
   const tryToday = useMutation({
     mutationFn: async (lesson: string) => {
@@ -420,9 +437,12 @@ function Library() {
                       <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">3 ta saboq</p>
                       <ol className="list-decimal space-y-1 pl-5">
                         {b.lessons.map((l) => (
-                          <li key={l} className="flex items-start justify-between gap-2">
-                            <span>{l}</span>
-                            <Button size="sm" variant="ghost" className="h-7 shrink-0 px-2 text-xs" disabled={!uid || tryToday.isPending} onClick={() => tryToday.mutate(l)}>Bugun sinab ko'rish</Button>
+                          <li key={l} className="space-y-2 pb-3">
+                            <p>{l}</p>
+                            <div className="flex flex-wrap gap-2">
+                              <Button size="sm" variant="outline" disabled={!uid || tryToday.isPending} onClick={() => tryToday.mutate(l)}>Bugun sinab ko'rish</Button>
+                              <Button size="sm" variant="ghost" disabled={!uid || createHabit.isPending || habitLessons.includes(l)} onClick={() => createHabit.mutate(l)}><CheckCircle2 />{habitLessons.includes(l) ? "Odatga qo‘shildi" : "Odatga aylantirish"}</Button>
+                            </div>
                           </li>
                         ))}
                       </ol>

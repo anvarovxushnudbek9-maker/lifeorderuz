@@ -12,6 +12,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { readSharedDraft, SHARED_DRAFT_KEY } from "@/lib/shared-draft";
+import { todayISO } from "@/lib/date";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const TITLE = "Kundalik — Life Order";
 const DESC = "Kunlik fikrlaringizni yozing, kayfiyatni kuzating va o'z o'sishingizni ko'ring.";
@@ -36,6 +38,16 @@ function Journal() {
   const qc = useQueryClient();
   const [title, setTitle] = React.useState("");
   const [content, setContent] = React.useState("");
+  const [action, setAction] = React.useState<{ id: string; title: string } | null>(null);
+  const makeAction = useMutation({
+    mutationFn: async () => {
+      if (!action?.title.trim()) return;
+      const { error } = await supabase.from("daily_plan_items").upsert({ user_id: uid, plan_date: todayISO(), title: action.title.trim().slice(0, 200), minutes: 10, position: 91, domain: "boshqaruv", source: "user", why: "Kundalikdagi xulosadan tanlangan qadam." }, { onConflict: "user_id,plan_date,title", ignoreDuplicates: true });
+      if (error) throw error;
+    },
+    onSuccess: () => { setAction(null); void qc.invalidateQueries({ queryKey: ["life-engine"] }); toast.success("Bugungi rejaga qo‘shildi"); },
+    onError: (error: Error) => toast.error(error.message),
+  });
 
   // Prefill from the install "share" sheet / protocol handler / opened files.
   React.useEffect(() => {
@@ -142,10 +154,19 @@ function Journal() {
                 </button>
               </div>
               <p className="mt-2 whitespace-pre-wrap text-sm text-foreground">{e.content}</p>
+              <Button variant="outline" size="sm" className="mt-3" onClick={() => setAction({ id: e.id, title: (e.title || e.content).slice(0, 200) })}>Xulosadan qadam yaratish</Button>
             </div>
           ))}
         </div>
       )}
+      <Dialog open={Boolean(action)} onOpenChange={(open) => { if (!open) setAction(null); }}>
+        <DialogContent><DialogHeader><DialogTitle>Bugungi amaliy qadam</DialogTitle></DialogHeader>
+          <form className="space-y-4" onSubmit={(event) => { event.preventDefault(); makeAction.mutate(); }}>
+            <Input aria-label="Amaliy qadam" maxLength={200} required value={action?.title ?? ""} onChange={(event) => setAction((old) => old ? { ...old, title: event.target.value } : null)} />
+            <Button type="submit" disabled={makeAction.isPending || !action?.title.trim()}>Rejaga qo‘shish</Button>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

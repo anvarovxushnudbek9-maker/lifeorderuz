@@ -48,22 +48,22 @@
 
 ## 24 ta ish — boshlash va tekshirish
 Hozirgi so‘rov barcha 24 blokni boshlashdir; mavjud funksiyalar takror qurilmaydi.
-- [ ] 1. Auth: bitta parol ko‘rsatish belgisi
-- [ ] 2. Tezlik: yopiq batafsil bloklar so‘rov yubormasin
+- [x] 1. Auth: bitta parol ko‘rsatish belgisi — brauzerda ochish/yashirish tekshirildi
+- [ ] 2. Tezlik: yopiq batafsil bloklar shartli o‘rnatiladi; hisobga kirilgan tezlik sinovi kutmoqda
 - [ ] 3. Onboarding: beshinchi qadam tanlovlarini tekshirish
 - [ ] 4. Landing: halol Bepul/Premium farqi
-- [ ] 5. Dashboard: XP → kun tartibi → odatlar → grafik
+- [ ] 5. Dashboard: XP → kun tartibi → odatlar → grafik qurildi; shaxsiy sahifa sinovi kirishni kutmoqda
 - [ ] 6. Yetti kunlik sinov: haqiqiy Premium huquqlari bilan
 - [ ] 7. Ikki streak qalqoni
-- [ ] 8. Kitob sabog‘idan odat
-- [ ] 9. Kunlik amaliy donishmandlik
+- [ ] 8. Kitob sabog‘idan odat qo‘shish qurildi; saqlash/ro‘yxatdan qayta o‘qish sinovi kirishni kutmoqda
+- [x] 9. Kunlik amaliy donishmandlik — original erkin talqin, sana bo‘yicha barqaror; 2 test o‘tdi
 - [ ] 10. Bo‘limlar sinergiyasi
 - [ ] 11. AI murabbiy ohanglari
 - [ ] 12. Onboarding shaxsiylashtirish
 - [ ] 13. Profil va obuna holati
 - [ ] 14. Xavfsiz dopamin tiklanishi
-- [ ] 15. Amaliy xulosalar daftari
-- [ ] 16. Yagona Davra chati
+- [ ] 15. Kundalik xulosasidan tahrirlangan qadamni rejaga qo‘shish qurildi; saqlash sinovi kirishni kutmoqda
+- [ ] 16. Yagona Davra chati; mavjud chat eng yangi 200 xabarni ochadigan qilindi, o‘qish xatosi va yuborish holati qo‘shildi
 - [ ] 17. Buddy ulanishi
 - [ ] 18. Mashq qo‘llanmalari
 - [ ] 19. Original kitob xulosalarini kengaytirish
@@ -72,3 +72,5 @@ Hozirgi so‘rov barcha 24 blokni boshlashdir; mavjud funksiyalar takror qurilma
 - [ ] 22. To‘lov buyurtmalari va tasdiqlangan Premium huquqlari
 - [ ] 23. Haftalik AI audit
 - [ ] 24. Ichki eslatmalar
+
+Tekshiruv: 52 Bun testi o‘tdi, oxirgi yig‘ilish muvaffaqiyatli. Joriy hisob bilan shaxsiy sahifalarni tekshirish imkoni bo‘lmadi: so‘rovchi emailiga mos ilova hisobi yo‘q. Yuqoridagi ochiq ishlar yakunlangan deb hisoblanmaydi. Ushbu so‘rovda 24 blokning dastlabki ishlari boshlandi; tarjima, qalqon, to‘lov/trial, yagona chat, qo‘llanmalar va qolgan to‘liq oqimlar hali yakunlanmagan.
