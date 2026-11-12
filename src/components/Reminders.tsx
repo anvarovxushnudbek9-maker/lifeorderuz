@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { TelegramConnect } from "@/components/TelegramConnect";
 import { appliesOn, hhmm, isDone, localISO, REPEAT_LABEL } from "@/lib/reminders";
+import { pickDue } from "@/lib/telegram-reminders";
 
 const schema = z
   .object({
@@ -223,37 +224,35 @@ export function RemindersManager() {
 
 /** Background watcher: fires an in-app toast (and browser notification if allowed) at start/end time. */
 export function ReminderWatcher() {
-  const { reminders } = useReminders();
+  const { reminders, uid } = useReminders();
   const fired = React.useRef(new Set<string>());
 
   React.useEffect(() => {
     function check() {
       const now = new Date();
-      const cur = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
       const day = localISO(now);
-      for (const r of reminders) {
-        if (!appliesOn(r, now) || isDone(r, now)) continue;
-        const events: [string, string][] = [[hhmm(r.start_time), "boshlanish vaqti"]];
-        if (r.end_time) events.push([hhmm(r.end_time), "tugash vaqti"]);
-        for (const [t, label] of events) {
-          const id = `${r.id}-${day}-${t}`;
-          if (t !== cur || fired.current.has(id)) continue;
-          fired.current.add(id);
-          toast(`⏰ ${r.title}`, { description: `${t} — ${label}`, duration: 15000 });
+      const key = `lo-reminder-delivery:${uid}:${day}`;
+      let sent = new Set<string>();
+      try { const value = JSON.parse(localStorage.getItem(key) ?? "[]"); if (Array.isArray(value)) sent = new Set(value.filter(v => typeof v === "string")); } catch { /* no private text is stored */ }
+      for (const id of fired.current) if (id.startsWith(day + ":")) sent.add(id.slice(day.length + 1));
+      const due = pickDue(reminders, { date: day, minutes: now.getHours() * 60 + now.getMinutes() }, sent);
+      for (const r of due) {
+          fired.current.add(`${day}:${r.id}`); sent.add(r.id);
+          try { localStorage.setItem(key, JSON.stringify([...sent])); } catch { /* memory fallback */ }
+          toast(`⏰ ${r.title}`, { description: `${hhmm(r.start_time)} — boshlanish vaqti`, duration: 15000 });
           if (typeof Notification !== "undefined" && Notification.permission === "granted") {
             try {
-              new Notification(`Life Order: ${r.title}`, { body: `${t} — ${label}` });
+              new Notification("Life Order", { body: "Rejangizdagi bir qadam vaqti keldi.", tag: r.id });
             } catch {
               /* some mobile browsers disallow direct notifications */
             }
           }
-        }
       }
     }
     check();
     const id = window.setInterval(check, 20000);
     return () => window.clearInterval(id);
-  }, [reminders]);
+  }, [reminders, uid]);
 
   return null;
 }

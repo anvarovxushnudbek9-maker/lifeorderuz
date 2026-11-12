@@ -38,7 +38,7 @@ export function freeTopPosition(taken: number[]) {
   return null;
 }
 
-export const RECOVERY_TASKS = ["20 ta push-up (otjimaniye)", "5 sahifa kitob o‘qish"] as const;
+export const RECOVERY_TASKS = ["2 daqiqa sokin nafas va keyingi qadam", "5 sahifa kitob o‘qish", "Telefonni chetga qo‘yib 2 daqiqa fokus"] as const;
 export const BREACH_XP = 10;
 /** XP lost for breaches that have not yet been recovered. */
 export function breachPenalty(unrecovered: number) {

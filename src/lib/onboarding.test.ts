@@ -15,4 +15,9 @@ describe("confirmed onboarding rules", () => {
     expect(isMinorAge("18")).toBe(false);
     expect(onboardingError({ full_name: "Test", age: "16", activity_level: "light", goal_type: "lose", sport_preference: "Suzish" }, 4)).not.toBeNull();
   });
+  test("age above database maximum cannot finish onboarding", () => {
+    const answers = { full_name: "Test", age: "111", activity_level: "light", goal_type: "health", sport_preference: "Suzish" };
+    expect(onboardingError(answers, 4)).not.toBeNull();
+    expect(onboardingError({ ...answers, age: "110" }, 4)).toBeNull();
+  });
 });

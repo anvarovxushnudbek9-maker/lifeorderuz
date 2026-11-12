@@ -17,14 +17,14 @@ export function BuddyCard() {
   const refresh = () => { qc.invalidateQueries({ queryKey: ["buddy"] }); qc.invalidateQueries({ queryKey: ["buddy_today"] }); };
   const create = useMutation({ mutationFn: async () => { const { error } = await supabase.from("buddy_links").insert({ user_id: uid, invite_code: code() }); if (error) throw error; }, onSuccess: refresh, onError: (e: Error) => toast.error(e.message) });
   const accept = useMutation({ mutationFn: async () => { const { data, error } = await supabase.rpc("accept_buddy", { _code: input.trim().toUpperCase() }); if (error) throw error; if (!data) throw new Error("Kod topilmadi yoki band"); }, onSuccess: () => { toast.success("Hamkor ulandi"); refresh(); }, onError: (e: Error) => toast.error(e.message) });
-  const leave = useMutation({ mutationFn: async () => { const { error } = await supabase.from("buddy_links").delete().eq("user_id", uid); if (error) throw error; }, onSuccess: refresh });
+  const leave = useMutation({ mutationFn: async () => { const { error } = await supabase.rpc("disconnect_buddy"); if (error) throw error; }, onSuccess: refresh, onError: (e: Error) => toast.error(e.message) });
   return <section className="rounded-2xl border border-border bg-card p-5">
     <h2 className="flex items-center gap-2 text-base font-semibold"><Handshake className="size-4 text-primary" />Mas’uliyat hamkori</h2>
     {link?.partner_id ? partner ? <div className="mt-3"><p className="text-sm"><b>{partner.partner_name}</b> bugun 3 ta asosiy ishdan <b>{partner.done}/{partner.total || 3}</b> tasini bajardi.</p><Button size="sm" variant="ghost" className="mt-2" onClick={() => leave.mutate()}>Hamkorlikni tugatish</Button></div>
-      : <p className="mt-3 text-sm text-muted-foreground">Hamkor ulanishni tugatdi yoki kutilmoqda.</p>
+      : <div><p className="mt-3 text-sm text-muted-foreground">Hamkor ma’lumoti hozir mavjud emas.</p><Button variant="outline" className="mt-2" disabled={leave.isPending} onClick={() => leave.mutate()}>Ulanishni bekor qilish</Button></div>
     : <div className="mt-3 space-y-3">
       <p className="text-xs text-muted-foreground">Bitta do‘st bilan bir-biringizning kunlik 3 ta ishingiz natijasini ko‘ring. Faqat son ko‘rinadi, ish matni emas.</p>
-      {link ? <p className="text-sm">Sizning kodingiz: <b className="tracking-widest">{link.invite_code}</b> — do‘stingizga yuboring.</p> : <Button size="sm" onClick={() => create.mutate()} disabled={!uid}>Taklif kodini olish</Button>}
+      {link ? <div><p className="text-sm">Sizning kodingiz: <b className="tracking-widest">{link.invite_code}</b> — 7 kun amal qiladi.</p><Button variant="ghost" size="sm" disabled={leave.isPending} onClick={() => leave.mutate()}>Kodni yangilash</Button></div> : <Button size="sm" onClick={() => create.mutate()} disabled={!uid || create.isPending}>Taklif kodini olish</Button>}
       <div className="flex gap-2"><Input value={input} maxLength={40} placeholder="Do‘stingiz kodi" onChange={(e) => setInput(e.target.value)} /><Button size="sm" variant="outline" disabled={!input.trim() || accept.isPending} onClick={() => accept.mutate()}>Ulash</Button></div>
     </div>}
   </section>;

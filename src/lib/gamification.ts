@@ -11,7 +11,7 @@ export function levelFor(xp: number) {
   return { level, into: xp - base, need: 100 * level };
 }
 export const LEVEL_TITLES = ["Boshlovchi", "Izlanuvchi", "Intizomli", "Barqaror", "Kuchli", "Ustoz", "Afsona"];
-export const levelTitle = (l: number) => LEVEL_TITLES[Math.min(l, LEVEL_TITLES.length) - 1]!;
+export const levelTitle = (l: number) => LEVEL_TITLES[Math.max(0, Math.min(l, LEVEL_TITLES.length) - 1)] ?? "Boshlovchi";
 
 /**
  * Streak with a weekly freeze: one missed day in any 7-day window is forgiven.
@@ -20,10 +20,26 @@ export const levelTitle = (l: number) => LEVEL_TITLES[Math.min(l, LEVEL_TITLES.l
 export function streakWithFreeze(done: (day: string) => boolean, days: string[]) {
   let streak = 0; let lastFreeze = Infinity; let frozen = 0;
   for (let i = days.length - 1; i >= 0; i--) {
-    if (done(days[i]!)) { streak++; continue; }
+    const day = days[i];
+    if (!day) continue;
+    if (done(day)) { streak++; continue; }
     if (i === days.length - 1) continue;
     if (lastFreeze - i >= 7) { lastFreeze = i; frozen++; continue; }
     break;
   }
   return { streak, frozen };
+}
+
+/** Two shields per displayed seven-day window. A shield never counts as a completed day. */
+export function streakWithShields(done: (day: string) => boolean, days: string[]) {
+  let streak = 0; let used = 0;
+  for (let i = days.length - 1; i >= 0; i--) {
+    const day = days[i];
+    if (!day) continue;
+    if (done(day)) { streak++; continue; }
+    if (i === days.length - 1) continue;
+    if (used < 2) { used++; continue; }
+    break;
+  }
+  return { streak, used, remaining: 2 - used };
 }

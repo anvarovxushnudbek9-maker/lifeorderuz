@@ -6,6 +6,7 @@ import { LogOut, Trash2 } from "lucide-react";
 import { useServerFn } from "@tanstack/react-start";
 import { deleteMyAccount } from "@/lib/account.functions";
 import { ArchetypeCard } from "@/components/day/ArchetypeCard";
+import { PlanStatus } from "@/components/PlanStatus";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -99,6 +100,7 @@ function Profile() {
   return (
     <div>
       <PageHeader title="Profil" subtitle={user?.email ?? ""} />
+      <PlanStatus />
 
       <form
         className="space-y-4 rounded-2xl border border-border bg-card p-5"
@@ -119,7 +121,7 @@ function Profile() {
           <Label htmlFor="main_goal">Asosiy maqsad</Label>
           <Input
             id="main_goal"
-            placeholder="Masalan: 6 oyda 10 kg kamaytirish"
+            placeholder="Masalan: har kuni 20 daqiqa o‘qish"
             value={form.main_goal}
             onChange={(e) => setForm({ ...form, main_goal: e.target.value })}
           />
@@ -149,8 +151,8 @@ function Profile() {
       <div className="mt-4 rounded-2xl border border-border bg-card p-5">
         <p className="text-sm font-medium">Nadir murabbiy ohangi</p>
         <p className="text-xs text-muted-foreground">18 yoshgacha qat&apos;iy rejim yumshoq qoladi.</p>
-        <div className="mt-3 grid grid-cols-3 gap-2">
-          {([["normal", "Muvozanatli"], ["hardcore", "Qattiqqo'l armiya"], ["sage", "Dono oqsoqol"]] as const).map(([v, l]) => (
+        <div className="mt-3 grid gap-2 sm:grid-cols-3">
+          {([["normal", "Do‘stona"], ["hardcore", "Qat’iy"], ["sage", "Donishmand"]] as const).map(([v, l]) => (
             <Button key={v} size="sm" variant={(profile?.coach_mode ?? "normal") === v ? "default" : "outline"} onClick={async () => {
               const { error } = await supabase.from("profiles").update({ coach_mode: v }).eq("id", uid);
               if (error) toast.error(error.message); else { toast.success(`${l} ohangi tanlandi`); qc.invalidateQueries({ queryKey: ["profile"] }); }

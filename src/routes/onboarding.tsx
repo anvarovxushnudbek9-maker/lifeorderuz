@@ -166,7 +166,7 @@ function Onboarding() {
   if (!keys) return null;
   const questions = QUESTIONS.filter((q) => keys.some((key) => key === q.key));
   const pct = showResult ? 100 : Math.round(((step + 1) / total) * 100);
-  const preview = decide({ profile: { main_goal: answers["main_goal"] ?? null, biggest_obstacle: answers["biggest_obstacle"] ?? null, digital_habits: answers }, history: [], habitsTotal: 0, habitsDoneToday: 0, sleepHours: null, todayISO: todayISO() });
+  const preview = decide({ profile: { main_goal: answers["main_goal"] ?? null, biggest_obstacle: answers["biggest_obstacle"] ?? null, goal_type: answers["goal_type"] ?? null, activity_level: answers["activity_level"] ?? null, digital_habits: answers }, history: [], habitsTotal: 0, habitsDoneToday: 0, sleepHours: null, todayISO: todayISO() });
 
   return (
     <main className="min-h-screen bg-background px-5 py-8 sm:py-12">
@@ -192,7 +192,7 @@ function Onboarding() {
             <h1 className="text-3xl font-bold">{STEP_TITLES[step]}</h1>
             {step === 4 && <div className="grid gap-5 sm:grid-cols-2">
               <div className="space-y-2"><Label htmlFor="full-name">Ismingiz</Label><Input id="full-name" autoComplete="given-name" maxLength={80} value={answers["full_name"] ?? ""} onChange={(e) => setAnswer("full_name", e.target.value)} required /></div>
-              <div className="space-y-2"><Label htmlFor="age">Yoshingiz</Label><Input id="age" type="number" min={13} max={120} value={answers["age"] ?? ""} onChange={(e) => setAnswer("age", e.target.value)} required /></div>
+              <div className="space-y-2"><Label htmlFor="age">Yoshingiz</Label><Input id="age" type="number" min={13} max={110} value={answers["age"] ?? ""} onChange={(e) => setAnswer("age", e.target.value)} required /></div>
               <div className="space-y-2"><Label htmlFor="height">Bo‘y (sm, ixtiyoriy)</Label><Input id="height" type="number" min={80} max={250} value={answers["height_cm"] ?? ""} onChange={(e) => setAnswer("height_cm", e.target.value)} /></div>
               <div className="space-y-2"><Label htmlFor="weight">Vazn (kg, ixtiyoriy)</Label><Input id="weight" type="number" min={20} max={300} step="0.1" value={answers["weight_kg"] ?? ""} onChange={(e) => setAnswer("weight_kg", e.target.value)} /></div>
               <fieldset className="space-y-2 sm:col-span-2"><legend className="text-sm font-medium">Jins (ixtiyoriy)</legend><div className="flex flex-wrap gap-2">{[{ v: "male", t: "Erkak" }, { v: "female", t: "Ayol" }, { v: "", t: "Aytishni istamayman" }].map((opt) => <Button key={opt.t} type="button" variant={answers["gender"] === opt.v ? "default" : "outline"} onClick={() => setAnswer("gender", opt.v)}>{opt.t}</Button>)}</div></fieldset>

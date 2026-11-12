@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import type { Database } from "@/integrations/supabase/types";
-import { aiLimitReached, FREE_AI_DAILY_LIMIT } from "@/lib/ai-limits";
 
 const SYSTEM = `Sen "Life Order" nomli shaxsiy rivojlanish ilovasining AI murabbiysi — Nadirsan.
 Har doim o'zbek tilida (lotin yozuvida) javob ber.
@@ -73,23 +72,14 @@ async function authorize(request: Request): Promise<Response | Authed> {
   const userId = data?.claims?.sub;
   if (error || !userId) return plain("Sessiya tugagan. Qaytadan kiring.", 401);
 
-  const hourAgo = new Date(Date.now() - 3600_000).toISOString();
-  const dayAgo = new Date(Date.now() - 86_400_000).toISOString();
-  const [hour, day] = await Promise.all([
-    sb.from("ai_requests").select("id", { count: "exact", head: true }).eq("user_id", userId).gte("created_at", hourAgo),
-    sb.from("ai_requests").select("id", { count: "exact", head: true }).eq("user_id", userId).gte("created_at", dayAgo),
-  ]);
-  if (aiLimitReached(hour.count ?? 0, day.count ?? 0)) {
-    return plain(`Bepul tarifda 24 soatda ${FREE_AI_DAILY_LIMIT} ta AI tahlil bor — bugungi limit tugadi. Kunlik reja va boshqa bo'limlar AI'siz ishlashda davom etadi.`, 429);
-  }
-  const ins = await sb.from("ai_requests").insert({ user_id: userId });
-  if (ins.error) return plain("So'rovni qayd etib bo'lmadi.", 500);
+  const { data: remaining, error: limitError } = await sb.rpc("claim_life_ai_request");
+  if (limitError) return plain("AI limitini tekshirib bo‘lmadi. Keyinroq urinib ko‘ring.", 503);
+  if (!remaining) return plain("AI limiti tugadi: Bepul — 3, Premium sinovi — 30 tahlil/24 soat. Kunlik reja va odatlar ishlashda davom etadi.", 429);
   return { sb, userId };
 }
 
 const HARDCORE = `\nQAT'IY REJIM yoqilgan: bahonalarni qabul qilma, to'g'ridan-to'g'ri va qisqa gapir, har javobni "Hozir qil:" bilan boshlanadigan bitta aniq harakat bilan tugat. Haqorat qilma, sog'liqqa xavfli talab qo'yma.`;
 const SAGE = `\nDONO OQSOQOL REJIMI: sokin, hikmatli va sabrli gapir; qisqa misol yoki hikmat bilan tushuntir, keyin bitta kichik amaliy qadam ber.`;
-const toneByUser = new Map<string, string>();
 
 async function buildLifeModel({ sb, userId }: Authed) {
   const today = new Date().toISOString().slice(0, 10);
@@ -114,9 +104,9 @@ async function buildLifeModel({ sb, userId }: Authed) {
   const done = items.filter((i) => i.status === "done").length;
   const reasons = items.map((i) => i.skip_reason).filter(Boolean);
   const dh = (p.data?.digital_habits ?? {}) as Record<string, string>;
-  const minor = dh["age_range"] === "18 dan kichik";
-  toneByUser.set(userId, p.data?.coach_mode === "hardcore" && !minor ? HARDCORE : p.data?.coach_mode === "sage" ? SAGE : "");
-  return [
+  const minor = !p.data?.age || p.data.age < 18 || dh["age_range"] === "18 dan kichik";
+  const tone = p.data?.coach_mode === "hardcore" && !minor ? HARDCORE : p.data?.coach_mode === "sage" ? SAGE : "";
+  const context = [
     `Maqsad: ${p.data?.main_goal ?? "-"}; tana maqsadi: ${p.data?.goal_type ?? "-"}; to'siq: ${p.data?.biggest_obstacle ?? "-"}`,
     `Yosh: ${dh["age_range"] ?? "-"}; bandlik: ${dh["life_stage"] ?? "-"}; ekran vaqti: ${dh["screen_time"] ?? "-"}; bo'sh vaqt: ${dh["free_time"] ?? "-"}; samarali vaqt: ${dh["peak_time"] ?? "-"}; ish uslubi: ${dh["start_style"] ?? "-"}`,
     minor ? "MUHIM: foydalanuvchi voyaga yetmagan — vazn tashlash, kaloriya cheklash yoki og'ir mashq tavsiya qilma." : "",
@@ -125,7 +115,8 @@ async function buildLifeModel({ sb, userId }: Authed) {
     `Odatlar: ${(habits.data ?? []).map((h) => h.title).join(", ") || "yo'q"}; 14 kunda belgilar: ${logs.data?.length ?? 0}`,
     `14 kunlik mashq: ${(workouts.data ?? []).reduce((s, w) => s + (w.duration_min ?? 0), 0)} daq; bugun uyqu ${todayM?.sleep_hours ?? "-"} s, suv ${todayM?.water_ml ?? 0} ml`,
     `Kunma-kun (14 kun):\n${byDay.join("\n")}`,
-  ].filter(Boolean).join("\n").slice(0, 3000);
+  ].filter(Boolean).join("\n").slice(0, 6000);
+  return { context, tone };
 }
 
 export const Route = createFileRoute("/api/chat")({
@@ -135,21 +126,20 @@ export const Route = createFileRoute("/api/chat")({
         const len = Number(request.headers.get("content-length") ?? "0");
         if (len > 200_000) return plain("So'rov juda katta.", 413);
 
+        const parsed = Body.safeParse(await request.json().catch(() => null));
+        if (!parsed.success) return plain("Noto'g'ri so'rov", 400);
         const auth = await authorize(request);
         if (auth instanceof Response) return auth;
-        const serverContext = await buildLifeModel(auth).catch(() => "");
-
-        const parsed = Body.safeParse(await request.json().catch(() => null));
-        if (!parsed.success) return new Response("Noto'g'ri so'rov", { status: 400 });
+        const model = await buildLifeModel(auth).catch(() => ({ context: "Ma’lumotlarni tekshirib bo‘lmadi; taxminiy raqamlar yoki og‘ir mashq tavsiya qilma.", tone: "" }));
 
         const apiKey = process.env["LOVABLE_API_KEY"];
         if (!apiKey) return textResponse(FALLBACK);
 
         const { messages } = parsed.data;
         // Context is built on the server from verified data; client context is ignored.
-        const context = serverContext;
+        const context = model.context;
         const input = [
-          { role: "system", content: [{ type: "input_text", text: SYSTEM + (toneByUser.get(auth.userId) ?? "") }] },
+          { role: "system", content: [{ type: "input_text", text: SYSTEM + model.tone }] },
           ...(context
             ? [
                 {
@@ -202,9 +192,10 @@ export const Route = createFileRoute("/api/chat")({
         const encoder = new TextEncoder();
         let buffer = "";
 
+        const upstreamBody = upstream.body;
         const stream = new ReadableStream<Uint8Array>({
           async start(controller) {
-            const reader = upstream.body!.getReader();
+            const reader = upstreamBody.getReader();
             try {
               for (;;) {
                 const { done, value } = await reader.read();

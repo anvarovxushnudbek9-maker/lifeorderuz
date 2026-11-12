@@ -6,6 +6,7 @@ const USER_TABLES = [
   "courses", "daily_plan_items", "habit_logs", "habits", "journal_entries", "meals",
   "reminder_deliveries", "reminders", "telegram_links", "workouts",
   "top_tasks", "schedule_blocks", "distraction_logs", "buddy_links",
+  "daily_checkins", "weekly_reviews", "community_messages", "payment_orders", "ai_usage_counters", "plan_entitlements",
 ] as const;
 
 export const deleteMyAccount = createServerFn({ method: "POST" })

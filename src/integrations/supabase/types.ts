@@ -157,22 +157,51 @@ export type Database = {
         }
         Relationships: []
       }
+      buddy_attempts: {
+        Row: {
+          attempts: number
+          user_id: string
+          window_start: string
+        }
+        Insert: {
+          attempts?: number
+          user_id: string
+          window_start?: string
+        }
+        Update: {
+          attempts?: number
+          user_id?: string
+          window_start?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "buddy_attempts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       buddy_links: {
         Row: {
           created_at: string
           invite_code: string
+          invite_expires_at: string
           partner_id: string | null
           user_id: string
         }
         Insert: {
           created_at?: string
           invite_code: string
+          invite_expires_at?: string
           partner_id?: string | null
           user_id: string
         }
         Update: {
           created_at?: string
           invite_code?: string
+          invite_expires_at?: string
           partner_id?: string | null
           user_id?: string
         }
@@ -964,6 +993,7 @@ export type Database = {
         }[]
       }
       claim_life_ai_request: { Args: never; Returns: number }
+      disconnect_buddy: { Args: never; Returns: undefined }
       is_circle_member: {
         Args: { _circle: string; _user: string }
         Returns: boolean

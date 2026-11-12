@@ -1,6 +1,5 @@
 import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
 import { Send, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
@@ -9,7 +8,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { todayISO, lastNDays } from "@/lib/date";
 import { aiFetch } from "@/lib/ai-fetch";
 
 const TITLE = "AI murabbiy — Life Order";
@@ -46,29 +44,6 @@ function AiCoach() {
   const [streaming, setStreaming] = React.useState(false);
   const endRef = React.useRef<HTMLDivElement>(null);
 
-  const { data: context } = useQuery({
-    queryKey: ["ai-context", uid],
-    enabled: !!uid,
-    queryFn: async () => {
-      const week = lastNDays(7);
-      const [habits, logs, workouts, books, metrics] = await Promise.all([
-        supabase.from("habits").select("title,target_per_week").eq("user_id", uid),
-        supabase.from("habit_logs").select("log_date").eq("user_id", uid).gte("log_date", week[0]!),
-        supabase.from("workouts").select("title,duration_min").eq("user_id", uid).gte("performed_on", week[0]!),
-        supabase.from("books").select("title,current_page,total_pages").eq("user_id", uid),
-        supabase.from("body_metrics").select("*").eq("user_id", uid).eq("metric_date", todayISO()).maybeSingle(),
-      ]);
-      const lines = [
-        `Odatlar: ${(habits.data ?? []).map((h) => h.title).join(", ") || "yo'q"}`,
-        `Oxirgi 7 kunda bajarilgan odat belgilari: ${logs.data?.length ?? 0}`,
-        `Haftalik mashqlar: ${(workouts.data ?? []).map((w) => `${w.title} (${w.duration_min} daq)`).join(", ") || "yo'q"}`,
-        `Kitoblar: ${(books.data ?? []).map((b) => `${b.title} ${b.current_page}/${b.total_pages}`).join(", ") || "yo'q"}`,
-        `Bugun: uyqu ${metrics.data?.sleep_hours ?? "-"} soat, suv ${metrics.data?.water_ml ?? 0} ml, qadam ${metrics.data?.steps ?? 0}`,
-      ];
-      return lines.join("\n");
-    },
-  });
-
   React.useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, streaming]);
@@ -82,7 +57,7 @@ function AiCoach() {
     setMessages([...next, { role: "assistant", content: "" }]);
 
     try {
-      const res = await aiFetch({ messages: next, context });
+      const res = await aiFetch({ messages: next });
       if (!res.ok || !res.body) {
         throw new Error(await res.text());
       }
@@ -116,7 +91,7 @@ function AiCoach() {
           <Sparkles className="size-5 text-primary" />
         </div>
         <div>
-          <h1 className="text-lg font-bold">AI murabbiy</h1>
+          <h1 className="text-lg font-bold">Nadir</h1>
           <p className="text-xs text-muted-foreground">Tahlil qiladi, reja tuzadi, yo&apos;naltiradi.</p>
         </div>
       </div>
@@ -126,13 +101,13 @@ function AiCoach() {
           <div className="space-y-2">
             <p className="text-sm text-muted-foreground">Nimadan boshlaymiz?</p>
             {SUGGESTIONS.map((s) => (
-              <button
+              <Button variant="outline"
                 key={s}
                 onClick={() => send(s)}
-                className="w-full rounded-xl border border-border bg-card px-4 py-3 text-left text-sm transition-colors hover:bg-accent"
+                className="h-auto w-full justify-start whitespace-normal px-4 py-3 text-left text-sm"
               >
                 {s}
-              </button>
+              </Button>
             ))}
           </div>
         ) : (

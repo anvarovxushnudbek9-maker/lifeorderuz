@@ -1,4 +1,4 @@
-import { streakWithFreeze } from "@/lib/gamification";
+import { streakWithShields } from "@/lib/gamification";
 import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -151,7 +151,7 @@ function Habits() {
                       {h.title}
                     </p>
                     <p className="mt-0.5 text-xs text-muted-foreground">
-                      Ketma-ketlik: {streak} kun (haftada 1 kun muzlatiladi) · haftasiga {h.target_per_week} marta
+                      Ketma-ketlik: {streak} kun · Qalqon: {streakWithShields(d => logSet.has(`${h.id}|${d}`), days).remaining}/2 · haftasiga {h.target_per_week} marta
                     </p>
                   </div>
                   <button
@@ -192,6 +192,5 @@ function Habits() {
 }
 
 function countStreak(logSet: Set<string>, habitId: string, days: string[]) {
-  // Weekly freeze: one missed day per 7 days does not break the streak.
-  return streakWithFreeze((d) => logSet.has(`${habitId}|${d}`), days).streak;
+  return streakWithShields((d) => logSet.has(`${habitId}|${d}`), days).streak;
 }

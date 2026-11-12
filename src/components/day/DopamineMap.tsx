@@ -48,10 +48,10 @@ export function DopamineMap() {
     <h2 className="flex items-center gap-2 text-base font-semibold"><ShieldAlert className="size-4 text-primary" />Dopamin qafasi</h2>
     <p className="mt-1 text-xs text-muted-foreground">Eng ko‘p chalg‘itadigan 1–2 tasini tanlang. Qoida buzilsa — tanbeh emas, tiklanish.</p>
     <div className="mt-3 flex flex-wrap gap-1.5">{SOURCES.map((s) => <Button key={s} size="sm" type="button" variant={triggers.includes(s) ? "default" : "outline"} aria-pressed={triggers.includes(s)} disabled={setTriggers.isPending || !uid} onClick={() => toggleTrigger(s)}>{s}</Button>)}</div>
-    {triggers.length > 0 && <div className="mt-3 flex flex-wrap gap-2">{triggers.map((t) => <Button key={t} size="sm" variant="destructive" disabled={add.isPending} onClick={() => add.mutate({ source: t, minutes: 15, breach: true })}>Men chalg‘idim: {t}</Button>)}</div>}
+    {triggers.length > 0 && <div className="mt-3 flex flex-wrap items-center gap-2"><Input aria-label="Chalg‘ish daqiqasi" type="number" min={1} max={1440} value={min} onChange={e => setMin(e.target.value)} className="w-24" />{triggers.map((t) => <Button key={t} size="sm" variant="outline" disabled={add.isPending} onClick={() => add.mutate({ source: t, minutes: Math.round(Number(min)), breach: true })}>Men chalg‘idim: {t}</Button>)}</div>}
     {pending.map((p) => <div key={p.id} className="mt-3 rounded-xl border border-destructive/30 bg-destructive/5 p-3" role="alert">
       <p className="text-sm font-semibold">Tiklanish intizomi · {p.source}</p>
-      <p className="mt-0.5 text-xs text-muted-foreground">−{BREACH_XP} XP. Bittasini bajaring — XP qaytadi.</p>
+      <p className="mt-0.5 text-xs text-muted-foreground">−{BREACH_XP} XP — faqat shaxsiy hisob. Qulay tiklanish yo‘lini tanlang; mashq qilish majburiy emas.</p>
       <div className="mt-2 flex flex-wrap gap-2">{RECOVERY_TASKS.map((t) => <Button key={t} size="sm" variant="outline" disabled={recover.isPending} onClick={() => recover.mutate({ id: p.id, task: t })}>Bajardim: {t}</Button>)}</div>
     </div>)}
     <h3 className="mt-5 flex items-center gap-2 text-sm font-semibold"><Smartphone className="size-4 text-primary" />Dopamin xaritasi</h3>
